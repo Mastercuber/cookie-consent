@@ -1,0 +1,40 @@
+.table-container {
+    height: 0;
+    transition: height 0.8s;
+    overflow: hidden;
+}
+
+table:not(:last-child) {
+    margin: 3px;
+    border-bottom: 2px solid lightseagreen;
+}
+
+table tr, table tr:hover {
+    background: white !important;
+    cursor: default;
+}
+
+table tr td:first-child {
+    user-select: none;
+}
+
+table td {
+    border: 1px solid lightgrey;
+    cursor: default;
+    padding: 3px 3px 3px 8px;
+}
+
+table td:first-child {
+    width: 35%;
+    font-weight: bold;
+}
+
+table td a:not(:last-child)::after {
+    content: ' | ';
+    font-weight: bold;
+}
+
+.table-binary-slider-container > div, .table-binary-slider-container > span {
+    display: inline-block;
+    vertical-align: middle;
+}

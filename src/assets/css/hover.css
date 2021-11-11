@@ -1,0 +1,13 @@
+label {
+    transform: translateY(1px);
+}
+label:hover {
+    color: orange !important;
+    text-shadow: 0 0 1px orange;
+}
+button {
+    transition: 0.4s;
+}
+button:hover {
+    box-shadow: 0 0 10px #1B37E1;
+}

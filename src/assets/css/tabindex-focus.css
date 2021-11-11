@@ -1,0 +1,11 @@
+.av-card-4:focus {
+    box-shadow: #1B37E1 0 0 20px;
+}
+
+input[type=checkbox]:focus {
+    border: 1px solid orange !important;
+    border-radius: 4px;
+}
+button:focus {
+    border: 1px solid orange;
+}

@@ -1,0 +1,35 @@
+/* Für die Unterschrift */
+@font-face {
+    font-family: 'Learning Curve';
+    font-display: block;
+    src: url('/font/learning_curve_regular_ot_tt.ttf') format('truetype')
+}
+@font-face {
+    font-family: 'Glyphicons Halfings';
+    font-display: block;
+    src: url('/font/glyphicons-halflings-regular.ttf') format('truetype')
+}
+
+h4, .back-to-main, button {
+    font-family: Avenir;
+    font-size: 1em;
+    font-weight: bold;
+}
+p {
+    font-family: "Nimbus Roman";
+}
+.back-to-main {
+    margin-right: 0.2em;
+}
+h5 {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+table tr td:last-child {
+    font-family: "Fira Code Light";
+}
+#link-container a b {
+     font-family: Arial;
+ }
+
+

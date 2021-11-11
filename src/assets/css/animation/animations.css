@@ -1,0 +1,136 @@
+@keyframes transform-to-details {
+    50% {
+        width: var(--cookie-consent-width);
+        height: 0;
+        margin: 50vh auto;
+    }
+    60% {
+        width: var(--cookie-consent-details-width);
+    }
+    100% {
+        width: var(--cookie-consent-details-width);
+        height: var(--cookie-consent-details-height);
+        margin: 25vh auto;
+    }
+}
+
+@keyframes transform-to-main {
+    0% {
+        width: var(--cookie-consent-details-width);
+        height: var(--cookie-consent-details-height);
+        margin: 25vh auto;
+    }
+    50% {
+        width: var(--cookie-consent-details-width);
+        height: 0;
+        margin: 50vh auto;
+    }
+    60% {
+        width: var(--cookie-consent-width);
+    }
+    100% {
+        width: var(--cookie-consent-width);
+        height: var(--cookie-consent-height);
+        margin: 25vh auto;
+    }
+}
+
+@keyframes transform-opacity-to-details {
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes transform-opacity-to-main {
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes hide-consent {
+    from {
+        width: var(--transform-current-width);
+        height: var(--transform-current-height);
+        overflow: hidden;
+    }
+    20% {
+        opacity: 1;
+        transform: rotateX(-15deg);
+        overflow: hidden;
+    }
+    to {
+        width: var(--transform-current-width) !important;
+        height: var(--transform-current-height) !important;
+        opacity: 0;
+        transform: rotateX(90deg);
+        overflow: hidden;
+    }
+}
+
+@keyframes minimize {
+    from {
+        width: var(--transform-current-width);
+        height: var(--transform-current-height);
+        transform: translateX(0) translateY(0);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    1% {
+        overflow: hidden;
+    }
+    to {
+        width: 50px;
+        height: 50px;
+        transform: translateX(var(--transform-minimize-x)) translateY(var(--transform-minimize-y));
+        opacity: 0;
+        overflow: hidden;
+    }
+}
+
+@keyframes blur-overlay {
+    to {
+        background: rgba(51, 51, 51, 0);
+    }
+}
+
+.blur-overlay-reverse {
+    animation: blur-overlay var(--cookie-consent-minimize-animation-duration) reverse;
+}
+
+.blur-overlay {
+    animation: blur-overlay var(--cookie-consent-minimize-animation-duration);
+}
+
+.maximize {
+    animation: minimize var(--cookie-consent-minimize-animation-duration) reverse forwards;
+}
+
+.minimize {
+    animation: minimize var(--cookie-consent-minimize-animation-duration) forwards;
+}
+
+.transform-to-details {
+    animation: transform-to-details var(--cookie-consent-animation-duration) forwards;
+}
+
+.transform-to-main {
+    animation: transform-to-main var(--cookie-consent-animation-duration) forwards;
+}
+
+.transform-opacity-to-details {
+    animation: transform-opacity-to-details var(--cookie-consent-animation-duration) forwards;
+}
+
+.transform-opacity-to-main {
+    animation: transform-opacity-to-main var(--cookie-consent-animation-duration) forwards;
+}
+
+.hide-consent {
+    animation: hide-consent var(--cookie-consent-hide-duration);
+}

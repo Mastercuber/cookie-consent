@@ -1,0 +1,78 @@
+/* Checkbox styling */
+input[type="checkbox"] {
+    appearance: none;
+    position: relative;
+    height: 18px;
+    width: 18px;
+    color: green;
+    user-select: none;
+    outline: none;
+    border: 1px solid gray;
+    box-sizing: content-box;
+}
+input[type="checkbox"]:checked::before {
+    /* Use `visibility` instead of `display` to avoid recalculating layout */
+    visibility: visible;
+}
+input[type="checkbox"]:not(:checked)::after {
+    visibility: visible;
+}
+input[type="checkbox"]::before {
+    content: "✔";
+    position: absolute;
+    font-size: 1.5em;
+    right: 0px;
+    top: -3px;
+    visibility: hidden;
+}
+@media all and (max-width: 600px) {
+    input[type="checkbox"]::before {
+        content: "✔";
+        position: absolute;
+        font-size: 1.5em;
+        right: 0px;
+        top: -6px;
+        visibility: hidden;
+    }
+}
+@media all and (max-width: 1000px) {
+
+}
+input[type="checkbox"]:disabled {
+    background: #ddd;
+    color: green;
+}
+
+.cookie-consent-checkbox-accept {
+    margin-top: 6px;
+}
+
+.checkbox-container {
+    margin-left: 12px;
+    position: relative;
+}
+
+input[type=checkbox]:hover, label:hover {
+    cursor: pointer;
+}
+
+.checkbox-partial-indicator {
+    position: absolute;
+    background: dodgerblue;
+    left: 7px;
+    top: 6px;
+    width: 12.1px;
+    height: 12.1px;
+    transform: translateX(1px) translateY(1px);
+    pointer-events: none;
+}
+.checkbox-none-indicator {
+    position: absolute;
+    background: gray;
+    left: 7px;
+    top: 0px;
+    width: 12.1px;
+    height: 4.1px;
+    transform: translateX(1px) translateY(10px);
+    pointer-events: none;
+}
