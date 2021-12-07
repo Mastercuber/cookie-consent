@@ -1,218 +1,199 @@
 <template>
   <div class="language-indicator-container">
-      <span v-for="(lang, index) in mergedLangs" :key="lang.locale" class="language-indicator" @click="setLang(lang.locale , index === (langs.length - 1))" :title="lang.title">
+      <span v-for="(lang, index) in langs" :key="lang.locale" class="language-indicator" @click="setLang(lang.locale , index === (langs.length - 1))" :title="lang.title">
         <span v-html="lang.flag"></span>
       </span>
   </div>
 </template>
 
-<script>
-export default {
-  name: "LanguageFlags",
-  emits: ['changed-language'],
-  props: {
-    langs: {
-      type: Array,
-      default: []
-    }
-  },
-  data() {
-    return {
-      langsDefaults: [
-        {
-          locale: 'de',
-          flag: '&#127465&#127466',
-          title: 'Germany'
-        },
-        {
-          locale: 'gb',
-          flag: '&#127468&#127463',
-          title: 'United Kingdom'
-        },
-        {
-          locale: 'us',
-          flag: '&#127482&#127480',
-          title: 'United States'
-        },
-        {
-          locale: 'dk',
-          flag: '&#127465&#127472',
-          title: 'Denmark'
-        },
-        {
-          locale: 'nl',
-          flag: '&#127475&#127473',
-          title: 'Netherlands'
-        },
-        {
-          locale: 'lu',
-          flag: '&#127473&#127482',
-          title: 'Luxembourg'
-        },
-        {
-          locale: 'ro',
-          flag: '&#127479&#127476',
-          title: 'Romania'
-        },
-        {
-          locale: 'hu',
-          flag: '&#127469&#127482',
-          title: 'Hungary'
-        },
-        {
-          locale: 'fr',
-          flag: '&#127467&#127479',
-          title: 'France'
-        },
-        {
-          locale: 'pl',
-          flag: '&#127477&#127473',
-          title: 'Poland'
-        },
-        {
-          locale: 'cz',
-          flag: '&#127464&#127487',
-          title: 'Czechia'
-        },
-        {
-          locale: 'it',
-          flag: '&#127470&#127481',
-          title: 'Italy'
-        },
-        {
-          locale: 'hr',
-          flag: '&#127469&#127479',
-          title: 'Croatia'
-        },
-        {
-          locale: 'si',
-          flag: '&#127480&#127470',
-          title: 'Slovenia'
-        },
-        {
-          locale: 'sk',
-          flag: '&#127480&#127472',
-          title: 'Slovakia'
-        },
-        {
-          locale: 'es',
-          flag: '&#127466&#127480',
-          title: 'Spain'
-        },
-        {
-          locale: 'pt',
-          flag: '&#127477&#127481',
-          title: 'Portugal'
-        },
-        {
-          locale: 'ee',
-          flag: '&#127466&#127466',
-          title: 'Estonia'
-        },
-        {
-          locale: 'lv',
-          flag: '&#127473&#127483',
-          title: 'Latvia'
-        },
-        {
-          locale: 'lt',
-          flag: '&#127473&#127481',
-          title: 'Lithuania'
-        },
-        {
-          locale: 'no',
-          flag: '&#127475&#127476',
-          title: 'Norway'
-        },
-        {
-          locale: 'sw',
-          flag: '&#127480&#127466',
-          title: 'Sweden'
-        },
-        {
-          locale: 'fi',
-          flag: '&#127467&#127470',
-          title: 'Finland'
-        },
-        {
-          locale: 'ru',
-          flag: '&#127479&#127482',
-          title: 'Russia'
-        },
-        {
-          locale: 'ua',
-          flag: '&#127482&#127462',
-          title: 'Ukraine'
-        },
-        {
-          locale: 'gr',
-          flag: '&#127468&#127479',
-          title: 'Greece'
-        },
-        {
-          locale: 'tr',
-          flag: '&#127481&#127479',
-          title: 'Turkey'
-        },
-        {
-          locale: 'bg',
-          flag: '&#127463&#127468',
-          title: 'Bulgaria'
-        },
-        {
-          locale: 'al',
-          flag: '&#127462&#127473',
-          title: 'Albania'
-        },
-        {
-          locale: 'am',
-          flag: '&#127462&#127474',
-          title: 'Armenia'
-        },
-        {
-          locale: 'cn',
-          flag: '&#127464&#127475',
-          title: 'China'
-        },
-        {
-          locale: 'in',
-          flag: '&#127470&#127475',
-          title: 'India (Hindi)'
-        },
-        {
-          locale: 'ae',
-          flag: '&#127462&#127466',
-          title: 'United Arab Emirates'
-        },
-        {
-          locale: 'gb',
-          flag: '&#8634;',
-          title: 'Reset'
-        }
-      ],
-      mergedLangs: []
-    }
-  },
-  created() {
-    this.mergedLangs = {
-      ...this.langsDefaults,
-      ...this.langs
-    }
-  },
-  methods: {
-    setLang(locale = 'gb', reset = false) {
-      console.log(reset)
-      if (reset) {
-        Consents.clear()
-        location.href = '/'
-        window.location = '/'
-      }
+<script setup>
+import { useI18n } from 'vue-i18n'
+const { locale } = useI18n()
 
-      this.$emit('changed-language', locale)
-    }
+const langs = [
+  {
+    locale: 'de',
+    flag: '&#127465&#127466',
+    title: 'Germany'
+  },
+  {
+    locale: 'en',
+    flag: '&#127468&#127463',
+    title: 'English'
+  },
+  {
+    locale: 'dk',
+    flag: '&#127465&#127472',
+    title: 'Denmark'
+  },
+  {
+    locale: 'nl',
+    flag: '&#127475&#127473',
+    title: 'Netherlands'
+  },
+  {
+    locale: 'lu',
+    flag: '&#127473&#127482',
+    title: 'Luxembourg'
+  },
+  {
+    locale: 'ro',
+    flag: '&#127479&#127476',
+    title: 'Romania'
+  },
+  {
+    locale: 'hu',
+    flag: '&#127469&#127482',
+    title: 'Hungary'
+  },
+  {
+    locale: 'fr',
+    flag: '&#127467&#127479',
+    title: 'France'
+  },
+  {
+    locale: 'pl',
+    flag: '&#127477&#127473',
+    title: 'Poland'
+  },
+  {
+    locale: 'cz',
+    flag: '&#127464&#127487',
+    title: 'Czechia'
+  },
+  {
+    locale: 'it',
+    flag: '&#127470&#127481',
+    title: 'Italy'
+  },
+  {
+    locale: 'hr',
+    flag: '&#127469&#127479',
+    title: 'Croatia'
+  },
+  {
+    locale: 'si',
+    flag: '&#127480&#127470',
+    title: 'Slovenia'
+  },
+  {
+    locale: 'sk',
+    flag: '&#127480&#127472',
+    title: 'Slovakia'
+  },
+  {
+    locale: 'es',
+    flag: '&#127466&#127480',
+    title: 'Spain'
+  },
+  {
+    locale: 'pt',
+    flag: '&#127477&#127481',
+    title: 'Portugal'
+  },
+  {
+    locale: 'ee',
+    flag: '&#127466&#127466',
+    title: 'Estonia'
+  },
+  {
+    locale: 'lv',
+    flag: '&#127473&#127483',
+    title: 'Latvia'
+  },
+  {
+    locale: 'lt',
+    flag: '&#127473&#127481',
+    title: 'Lithuania'
+  },
+  {
+    locale: 'no',
+    flag: '&#127475&#127476',
+    title: 'Norway'
+  },
+  {
+    locale: 'sw',
+    flag: '&#127480&#127466',
+    title: 'Sweden'
+  },
+  {
+    locale: 'fi',
+    flag: '&#127467&#127470',
+    title: 'Finland'
+  },
+  {
+    locale: 'ru',
+    flag: '&#127479&#127482',
+    title: 'Russia'
+  },
+  {
+    locale: 'ua',
+    flag: '&#127482&#127462',
+    title: 'Ukraine'
+  },
+  {
+    locale: 'gr',
+    flag: '&#127468&#127479',
+    title: 'Greece'
+  },
+  {
+    locale: 'tr',
+    flag: '&#127481&#127479',
+    title: 'Turkey'
+  },
+  {
+    locale: 'bg',
+    flag: '&#127463&#127468',
+    title: 'Bulgaria'
+  },
+  {
+    locale: 'al',
+    flag: '&#127462&#127473',
+    title: 'Albania'
+  },
+  {
+    locale: 'am',
+    flag: '&#127462&#127474',
+    title: 'Armenia'
+  },
+  {
+    locale: 'cn',
+    flag: '&#127464&#127475',
+    title: 'China'
+  },
+  {
+    locale: 'in',
+    flag: '&#127470&#127475',
+    title: 'India (Hindi)'
+  },
+  {
+    locale: 'ae',
+    flag: '&#127462&#127466',
+    title: 'United Arab Emirates'
+  },
+  {
+    locale: 'gb',
+    flag: '&#8634;',
+    title: 'Reset'
   }
+]
+
+function setLang(l = 'en', reset = false) {
+  console.log(reset)
+  if (reset) {
+    Consents.clear()
+    location.href = '/'
+    window.location = '/'
+  }
+
+  locale.value = l
 }
+
 </script>
+
+<style>
+  @import "/src/assets/css/global/common.css";
+</style>
 
 <style scoped>
 

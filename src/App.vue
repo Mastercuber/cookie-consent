@@ -1,14 +1,21 @@
+<template>
+  <div style="position: relative; z-index: 1;">
+    <LanguageFlags style="position: absolute; z-index: 2;"/>
+    <CookieConsent ref="cookie-consent" :required-links="obj.requiredLinks" :categories="obj.categories" :locale="lang" style="position: absolute; z-index: 1;"/>
+  </div>
+</template>
+
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import CookieConsent from './components/CookieConsent.vue'
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import LanguageFlags from "./components/LanguageFlags.vue";
 
-let lang = ref('gb')
+let lang = ref('en')
 
 const obj = {
-  lang: 'gb',
+  lang: 'en',
 
   requiredLinks: {
     privacy: {
@@ -78,19 +85,7 @@ const obj = {
     }
   ]
 }
-
-function changeLocale(l: string) {
-  console.log(`[App] changed to ${l}`)
-  lang.value = l
-}
 </script>
-
-<template>
-  <div style="position: relative; z-index: 1;">
-    <LanguageFlags @changed-language="this.lang = $event" style="position: absolute; z-index: 2;"/>
-    <CookieConsent ref="cookie-consent" :required-links="obj.requiredLinks" :categories="obj.categories" :locale="lang" style="position: absolute; z-index: 1;"/>
-  </div>
-</template>
 
 <style>
 #app {

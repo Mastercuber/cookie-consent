@@ -1,6 +1,6 @@
 export interface Link {
     title: string,
-    href?: string
+    href: string
 }
 
 export interface Cookie {
@@ -10,7 +10,11 @@ export interface Cookie {
     provider?: string,
     cookieName?: string,
     cookieValidityPeriod?: string,
-    onDenied?: Function
+    onAccepted?: Function,
+    onDenied?: Function,
+    privacyURL?: string,
+    links?: Array<Link>,
+    hosts?: string
 }
 
 export interface Category {
@@ -60,20 +64,19 @@ export interface GeneralLabelsProps {
     binarySliderLabels: BinarySliderLabels,
     button: Button,
     description: Description
-    showCookieInformation: 'Cookie-Information anzeigen',
-    cookieDetails: 'Cookie-Details',
-    individuellSettings: 'Individuelle Datenschutzeinstellungen'
+    showCookieInformation: string,
+    cookieDetails: string,
+    individuellSettings: string
 }
 
 export interface Props {
     categories: Array<Category>,
     requiredLinks: RequiredLinksProps,
     links?: Array<Link>,
-    cookieLabels?: CookieLabelsProps,
     generalLabels?: GeneralLabelsProps,
+    cookieLabels?: CookieLabelsProps,
     useMetaCookie?: boolean,
     metaCookieTitles?: Cookie,
-    locale?: string,
 
     animationDuration?: string,
     minimizeAnimationDuration?: string,

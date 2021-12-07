@@ -1,8 +1,10 @@
 import {Category} from "../interfaces/CookieConsentProps";
 import {Consent, Cookie} from "../interfaces/Consent";
 
-interface Window {
-    Consents: any
+declare global {
+    interface Window {
+        Consents: any
+    }
 }
 
 export default function (metaCookieTitles: Cookie, useMetaCookie: boolean, storagePrefix: string, storageConsentsKey: string, categories: Array<Category>, consents: Array<Consent>) {
@@ -77,7 +79,6 @@ export default function (metaCookieTitles: Cookie, useMetaCookie: boolean, stora
     // load consents and receive all ids
     const ids = loadConsentsWrapper()
 
-    // @ts-ignore
     window.Consents = {
         storagePrefix: storagePrefix,
         storageConsentsKey: storageConsentsKey,
