@@ -1,6 +1,189 @@
+<template>
+  <div id="cookie-consent">
+    <div id="settings-symbol" @click="maximize($event)" :title="$t('generalLabels.title')">
+      <span>&#9881;</span>
+    </div>
+    <div v-if="showConsent" id="overlay" class="av-animate-top" :class="{ 'cookie-consent-hidden': isMinimized, 'blur-overlay-reverse': blurOverlayReverse }">
+      <div id="container" class="av-card-4 av-round av-padding av-center av-white">
+
+        <div id="cookie-consent-opacity-container">
+          <div v-if="isMainContainerVisible">
+            <header>
+              <a rel="nofollow" href="#" class="minimizer" @click="minimize($event)"
+                 :title="$t('generalLabels.minimize')"></a>
+              <a rel="nofollow" href="#" class="clear-site" @click="clearSite($event)"
+                 :title="$t('generalLabels.clearSite')"></a>
+              <div class="heading">
+                <span>&#127850;</span>
+                <h4>{{ $t('generalLabels.title') }}</h4>
+              </div>
+              <hr class="first-hr"/>
+              <p>{{ $t('generalLabels.description.main') }}</p>
+              <hr class="second-hr-main"/>
+            </header>
+
+            <div class="content">
+              <div v-for="(category, index) in categories" class="checkbox-container row" :key="category.id">
+                <input :id="`cookie-consent-checkbox-${category.id}`" type="checkbox"
+                       :checked="consents[index].accepted" :disabled="index === 0"
+                       @change="setCategoryConsent($event, index)" class="col"/>
+                <label :for="`cookie-consent-checkbox-${category.id}`" class="col">{{ category.label }}</label>
+                <span v-if="index > 0 && consents[index].partial" class="checkbox-partial-indicator"></span>
+                <span v-if="index > 0 && !consents[index].partial && !consents[index].accepted "
+                      class="checkbox-none-indicator"></span>
+              </div>
+
+              <div>
+                <button @click="acceptAll()">{{ $t('generalLabels.button.acceptAll') }}</button>
+                <button @click="acceptSelection()">{{ $t('generalLabels.button.acceptSelection') }}</button>
+              </div>
+            </div>
+
+            <div id="link-container" class="av-white">
+              <div>
+                <a rel="nofollow" href="#" @click="showDetails($event)"><b>{{
+                    $t('generalLabels.individualSettings')
+                  }}</b></a>
+              </div>
+              <a rel="nofollow" href="#" @click="showDetails($event)"><b>{{ $t('generalLabels.cookieDetails') }}</b></a>
+              <a rel="nofollow" :href="$t('generalLabels.requiredLinks.privacy.href')">{{
+                  $t('generalLabels.requiredLinks.privacy.title')
+                }}</a>
+              <a rel="nofollow" :href="$t('generalLabels.requiredLinks.impress.href')">{{
+                  $t('generalLabels.requiredLinks.impress.title')
+                }}</a>
+              <a rel="nofollow" v-for="link in links" :key="link.title" :href="link.href">{{ link.title }}</a>
+            </div>
+          </div>
+
+          <div v-else id="details-container">
+            <header>
+              <a rel="nofollow" href="#" class="back-to-main"
+                 @click="showMain($event)">{{ $t('generalLabels.details.back') }}</a>
+              <a rel="nofollow" href="#" class="minimizer" @click="minimize($event)"
+                 :title="$t('generalLabels.minimize')"><span>-</span></a>
+              <div class="heading">
+                <span>&#127850;</span>
+                <h4>{{ $t('generalLabels.title') }}</h4>
+              </div>
+              <hr class="first-hr"/>
+              <p class="av-center">{{ $t('generalLabels.description.details') }}</p>
+              <hr class="second-hr-details"/>
+              <div>
+                <button @click="acceptAll()">{{ $t('generalLabels.button.acceptAll') }}</button>
+                <button @click="acceptSelection()">{{ $t('generalLabels.button.acceptSelection') }}</button>
+              </div>
+            </header>
+
+            <div v-for="(category, categoryIndex) in categories" class="cookie-details-card" :key="category.id"
+                 :ref="`details-card-${categoryIndex}`">
+              <div class="binary-slider-label-container" v-if="categoryIndex > 0">
+                <span class="binary-slider-label binary-slider-label-margin accepted"
+                      :class="{ 'av-hide': !consents[categoryIndex].accepted }">{{
+                    $t('generalLabels.binarySliderLabels.accepted')
+                  }}</span>
+                <span class="binary-slider-label binary-slider-label-margin declined"
+                      :class="{ 'av-hide': consents[categoryIndex].accepted || consents[categoryIndex].partial }">{{
+                    $t('generalLabels.binarySliderLabels.declined')
+                  }}</span>
+                <span class="binary-slider-label binary-slider-label-margin partial"
+                      :class="{ 'av-hide': !consents[categoryIndex].partial }">{{
+                    $t('generalLabels.binarySliderLabels.partial')
+                  }}</span>
+                <div>
+                  <div :id="`cookie-consent-details-checkbox-${category.id}`" class="binary-slider margin-small"
+                       :class="{ active: consents[categoryIndex].accepted, partial: consents[categoryIndex].partial }"
+                       @click="toggleConsent($event, categoryIndex)">
+                    <span class="binary-slider-circle"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="label-container">
+                <h5 class="padding-top">{{ category.label }} ({{ category.cookies.length }})</h5>
+                <div></div>
+              </div>
+
+              <p>{{ category.description }}</p>
+              <a rel="nofollow" href="#" class="av-center av-block"
+                 @click="toggleCookieInformation($event)">{{ $t('generalLabels.showCookieInformation') }}</a>
+
+              <div class="table-container">
+                <table v-for="(cookie, cookieIndex) in category.cookies" :key="cookie.cookieName">
+                  <tr v-if="categoryIndex > 0">
+                    <td>{{ $t('cookieLabels.accept') }}</td>
+                    <td>
+                      <div class="table-binary-slider-container">
+                        <div class="binary-slider" @click="toggleConsent($event, categoryIndex, cookieIndex)"
+                             :class="{ active: consents[categoryIndex].cookies[cookieIndex].accepted }">
+                          <span class="binary-slider-circle"></span>
+                        </div>
+                        <div class="binary-slider-label binary-slider-label-small-margin"
+                             :class="{ 'av-hide': !consents[categoryIndex].cookies[cookieIndex].accepted }">
+                          {{ $t('generalLabels.binarySliderLabels.accepted') }}
+                        </div>
+                        <div class="binary-slider-label binary-slider-label-small-margin"
+                             :class="{ 'av-hide': consents[categoryIndex].cookies[cookieIndex].accepted }">
+                          {{ $t('generalLabels.binarySliderLabels.declined') }}
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{{ $t('cookieLabels.name') }}</td>
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ $t('metaCookieTitles.name') }}</td>
+                    <td v-else>{{ cookie.name }}</td>
+                  </tr>
+                  <tr>
+                    <td>{{ $t('cookieLabels.provider') }}</td>
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ $t('metaCookieTitles.provider') }}</td>
+                    <td v-else>{{ cookie.provider }}</td>
+                  </tr>
+                  <tr>
+                    <td>{{ $t('cookieLabels.purpose') }}</td>
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ $t('metaCookieTitles.purpose') }}</td>
+                    <td v-else>{{ cookie.purpose }}</td>
+                  </tr>
+                  <tr v-if="'privacyURL' in cookie">
+                    <td>{{ $t('cookieLabels.privacy') }}</td>
+                    <td><a rel="nofollow" :href="cookie.privacyURL">{{ cookie.privacyURL }}</a></td>
+                  </tr>
+                  <tr v-if="'hosts' in cookie">
+                    <td>{{ $t('cookieLabels.hosts') }}</td>
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ $t('metaCookieTitles.hosts') }}</td>
+                    <td v-else>{{ cookie.hosts }}</td>
+                  </tr>
+                  <tr v-if="'cookieName' in cookie">
+                    <td>{{ $t('cookieLabels.cookieName') }}</td>
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ $t('metaCookieTitles.cookieName') }}</td>
+                    <td v-else><i>{{ cookie.cookieName }}</i></td>
+                  </tr>
+                  <tr v-if="'cookieValidityPeriod' in cookie">
+                    <td>{{ $t('cookieLabels.cookieValidityPeriod') }}</td>
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{
+                        $t('metaCookieTitles.cookieValidityPeriod')
+                      }}
+                    </td>
+                    <td v-else>{{ cookie.cookieValidityPeriod }}</td>
+                  </tr>
+                  <tr v-if="'links' in cookie && cookie.links.length > 0">
+                    <td>{{ $t('cookieLabels.links') }}</td>
+                    <td><a rel="nofollow" v-for="link in cookie.links" :key="link.title" :href="link.href"
+                           target="_blank">{{ link.title || link.href }}</a></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</template>
+
 <script async setup lang="ts">
-import { getCurrentInstance, onBeforeMount, onMounted, reactive, ref, toRefs, watch, withDefaults } from 'vue'
-import { l, translate } from '@planning.nl/vue3-i18n'
+import { onBeforeMount, onMounted, reactive, ref, toRefs, watch, withDefaults } from 'vue'
 import {
   Category, Cookie,
   CookieLabelsProps,
@@ -9,6 +192,9 @@ import {
   RequiredLinksProps
 } from '../interfaces/CookieConsentProps'
 import Consents from './Consents'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 // Data
 const consents = ref([])
@@ -514,193 +700,6 @@ export default {
   }
 }
 </script>
-
-<template>
-  <div id="cookie-consent">
-    <div id="settings-symbol" @click="maximize($event)" :title="$t('generalLabels.title')">
-      <span>&#9881;</span>
-    </div>
-    <div v-if="showConsent" id="overlay" class="av-animate-top"
-         :class="{ 'cookie-consent-hidden': isMinimized, 'blur-overlay-reverse': blurOverlayReverse }">
-      <div id="container" class="av-card-4 av-round av-padding av-center av-white">
-
-        <div id="cookie-consent-opacity-container">
-          <div v-if="isMainContainerVisible">
-            <header>
-              <a rel="nofollow" href="#" class="minimizer" @click="minimize($event)"
-                 :title="$t('generalLabels.minimize')"></a>
-              <a rel="nofollow" href="#" class="clear-site" @click="clearSite($event)"
-                 :title="$t('generalLabels.clearSite')"></a>
-              <div class="heading">
-                <span>&#127850;</span>
-                <h4>{{ $t('generalLabels.title') }}</h4>
-              </div>
-              <hr class="first-hr"/>
-              <p>{{ $t('generalLabels.description.main') }}</p>
-              <hr class="second-hr-main"/>
-            </header>
-
-            <div class="content">
-              <div v-for="(category, index) in categories" class="checkbox-container row" :key="category.id">
-                <input :id="`cookie-consent-checkbox-${category.id}`" type="checkbox"
-                       :checked="consents[index].accepted" :disabled="index === 0"
-                       @change="setCategoryConsent($event, index)" class="col"/>
-                <label :for="`cookie-consent-checkbox-${category.id}`" class="col">{{ category.label }}</label>
-                <span v-if="index > 0 && consents[index].partial" class="checkbox-partial-indicator"></span>
-                <span v-if="index > 0 && !consents[index].partial && !consents[index].accepted "
-                      class="checkbox-none-indicator"></span>
-              </div>
-
-              <div>
-                <button @click="acceptAll()">{{ $t('generalLabels.button.acceptAll') }}</button>
-                <button @click="acceptSelection()">{{ $t('generalLabels.button.acceptSelection') }}</button>
-              </div>
-            </div>
-
-            <div id="link-container" class="av-white">
-              <div>
-                <a rel="nofollow" href="#" @click="showDetails($event)"><b>{{
-                    $t('generalLabels.individualSettings')
-                  }}</b></a>
-              </div>
-              <a rel="nofollow" href="#" @click="showDetails($event)"><b>{{ $t('generalLabels.cookieDetails') }}</b></a>
-              <a rel="nofollow" :href="$t('generalLabels.requiredLinks.privacy.href')">{{
-                  $t('generalLabels.requiredLinks.privacy.title')
-                }}</a>
-              <a rel="nofollow" :href="$t('generalLabels.requiredLinks.impress.href')">{{
-                  $t('generalLabels.requiredLinks.impress.title')
-                }}</a>
-              <a rel="nofollow" v-for="link in links" :key="link.title" :href="link.href">{{ link.title }}</a>
-            </div>
-          </div>
-
-          <div v-else id="details-container">
-            <header>
-              <a rel="nofollow" href="#" class="back-to-main"
-                 @click="showMain($event)">{{ $t('generalLabels.details.back') }}</a>
-              <a rel="nofollow" href="#" class="minimizer" @click="minimize($event)"
-                 :title="$t('generalLabels.minimize')"><span>-</span></a>
-              <div class="heading">
-                <span>&#127850;</span>
-                <h4>{{ $t('generalLabels.title') }}</h4>
-              </div>
-              <hr class="first-hr"/>
-              <p class="av-center">{{ $t('generalLabels.description.details') }}</p>
-              <hr class="second-hr-details"/>
-              <div>
-                <button @click="acceptAll()">{{ $t('generalLabels.button.acceptAll') }}</button>
-                <button @click="acceptSelection()">{{ $t('generalLabels.button.acceptSelection') }}</button>
-              </div>
-            </header>
-
-            <div v-for="(category, categoryIndex) in categories" class="cookie-details-card" :key="category.id"
-                 :ref="`details-card-${categoryIndex}`">
-              <div class="binary-slider-label-container" v-if="categoryIndex > 0">
-                <span class="binary-slider-label binary-slider-label-margin accepted"
-                      :class="{ 'av-hide': !consents[categoryIndex].accepted }">{{
-                    $t('generalLabels.binarySliderLabels.accepted')
-                  }}</span>
-                <span class="binary-slider-label binary-slider-label-margin declined"
-                      :class="{ 'av-hide': consents[categoryIndex].accepted || consents[categoryIndex].partial }">{{
-                    $t('generalLabels.binarySliderLabels.declined')
-                  }}</span>
-                <span class="binary-slider-label binary-slider-label-margin partial"
-                      :class="{ 'av-hide': !consents[categoryIndex].partial }">{{
-                    $t('generalLabels.binarySliderLabels.partial')
-                  }}</span>
-                <div>
-                  <div :id="`cookie-consent-details-checkbox-${category.id}`" class="binary-slider margin-small"
-                       :class="{ active: consents[categoryIndex].accepted, partial: consents[categoryIndex].partial }"
-                       @click="toggleConsent($event, categoryIndex)">
-                    <span class="binary-slider-circle"></span>
-                  </div>
-                </div>
-              </div>
-              <div class="label-container">
-                <h5 class="padding-top">{{ category.label }} ({{ category.cookies.length }})</h5>
-                <div></div>
-              </div>
-
-              <p>{{ category.description }}</p>
-              <a rel="nofollow" href="#" class="av-center av-block"
-                 @click="toggleCookieInformation($event)">{{ $t('generalLabels.showCookieInformation') }}</a>
-
-              <div class="table-container">
-                <table v-for="(cookie, cookieIndex) in category.cookies" :key="cookie.cookieName">
-                  <tr v-if="categoryIndex > 0">
-                    <td>{{ $t('cookieLabels.accept') }}</td>
-                    <td>
-                      <div class="table-binary-slider-container">
-                        <div class="binary-slider" @click="toggleConsent($event, categoryIndex, cookieIndex)"
-                             :class="{ active: consents[categoryIndex].cookies[cookieIndex].accepted }">
-                          <span class="binary-slider-circle"></span>
-                        </div>
-                        <div class="binary-slider-label binary-slider-label-small-margin"
-                             :class="{ 'av-hide': !consents[categoryIndex].cookies[cookieIndex].accepted }">
-                          {{ $t('generalLabels.binarySliderLabels.accepted') }}
-                        </div>
-                        <div class="binary-slider-label binary-slider-label-small-margin"
-                             :class="{ 'av-hide': consents[categoryIndex].cookies[cookieIndex].accepted }">
-                          {{ $t('generalLabels.binarySliderLabels.declined') }}
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{{ $t('cookieLabels.name') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ $t('metaCookieTitles.name') }}</td>
-                    <td v-else>{{ cookie.name }}</td>
-                  </tr>
-                  <tr>
-                    <td>{{ $t('cookieLabels.provider') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ $t('metaCookieTitles.provider') }}</td>
-                    <td v-else>{{ cookie.provider }}</td>
-                  </tr>
-                  <tr>
-                    <td>{{ $t('cookieLabels.purpose') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ $t('metaCookieTitles.purpose') }}</td>
-                    <td v-else>{{ cookie.purpose }}</td>
-                  </tr>
-                  <tr v-if="'privacyURL' in cookie">
-                    <td>{{ $t('cookieLabels.privacy') }}</td>
-                    <td><a rel="nofollow" :href="cookie.privacyURL">{{ cookie.privacyURL }}</a></td>
-                  </tr>
-                  <tr v-if="'hosts' in cookie">
-                    <td>{{ $t('cookieLabels.hosts') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ $t('metaCookieTitles.hosts') }}</td>
-                    <td v-else>{{ cookie.hosts }}</td>
-                  </tr>
-                  <tr v-if="'cookieName' in cookie">
-                    <td>{{ $t('cookieLabels.cookieName') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ $t('metaCookieTitles.cookieName') }}</td>
-                    <td v-else><i>{{ cookie.cookieName }}</i></td>
-                  </tr>
-                  <tr v-if="'cookieValidityPeriod' in cookie">
-                    <td>{{ $t('cookieLabels.cookieValidityPeriod') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{
-                        $t('metaCookieTitles.cookieValidityPeriod')
-                      }}
-                    </td>
-                    <td v-else>{{ cookie.cookieValidityPeriod }}</td>
-                  </tr>
-                  <tr v-if="'links' in cookie && cookie.links.length > 0">
-                    <td>{{ $t('cookieLabels.links') }}</td>
-                    <td><a rel="nofollow" v-for="link in cookie.links" :key="link.title" :href="link.href"
-                           target="_blank">{{ link.title || link.href }}</a></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</template>
-
-
 
 <style>
 @import "/src/assets/css/global/all.css";
