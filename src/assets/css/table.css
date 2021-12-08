@@ -5,8 +5,10 @@
 }
 
 table:not(:last-child) {
-    margin: 3px;
     border-bottom: 2px solid lightseagreen;
+}
+table {
+    margin: 3px;
 }
 
 table tr, table tr:hover {
