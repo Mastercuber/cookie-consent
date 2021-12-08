@@ -17,10 +17,6 @@
       "require": "./dist/cookie-consent.umd.js"
     }
   },
-  "dependencies": {
-    "vue": "^3.2.24",
-    "vue-i18n": "^9.1.9"
-  },
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^3.2.1",
     "@types/node": "^16.11.12",
@@ -28,6 +24,8 @@
     "typescript": "^4.5.2",
     "vite": "^2.7.0",
     "vite-plugin-vue-type-imports": "^0.0.3",
-    "vue-tsc": "^0.29.8"
+    "vue-tsc": "^0.29.8",
+    "vue": "^3.2.24",
+    "vue-i18n": "^9.1.9"
   }
 }
