@@ -1,10 +1,21 @@
 {
   "name": "cookie-consent-vite",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/cookie-consent.umd.js",
+  "module": "./dist/cookie-consent.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/cookie-consent.es.js",
+      "require": "./dist/cookie-consent.umd.js"
+    }
   },
   "dependencies": {
     "vue": "^3.2.24",
@@ -13,11 +24,10 @@
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^3.2.1",
     "@types/node": "^16.11.12",
-    "@types/vue": "^2.0.0",
-    "@types/vue-i18n": "^7.0.0",
     "@vitejs/plugin-vue": "^1.10.2",
     "typescript": "^4.5.2",
     "vite": "^2.7.0",
-    "vite-plugin-vue-type-imports": "^0.0.3"
+    "vite-plugin-vue-type-imports": "^0.0.3",
+    "vue-tsc": "^0.29.8"
   }
 }
