@@ -1,11 +1,41 @@
-# Vue 3 + Typescript + Vite
+## Language Codes (ISO-639-1)
+The language codes are listed in [IANA Subtag Registry](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry) (see also [IANA Protocols (Language Tags)](https://www.iana.org/protocols) and taken from [Wikipedia | List of ISO-639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
 
-This template should help get you started developing with Vue 3 and Typescript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Every translation block of this Cookie-Consent is named after the appropriate [ISO-639-1](https://en.wikipedia.org/wiki/ISO_639-1) code.
 
-## Recommended IDE Setup
+* Arabic ar
+* Bulgarian bg
+* Czech cs
+* Danish da
+* German de
+* Greek el
+* English en
+* Spanish es
+* Estonian et
+* Finnish fi
+* French fr
+* Indian (Hindi) hi
+* Croatian hr
+* Hungarian hu
+* Armenian hy
+* Italian it
+* Luxembourgian lb
+* Lithuanian lt
+* Latvian lv
+* Dutch nl
+* Norwegian no
+* Polish pl
+* Portuguese pt
+* Romanian ro
+* Russian ru
+* Slovakian sk
+* Slovenian sl
+* Albanian sq
+* Swedish sv
+* Turkish tk
+* Ukrainian uk
+* Chinese zh
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+In sum 32 languages are supported, mostly from the EU and some others like arabic, indian, russian and chinese.
 
-## Type Support For `.vue` Imports in TS
-
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's `.vue` type support plugin by running `Volar: Switch TS Plugin on/off` from VSCode command palette.
+The source language for the translations is German. All translations were made with [google translate](https://translate.google.com/) and [deepl](https://www.deepl.com). For some translations also [Leo](https://dict.leo.org) was used.
