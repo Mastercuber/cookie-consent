@@ -55,24 +55,23 @@
     margin-right: 40px;
 }
 .minimizer::before {
-    content: '-';
+    content: '\2010';
     position: absolute;
-    top: -2px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    text-align: center;
+    top: 0px;
+    font-size: 1em;
+    margin: 0;
+    padding: 0;
     pointer-events: none;
     transition: color 0.5s;
 }
 .clear-site::before {
-    content: 'x';
+    content: '\D7';
     position: absolute;
-    top: 0px;
-    font-size: 0.9em;
+    top: -1px;
+    font-size: 1em;
     color: darkred;
     margin: 0;
     padding: 0;
-    text-align: center;
     pointer-events: none;
     transition: color 0.5s;
 }

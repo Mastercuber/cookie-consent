@@ -18,26 +18,14 @@ input[type="checkbox"]:not(:checked)::after {
     visibility: visible;
 }
 input[type="checkbox"]::before {
-    content: "✔";
+    content: "\2714"; /* ✔ -> Unicode Zeichen */
     position: absolute;
     font-size: 1.5em;
     right: 0px;
     top: -3px;
     visibility: hidden;
 }
-@media all and (max-width: 600px) {
-    input[type="checkbox"]::before {
-        content: "✔";
-        position: absolute;
-        font-size: 1.5em;
-        right: 0px;
-        top: -6px;
-        visibility: hidden;
-    }
-}
-@media all and (max-width: 1000px) {
 
-}
 input[type="checkbox"]:disabled {
     background: #ddd;
     color: green;
