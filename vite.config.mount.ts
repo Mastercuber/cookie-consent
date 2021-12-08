@@ -10,6 +10,10 @@ export default defineConfig({
     vue(),
     VueTypeImports(),
     vueI18n({
+      // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
+      //compositionOnly: false,
+
+      // you need to set i18n resource including paths !
       include: path.resolve(__dirname, 'src/locales/**'),
       fullInstall: false
     })
@@ -17,13 +21,14 @@ export default defineConfig({
   build: {
     target: 'esnext',
     lib: {
-      entry: path.resolve(__dirname, 'src/components/CookieConsent.vue'),
+      entry: path.resolve(__dirname, 'src/main.ts'),
       name: 'CookieConsent',
       formats: ['es', 'umd'],
       fileName: (format) => `cookie-consent.${format}.js`
     },
     ssr: false,
-    minify: false,
+    minify: true,
+    reportCompressedSize: true,
     rollupOptions: {
       external: ['vue'],
       output: {
@@ -31,6 +36,12 @@ export default defineConfig({
           vue: 'Vue'
         }
       }
+      /*output: {
+        entryFileNames: `[name].js`,
+        chunkFileNames: `[name].js`,
+        assetFileNames: `[name].[ext]`
+      }*/
     }
-  }
+  },
+  assetsInclude: ['src/assets/*', 'src/locales/*'],
 })
