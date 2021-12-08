@@ -14,7 +14,7 @@ const langs = [
   {
     locale: 'de',
     flag: '&#127465&#127466',
-    title: 'Germany'
+    title: 'German'
   },
   {
     locale: 'en',
@@ -22,157 +22,156 @@ const langs = [
     title: 'English'
   },
   {
-    locale: 'dk',
+    locale: 'da',
     flag: '&#127465&#127472',
-    title: 'Denmark'
+    title: 'Danish'
   },
   {
     locale: 'nl',
     flag: '&#127475&#127473',
-    title: 'Netherlands'
+    title: 'Dutch'
   },
   {
-    locale: 'lu',
+    locale: 'lb',
     flag: '&#127473&#127482',
-    title: 'Luxembourg'
+    title: 'Luxembourgian'
   },
   {
     locale: 'ro',
     flag: '&#127479&#127476',
-    title: 'Romania'
+    title: 'Romanian'
   },
   {
     locale: 'hu',
     flag: '&#127469&#127482',
-    title: 'Hungary'
+    title: 'Hungarian'
   },
   {
     locale: 'fr',
     flag: '&#127467&#127479',
-    title: 'France'
+    title: 'French'
   },
   {
     locale: 'pl',
     flag: '&#127477&#127473',
-    title: 'Poland'
+    title: 'Polish'
   },
   {
-    locale: 'cz',
+    locale: 'cs',
     flag: '&#127464&#127487',
-    title: 'Czechia'
+    title: 'Czech'
   },
   {
     locale: 'it',
     flag: '&#127470&#127481',
-    title: 'Italy'
+    title: 'Italian'
   },
   {
     locale: 'hr',
     flag: '&#127469&#127479',
-    title: 'Croatia'
+    title: 'Croatian'
   },
   {
-    locale: 'si',
+    locale: 'sl',
     flag: '&#127480&#127470',
-    title: 'Slovenia'
+    title: 'Slovenian'
   },
   {
     locale: 'sk',
     flag: '&#127480&#127472',
-    title: 'Slovakia'
+    title: 'Slovakian'
   },
   {
     locale: 'es',
     flag: '&#127466&#127480',
-    title: 'Spain'
+    title: 'Spanish'
   },
   {
     locale: 'pt',
     flag: '&#127477&#127481',
-    title: 'Portugal'
+    title: 'Portuguese'
   },
   {
-    locale: 'ee',
+    locale: 'et',
     flag: '&#127466&#127466',
-    title: 'Estonia'
+    title: 'Estonian'
   },
   {
     locale: 'lv',
     flag: '&#127473&#127483',
-    title: 'Latvia'
+    title: 'Latvian'
   },
   {
     locale: 'lt',
     flag: '&#127473&#127481',
-    title: 'Lithuania'
+    title: 'Lithuanian'
   },
   {
     locale: 'no',
     flag: '&#127475&#127476',
-    title: 'Norway'
+    title: 'Norwegian'
   },
   {
-    locale: 'sw',
+    locale: 'sv',
     flag: '&#127480&#127466',
-    title: 'Sweden'
+    title: 'Swedish'
   },
   {
     locale: 'fi',
     flag: '&#127467&#127470',
-    title: 'Finland'
+    title: 'Finnish'
   },
   {
     locale: 'ru',
     flag: '&#127479&#127482',
-    title: 'Russia'
+    title: 'Russian'
   },
   {
-    locale: 'ua',
+    locale: 'uk',
     flag: '&#127482&#127462',
-    title: 'Ukraine'
+    title: 'Ukrainian'
   },
   {
-    locale: 'gr',
+    locale: 'el',
     flag: '&#127468&#127479',
-    title: 'Greece'
+    title: 'Greek'
   },
   {
-    locale: 'tr',
+    locale: 'tk',
     flag: '&#127481&#127479',
-    title: 'Turkey'
+    title: 'Turkish'
   },
   {
     locale: 'bg',
     flag: '&#127463&#127468',
-    title: 'Bulgaria'
+    title: 'Bulgarian'
   },
   {
-    locale: 'al',
+    locale: 'sq',
     flag: '&#127462&#127473',
-    title: 'Albania'
+    title: 'Albanian'
   },
   {
-    locale: 'am',
+    locale: 'hy',
     flag: '&#127462&#127474',
-    title: 'Armenia'
+    title: 'Armenian'
   },
   {
-    locale: 'cn',
+    locale: 'zh',
     flag: '&#127464&#127475',
-    title: 'China'
+    title: 'Chinese'
   },
   {
-    locale: 'in',
+    locale: 'hi',
     flag: '&#127470&#127475',
-    title: 'India (Hindi)'
+    title: 'Indian (Hindi)'
   },
   {
-    locale: 'ae',
+    locale: 'ar',
     flag: '&#127462&#127466',
-    title: 'United Arab Emirates'
+    title: 'Arabian'
   },
   {
-    locale: 'gb',
     flag: '&#8634;',
     title: 'Reset'
   }
