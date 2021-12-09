@@ -27,7 +27,7 @@ import sk from './sk.json'
 import sl from './sl.json'
 import sq from './sq.json'
 import sv from './sv.json'
-import tk from './tk.json'
+import tr from './tr.json'
 import uk from './uk.json'
 import zh from './zh.json'
 
@@ -62,6 +62,6 @@ export default {
   sl,
   sk,
   sv,
-  tk,
+  tr,
   uk
 }

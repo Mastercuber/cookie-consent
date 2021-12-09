@@ -137,7 +137,7 @@ const langs = [
     title: 'Greek'
   },
   {
-    locale: 'tk',
+    locale: 'tr',
     flag: '&#127481&#127479',
     title: 'Turkish'
   },

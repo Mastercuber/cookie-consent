@@ -4,6 +4,6 @@ import App from './App.vue';
 
 const app = createApp(App)
 const i18n = createI18n({
-    locale: 'en'
+    locale: 'de'
 })
 app.use(i18n).mount('#app')
