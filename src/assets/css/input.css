@@ -54,11 +54,23 @@ input[type=checkbox]:hover, label:hover {
     transform: translateX(1px) translateY(1px);
     pointer-events: none;
 }
+
+#container[dir=rtl] .checkbox-none-indicator {
+    left: auto;
+    right: 9px;
+}
+#container[dir=rtl] #details-container > header {
+    text-align: initial;
+}
+#container[dir=rtl] #details-container > header > .heading {
+    margin-inline-start: 65px;
+}
+
 .checkbox-none-indicator {
     position: absolute;
     background: gray;
     left: 7px;
-    top: 0px;
+    top: 1px;
     width: 12.1px;
     height: 4.1px;
     transform: translateX(1px) translateY(10px);

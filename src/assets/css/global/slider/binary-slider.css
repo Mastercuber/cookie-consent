@@ -34,7 +34,12 @@
 
 .binary-slider-label-small-margin {
     margin-top: 0;
-    margin-left: 6px;
+    margin-inline-start: 6px;
+}
+
+#container[dir=rtl] .binary-slider-label-container {
+    right: auto;
+    left: 0;
 }
 
 .binary-slider-label-container {

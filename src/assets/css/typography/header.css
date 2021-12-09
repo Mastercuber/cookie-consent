@@ -15,10 +15,16 @@ h4, p {
 h5 {
     margin-top: 8px;
     margin-bottom: 0;
-    width: 800px;
 }
-h5::before {
+
+#container[dir=rtl] .cookie-details-card .label-container h5 {
+    text-align: initial;
+    border-right: 4px solid black;
+}
+
+#container:not([dir=rtl]) .cookie-details-card h5::before {
     content: '';
     border: 2px solid black;
     margin: 0 12px 0 0;
 }
+

@@ -4,7 +4,7 @@
       <span>&#9881;</span>
     </div>
     <div v-if="showConsent" id="overlay" class="av-animate-top" :class="{ 'cookie-consent-hidden': isMinimized, 'blur-overlay-reverse': blurOverlayReverse }">
-      <div id="container" class="av-card-4 av-round av-padding av-center av-white">
+      <div :dir="locale === 'ar' ? 'rtl' : ''" id="container" class="av-card-4 av-round av-padding av-center av-white">
         <div id="cookie-consent-opacity-container">
           <div v-if="isMainContainerVisible">
             <header>
@@ -701,7 +701,7 @@
   }
 
   .content div label {
-    margin-left: 6px;
+    margin-inline-start: 6px;
     user-select: none;
   }
 
@@ -793,6 +793,10 @@
     border-color: #9e9e9e !important;
   }
 
+  #container[dir=rtl] .cookie-details-card p {
+    text-align: initial;
+  }
+
 
   .cookie-details-card {
     width: 100%;
@@ -872,7 +876,7 @@
       "provider": "صاحب الموقع الإلكتروني",
       "purpose": "يحفظ الموافقات أو الرفض لملفات تعريف الارتباط الفردية.",
       "cookieName": "consents",
-      "cookieValidityPeriod": "1 سنة"
+      "cookieValidityPeriod": "١ سنة"
     }
   },
   "bg": {
@@ -2415,7 +2419,7 @@
       "cookieValidityPeriod": "1 år"
     }
   },
-  "tk": {
+  "tr": {
     "generalLabels": {
       "title": "Gizlilik ayarları",
       "details": {

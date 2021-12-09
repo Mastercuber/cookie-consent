@@ -8,6 +8,7 @@ table:not(:last-child) {
     border-bottom: 2px solid lightseagreen;
 }
 table {
+    width: calc(100% - 3px);
     margin: 3px;
 }
 

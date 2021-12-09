@@ -15,6 +15,7 @@
 }
 .av-white {
     background: white;
+    border-radius: 6px;
 }
 .av-animate-top {
     position: relative;
