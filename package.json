@@ -9,6 +9,17 @@
   "files": [
     "dist"
   ],
+  "keywords": ["vue", "cookie", "consent", "privacy", "manager"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mastercuber/Cookie-Consent-Vite.git"
+  },
+  "author": "Armin Kunkel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mastercuber/Cookie-Consent-Vite/issues"
+  },
+  "homepage": "https://github.com/Mastercuber/Cookie-Consent-Vite#readme",
   "main": "./dist/cookie-consent.umd.js",
   "module": "./dist/cookie-consent.es.js",
   "exports": {
