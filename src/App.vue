@@ -8,9 +8,9 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import CookieConsent from './components/CookieConsent.vue'
+import CookieConsent from '@/components/CookieConsent.vue'
 import { ref } from "vue";
-import LanguageFlags from "./components/LanguageFlags.vue";
+import LanguageFlags from "@/components/LanguageFlags.vue";
 
 let lang = ref('en')
 
@@ -77,9 +77,54 @@ const obj = {
             }
           ],
           onAccepted() {
-        },
-        onDenied() {
+          },
+          onDenied() {
+          }
         }
+      ]
+    },
+    {
+      id: 'essential2',
+      label: 'Essenziell 2',
+      description: 'Essenzielle Cookies ermöglichen grundlegende Funktionalität und sind für den einwandfreien Betrieb der Webseite unabdingbar.',
+      cookies: [
+        {
+          id: 'session-cookie',
+          name: 'Sitzungscookie',
+          provider: 'Eigentümer der Webseite',
+          purpose: 'Speichert als anonymer Nutzer die Artikel im Warenkorb und als angemeldeter Nutzer zusätzlich die Tatsache der Anmeldung',
+          cookieName: 'SESSION',
+          cookieValidityPeriod: '2 Stunden'
+        }
+      ]
+    },
+    {
+      id: 'essential3',
+      label: 'Essenziell 3',
+      description: 'Essenzielle Cookies ermöglichen grundlegende Funktionalität und sind für den einwandfreien Betrieb der Webseite unabdingbar.',
+      cookies: [
+        {
+          id: 'session-cookie',
+          name: 'Sitzungscookie',
+          provider: 'Eigentümer der Webseite',
+          purpose: 'Speichert als anonymer Nutzer die Artikel im Warenkorb und als angemeldeter Nutzer zusätzlich die Tatsache der Anmeldung',
+          cookieName: 'SESSION',
+          cookieValidityPeriod: '2 Stunden'
+        }
+      ]
+    },
+    {
+      id: 'essential4',
+      label: 'Essenziell 4',
+      description: 'Essenzielle Cookies ermöglichen grundlegende Funktionalität und sind für den einwandfreien Betrieb der Webseite unabdingbar.',
+      cookies: [
+        {
+          id: 'session-cookie',
+          name: 'Sitzungscookie',
+          provider: 'Eigentümer der Webseite',
+          purpose: 'Speichert als anonymer Nutzer die Artikel im Warenkorb und als angemeldeter Nutzer zusätzlich die Tatsache der Anmeldung',
+          cookieName: 'SESSION',
+          cookieValidityPeriod: '2 Stunden'
         }
       ]
     }
