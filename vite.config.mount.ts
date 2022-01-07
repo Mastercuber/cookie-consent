@@ -1,8 +1,11 @@
-import path from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueI18n from "@intlify/vite-plugin-vue-i18n"
 import VueTypeImports from 'vite-plugin-vue-type-imports'
+
+import { resolve } from 'path'
+// @ts-ignore
+import autoprefixer from 'autoprefixer'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,14 +17,26 @@ export default defineConfig({
       //compositionOnly: false,
 
       // you need to set i18n resource including paths !
-      include: path.resolve(__dirname, 'src/locales/**'),
+      include: resolve(__dirname, 'src/locales/**'),
       fullInstall: false
     })
   ],
+  css: {
+    postcss: {
+      plugins: [
+          autoprefixer()
+      ]
+    }
+  },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src')
+    }
+  },
   build: {
     target: 'esnext',
     lib: {
-      entry: path.resolve(__dirname, 'src/main.ts'),
+      entry: resolve(__dirname, 'src/main.ts'),
       name: 'CookieConsent',
       formats: ['es', 'umd'],
       fileName: (format) => `cookie-consent.${format}.js`
@@ -42,6 +57,5 @@ export default defineConfig({
         assetFileNames: `[name].[ext]`
       }*/
     }
-  },
-  assetsInclude: ['src/assets/*', 'src/locales/*'],
+  }
 })
