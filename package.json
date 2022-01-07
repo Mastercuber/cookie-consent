@@ -1,10 +1,12 @@
 {
-  "name": "cookie-consent-vite",
+  "name": "cookie-consent",
   "version": "0.1.0",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "browserslist:update": "npx browserslist@latest --update-db",
+    "browserslist:show:selected": "npx browserslist"
   },
   "files": [
     "dist"
@@ -28,18 +30,26 @@
   "homepage": "https://github.com/Mastercuber/Cookie-Consent-Vite#readme",
   "main": "./dist/cookie-consent.umd.js",
   "module": "./dist/cookie-consent.es.js",
+  "types": "./dist/src/components/CookieConsent.vue.d.ts",
   "exports": {
+    "./style.css": "./dist/style.css",
     ".": {
       "import": "./dist/cookie-consent.es.js",
       "require": "./dist/cookie-consent.umd.js"
     }
   },
+  "browserslist": [
+    "last 6 versions"
+  ],
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^3.2.1",
     "@types/node": "^16.11.12",
     "@vitejs/plugin-vue": "^1.10.2",
+    "autoprefixer": "^10.4.0",
+    "browserslist": "^4.18.1",
     "typescript": "^4.5.2",
     "vite": "^2.7.0",
+    "vite-plugin-dts": "^0.9.6",
     "vite-plugin-vue-type-imports": "^0.0.3",
     "vue": "^3.2.24",
     "vue-i18n": "^9.1.9",
