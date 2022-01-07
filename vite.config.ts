@@ -1,7 +1,9 @@
-import path from 'path'
-import { defineConfig } from 'vite'
+/* globals path __dirname */
+
+import * as path from 'path'
+import {defineConfig} from 'vite'
 import vue from '@vitejs/plugin-vue'
-import vueI18n from "@intlify/vite-plugin-vue-i18n"
+import vueI18n from '@intlify/vite-plugin-vue-i18n'
 import VueTypeImports from 'vite-plugin-vue-type-imports'
 
 // https://vitejs.dev/config/

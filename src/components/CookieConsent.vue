@@ -182,13 +182,14 @@
 </template>
 
 <script setup lang="ts">
-  import { onBeforeMount, onMounted, ref, reactive, toRefs, withDefaults, nextTick } from 'vue'
-  import type {Props, Cookie, Category} from '../interfaces/CookieConsentProps'
-  import Consents from './Consents'
-  import { useI18n } from 'vue-i18n'
-  import { Consent } from '../interfaces/Consent'
+import {nextTick, onBeforeMount, onMounted, reactive, ref, toRefs, withDefaults} from 'vue'
+import type {Category, Cookie} from '../interfaces/CookieConsentProps'
+import {CookieLabelsProps, GeneralLabelsProps, Link, RequiredLinksProps} from "../interfaces/CookieConsentProps";
+import Consents from './Consents'
+import {useI18n} from 'vue-i18n'
+import {Consent} from '../interfaces/Consent'
 
-  const { t, locale } = useI18n()
+const { t, locale } = useI18n()
 
   // Data
   const consents: Array<Consent> = reactive([])
@@ -201,7 +202,19 @@
   const detailsCards = ref([])
 
   // Props
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<{
+    categories: Array<Category>,
+    requiredLinks: RequiredLinksProps,
+    links?: Array<Link>,
+    generalLabels?: GeneralLabelsProps,
+    cookieLabels?: CookieLabelsProps,
+    useMetaCookie?: boolean,
+    metaCookieTitles?: Cookie,
+
+    animationDuration?: string,
+    minimizeAnimationDuration?: string,
+    hideDuration?: string
+  }>(), {
     useMetaCookie: false,
     metaCookieTitles: {
       // @ts-ignore
