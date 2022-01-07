@@ -4,7 +4,7 @@
       <span>&#9881;</span>
     </div>
     <div v-if="showConsent" id="overlay" class="av-animate-top" :class="{ 'cookie-consent-hidden': isMinimized, 'blur-overlay-reverse': blurOverlayReverse }">
-      <div :dir="locale === 'ar' ? 'rtl' : ''" id="container" class="av-card-4 av-round av-padding av-center av-white">
+      <div :dir="locale === 'ar' ? 'rtl' : 'ltr'" id="container" class="av-card-4 av-round av-padding av-center av-white">
         <div id="cookie-consent-opacity-container">
           <div v-if="isMainContainerVisible">
             <header>
