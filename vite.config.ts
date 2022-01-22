@@ -19,13 +19,7 @@ export default defineConfig({
     }),
     dts()
   ],
-  css: {
-    postcss: {
-      plugins: [
-          autoprefixer()
-      ]
-    }
-  },
+  css: {},
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src')
@@ -34,7 +28,7 @@ export default defineConfig({
   build: {
     target: 'esnext',
     lib: {
-      entry: resolve(__dirname, 'src/components/CookieConsent.vue'),
+      entry: resolve(__dirname, 'src/entry.ts'),
       name: 'CookieConsent',
       formats: ['es', 'umd'],
       fileName: (format) => `cookie-consent.${format}.js`

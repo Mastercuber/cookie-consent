@@ -182,14 +182,14 @@
 </template>
 
 <script setup lang="ts">
-import {nextTick, onBeforeMount, onMounted, reactive, ref, toRefs, withDefaults} from 'vue'
-import type {Category, Cookie} from '../interfaces/CookieConsentProps'
-import {CookieLabelsProps, GeneralLabelsProps, Link, RequiredLinksProps} from "../interfaces/CookieConsentProps";
-import Consents from './Consents'
-import {useI18n} from 'vue-i18n'
-import {Consent} from '../interfaces/Consent'
+  import {nextTick, onBeforeMount, onMounted, reactive, ref, toRefs, withDefaults} from 'vue'
+  import type {Category, Cookie} from '../interfaces/CookieConsentProps'
+  import {CookieLabelsProps, GeneralLabelsProps, Link, RequiredLinksProps} from "../interfaces/CookieConsentProps";
+  import Consents from './Consents'
+  import {useI18n} from 'vue-i18n'
+  import {Consent} from '../interfaces/Consent'
 
-const { t, locale } = useI18n()
+  const { t, locale } = useI18n()
 
   // Data
   const consents: Array<Consent> = reactive([])
@@ -658,8 +658,6 @@ const { t, locale } = useI18n()
 
   * {
     font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 
     box-sizing: border-box;
     transition: 0.4s;
