@@ -95,6 +95,13 @@ const obj = {
           purpose: 'Speichert als anonymer Nutzer die Artikel im Warenkorb und als angemeldeter Nutzer zusätzlich die Tatsache der Anmeldung',
           cookieName: 'SESSION',
           cookieValidityPeriod: '2 Stunden'
+        },{
+          id: 'session-cookie-7',
+          name: 'Sitzungscookie 3',
+          provider: 'Eigentümer der Webseite',
+          purpose: 'Speichert als anonymer Nutzer die Artikel im Warenkorb und als angemeldeter Nutzer zusätzlich die Tatsache der Anmeldung',
+          cookieName: 'SESSION',
+          cookieValidityPeriod: '2 Stunden'
         }
       ]
     },
@@ -110,6 +117,13 @@ const obj = {
           purpose: 'Speichert als anonymer Nutzer die Artikel im Warenkorb und als angemeldeter Nutzer zusätzlich die Tatsache der Anmeldung',
           cookieName: 'SESSION',
           cookieValidityPeriod: '2 Stunden'
+        },{
+          id: 'session-cookie-6',
+          name: 'Sitzungscookie 3',
+          provider: 'Eigentümer der Webseite',
+          purpose: 'Speichert als anonymer Nutzer die Artikel im Warenkorb und als angemeldeter Nutzer zusätzlich die Tatsache der Anmeldung',
+          cookieName: 'SESSION',
+          cookieValidityPeriod: '2 Stunden'
         }
       ]
     },
@@ -121,6 +135,13 @@ const obj = {
         {
           id: 'session-cookie',
           name: 'Sitzungscookie',
+          provider: 'Eigentümer der Webseite',
+          purpose: 'Speichert als anonymer Nutzer die Artikel im Warenkorb und als angemeldeter Nutzer zusätzlich die Tatsache der Anmeldung',
+          cookieName: 'SESSION',
+          cookieValidityPeriod: '2 Stunden'
+        },{
+          id: 'session-cookie-5',
+          name: 'Sitzungscookie 3',
           provider: 'Eigentümer der Webseite',
           purpose: 'Speichert als anonymer Nutzer die Artikel im Warenkorb und als angemeldeter Nutzer zusätzlich die Tatsache der Anmeldung',
           cookieName: 'SESSION',

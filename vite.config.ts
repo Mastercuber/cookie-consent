@@ -5,8 +5,6 @@ import VueTypeImports from 'vite-plugin-vue-type-imports'
 import dts from 'vite-plugin-dts'
 
 import { resolve } from 'path'
-// @ts-ignore
-import autoprefixer from 'autoprefixer'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -19,7 +17,6 @@ export default defineConfig({
     }),
     dts()
   ],
-  css: {},
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src')
@@ -34,7 +31,7 @@ export default defineConfig({
       fileName: (format) => `cookie-consent.${format}.js`
     },
     ssr: false,
-    minify: false,
+    minify: true,
     rollupOptions: {
       external: ['vue'],
       output: {

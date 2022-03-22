@@ -181,8 +181,7 @@ function setLang(l = 'en', reset = false) {
   console.log(reset)
   if (reset) {
     Consents.clear()
-    location.href = '/'
-    window.location = '/'
+    location.reload()
   }
 
   locale.value = l
@@ -235,7 +234,7 @@ function setLang(l = 'en', reset = false) {
     border-radius: 4px;
     background: lightblue;
     cursor: pointer;
-    padding: 9px 7px;
+    padding: 5px 7px;
     margin: 4px;
     font-weight: bold;
     font-size: 40px;

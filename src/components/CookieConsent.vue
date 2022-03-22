@@ -1,112 +1,131 @@
 <template>
   <div id="cookie-consent">
-    <div id="settings-symbol" @click="maximize($event)" :title="t('generalLabels.title')">
-      <span>&#9881;</span>
+    <div class="settings-icon-container" @click="maximize($event)" :title="t('generalLabels.title')">
+      <span class="settings-icon" />
     </div>
-    <div v-if="showConsent" id="overlay" class="av-animate-top" :class="{ 'cookie-consent-hidden': isMinimized, 'blur-overlay-reverse': blurOverlayReverse }">
-      <div :dir="locale === 'ar' ? 'rtl' : 'ltr'" id="container" class="av-card-4 av-round av-padding av-center av-white">
+    <div id="overlay" v-if="showConsent"
+         class="animate-top w-full h-full bg-gray-600 bg-opacity-40 fixed top-0 left-0"
+         :class="{ 'hidden': isMinimized, 'blur-overlay-reverse': blurOverlayReverse }">
+      <div id="container" :dir="locale === 'ar' ? 'rtl' : 'ltr'"
+           class="transform-gpu rounded py-2 px-4 text-center bg-white relative w-[var(--cookie-consent-width)] h-[var(--cookie-consent-height)] overflow-x-hidden overflow-y-auto mx-auto my-[8vh] sm:my-[25vh]">
         <div id="cookie-consent-opacity-container">
           <div v-if="isMainContainerVisible">
             <header>
+              <div class="relative z-10">
+                <span class="cookie-consent-info font-bold" :title="t('generalLabels.info.title')" @click="toggleInfo" style="font-family: 'Verdana'">i</span>
+                <div class="rounded w-full h-max bg-blue-200 absolute top-[26px] left-0" :class="{ 'cookie-consent-info-hide': !isInfoOpen }">
+                  <span class="absolute arrow-up top-[-4px] left-[5px]"></span>
+                  <p class="text-[13px] px-2 text-left my-1 mx-0">{{ t('generalLabels.info.text') }}</p>
+                </div>
+              </div>
               <a rel="nofollow" href="#" class="minimizer" @click="minimize($event)"
                  :title="t('generalLabels.minimize')"></a>
               <a rel="nofollow" href="#" class="clear-site" @click="clearSite($event)"
                  :title="t('generalLabels.clearSite')"></a>
-              <div class="heading">
-                <span>&#127850;</span>
-                <h4>{{ t('generalLabels.title') }}</h4>
+              <div class="inline-flex h-[45px] mt-4">
+                <span class="select-none text-[36px]">&#127850;</span>
+                <h4 class="select-none font-bold mt-[10px]">{{ t('generalLabels.title') }}</h4>
               </div>
-              <hr class="first-hr"/>
+              <hr class="mt-5 mb-2 mx-0 rounded-b-2xl"/>
               <p>{{ t('generalLabels.description.main') }}</p>
-              <hr class="second-hr-main"/>
+              <hr class="mt-2 mb-3.5 rounded-t-2xl"/>
             </header>
 
-            <div class="content">
-              <div v-for="(category, index) in categories" class="checkbox-container row" :key="category.id">
-                <input :id="`cookie-consent-checkbox-${category.id}`" type="checkbox"
-                       :checked="consents[index].accepted" :disabled="index === 0"
-                       @change="setCategoryConsent($event, index)" class="col"/>
-                <label :for="`cookie-consent-checkbox-${category.id}`" class="col">{{ category.label }}</label>
-                <span v-if="index > 0 && consents[index].partial" class="checkbox-partial-indicator"></span>
-                <span v-if="index > 0 && !consents[index].partial && !consents[index].accepted "
-                      class="checkbox-none-indicator"></span>
+            <div class="categories">
+              <div v-for="(category, index) in categories" class="relative ml-4 inline-flex" :key="category.id">
+                <div class="relative w-[20px] h-[20px] flex checkbox-container">
+
+                  <input :id="`cookie-consent-checkbox-${category.id}`" type="checkbox"
+                         :checked="consents[index].accepted" :disabled="index === 0"
+                         @change="setCategoryConsent($event, index)" class="m-0" />
+                  <span v-if="index > 0 && consents[index].partial" class="checkbox-partial-indicator"></span>
+                  <span v-if="index > 0 && !consents[index].partial && !consents[index].accepted" class="checkbox-none-indicator"></span>
+                </div>
+                <label :for="`cookie-consent-checkbox-${category.id}`" class="ml-2 rtl:mr-2 select-none hover:text-orange-400 -translate-y-[2px]">{{ category.label }}</label>
+
               </div>
 
               <div>
-                <button @click="acceptAll()">{{ t('generalLabels.button.acceptAll') }}</button>
-                <button @click="acceptSelection()">{{ t('generalLabels.button.acceptSelection') }}</button>
+                <button class="btn" @click="acceptAll()">{{ t('generalLabels.button.acceptAll') }}</button>
+                <button class="btn" @click="acceptSelection()">{{ t('generalLabels.button.acceptSelection') }}</button>
               </div>
             </div>
 
-            <div id="link-container" class="av-white">
-              <div>
-                <a rel="nofollow" href="#" @click="showDetails($event)"><b>{{
+            <div id="link-container" class="bg-white rounded-t-lg sticky pb-3 -bottom-2">
+              <div class="my-[6px] rounded-lg">
+                <a rel="nofollow" href="#" @click="showDetails($event)" class="font-bold shadow-green-700 hover:shadow-[0_0_10px_green] text-[var(--cookie-consent-settings-color)] w-full h-full p-0.5 block">{{
                     t('generalLabels.individualSettings')
-                  }}</b></a>
+                  }}</a>
               </div>
-              <a rel="nofollow" href="#" @click="showDetails($event)"><b>{{ t('generalLabels.cookieDetails') }}</b></a>
-              <a rel="nofollow" :href="t('generalLabels.requiredLinks.privacy.href')">{{
+              <a class="hover:text-orange-400" rel="nofollow" href="#" @click="showDetails($event)"><b>{{ t('generalLabels.cookieDetails') }}</b></a>
+              <a rel="nofollow" :href="t('generalLabels.requiredLinks.privacy.href')"><b>{{
                   t('generalLabels.requiredLinks.privacy.title')
-                }}</a>
-              <a rel="nofollow" :href="t('generalLabels.requiredLinks.impress.href')">{{
+                }}</b></a>
+              <a rel="nofollow" :href="t('generalLabels.requiredLinks.impress.href')"><b>{{
                   t('generalLabels.requiredLinks.impress.title')
-                }}</a>
-              <a rel="nofollow" v-for="link in links" :key="link.title" :href="link.href">{{ link.title }}</a>
+                }}</b></a>
+              <a rel="nofollow" v-for="link in links" :key="link.title" :href="link.href"><b>{{ link.title }}</b></a>
             </div>
           </div>
 
-          <div v-else id="details-container">
+          <div v-else id="details-container" class="text-left">
             <header>
-              <a rel="nofollow" href="#" class="back-to-main"
+              <a rel="nofollow" href="#" class="absolute top-[6px] right-10 font-bold"
                  @click="showMain($event)">{{ t('generalLabels.details.back') }}</a>
               <a rel="nofollow" href="#" class="minimizer" @click="minimize($event)"
                  :title="t('generalLabels.minimize')"><span>-</span></a>
-              <div class="heading">
-                <span>&#127850;</span>
-                <h4>{{ t('generalLabels.title') }}</h4>
+              <div class="inline-flex h-[45px] mt-4">
+                <span class="select-none text-[36px]">&#127850;</span>
+                <h4 class="select-none font-bold mt-[10px]">{{ t('generalLabels.title') }}</h4>
               </div>
-              <hr class="first-hr"/>
-              <p class="av-center">{{ t('generalLabels.description.details') }}</p>
-              <hr class="second-hr-details"/>
+              <hr class="my-2 mx-0 rounded-b-2xl"/>
+              <p class="text-center">{{ t('generalLabels.description.details') }}</p>
+              <hr class="mt-2 mb-3.5 rounded-t-2xl"/>
               <div>
                 <button @click="acceptAll()">{{ t('generalLabels.button.acceptAll') }}</button>
                 <button @click="acceptSelection()">{{ t('generalLabels.button.acceptSelection') }}</button>
               </div>
+              <div>
+                <div class="w-full tab-container">
+                  <div class="w-1/2 h-[45px] text-center inline-block cursor-pointer" :class="{ 'active-tab': currentTab === 'cookies' }" @click="currentTab = 'cookies'"><span>Cookies</span></div>
+                  <div class="w-1/2 h-[45px] text-center inline-block cursor-pointer" :class="{ 'active-tab': currentTab === 'fonts' }" @click="currentTab = 'fonts'"><span>Fonts</span></div>
+                </div>
+                <hr class="mb-2 p-0 m-0 rounded-b-2xl hover:cursor-pointer"/>
+              </div>
             </header>
 
-            <div v-for="(category, categoryIndex) in categories" class="cookie-details-card" :key="category.id"
+            <div v-for="(category, categoryIndex) in categories" class="cookie-details-card w-full rounded relative px-3 my-4 mx-2" :key="category.id"
                  :ref="el => { detailsCards[categoryIndex] = el }">
-              <div class="binary-slider-label-container" v-if="categoryIndex > 0">
-                <span class="binary-slider-label binary-slider-label-margin accepted"
-                      :class="{ 'av-hide': !consents[categoryIndex].accepted }">{{
+              <div class="rtl:right-auto rtl:left-0 inline-flex absolute right-0 top-0" v-if="categoryIndex > 0">
+                <span class="select-none mt-[12px] rtl:mt-[6px]"
+                      :class="{ 'hidden': !consents[categoryIndex].accepted }">{{
                     t('generalLabels.binarySliderLabels.accepted')
                   }}</span>
-                <span class="binary-slider-label binary-slider-label-margin declined"
-                      :class="{ 'av-hide': consents[categoryIndex].accepted || consents[categoryIndex].partial }">{{
+                <span class="select-none mt-[12px] rtl:mt-[6px]"
+                      :class="{ 'hidden': consents[categoryIndex].accepted || consents[categoryIndex].partial }">{{
                     t('generalLabels.binarySliderLabels.declined')
                   }}</span>
-                <span class="binary-slider-label binary-slider-label-margin partial"
-                      :class="{ 'av-hide': !consents[categoryIndex].partial }">{{
+                <span class="select-none mt-[12px] rtl:mt-[6px]"
+                      :class="{ 'hidden': !consents[categoryIndex].partial }">{{
                     t('generalLabels.binarySliderLabels.partial')
                   }}</span>
                 <div>
-                  <div :id="`cookie-consent-details-checkbox-${category.id}`" class="binary-slider margin-small"
+                  <div :id="`cookie-consent-details-checkbox-${category.id}`" class="binary-slider m-[8px]"
                        :class="{ active: consents[categoryIndex].accepted, partial: consents[categoryIndex].partial }"
                        @click="toggleConsent($event, categoryIndex)">
                     <span class="binary-slider-circle"></span>
                   </div>
                 </div>
               </div>
-              <div class="label-container">
-                <h5 class="padding-top">{{ category.label }} ({{ getCookieCountForCategory(category) }})</h5>
-                <div></div>
+              <div class="label-container pt-4">
+                <h5 class="mt-2 mb-1 ltr:before:content-[''] ltr:before:border-2 ltr:before:border-solid ltr:before:border-black ltr:before:mr-4 rtl:border-r-4 rtl:border-solid rtl:border-black rtl:text-right rtl:pr-2 font-bold">{{ category.label }} ({{ getCookieCountForCategory(category) }})</h5>
               </div>
 
               <p>{{ category.description }}</p>
-              <a rel="nofollow" href="#" class="av-center av-block"
+              <a rel="nofollow" href="#" class="text-center block font-bold"
                  @click="toggleCookieInformation($event)">{{ t('generalLabels.showCookieInformation') }}</a>
 
-              <div class="table-container">
+              <div class="table-container h-0 transition-all duration-700 overflow-hidden">
                 <table v-for="(cookie, cookieIndex) in category.cookies" :key="cookie.cookieName">
                   <tr v-if="categoryIndex > 0">
                     <td>{{ t('cookieLabels.accept') }}</td>
@@ -116,12 +135,12 @@
                              :class="{ active: consents[categoryIndex].cookies[cookieIndex].accepted }">
                           <span class="binary-slider-circle"></span>
                         </div>
-                        <div class="binary-slider-label binary-slider-label-small-margin"
-                             :class="{ 'av-hide': !consents[categoryIndex].cookies[cookieIndex].accepted }">
+                        <div class="select-none mt-0 ml-2 rtl:mr-2 rtl:-mt-[8px]"
+                             :class="{ '!hidden': !consents[categoryIndex].cookies[cookieIndex].accepted }">
                           {{ t('generalLabels.binarySliderLabels.accepted') }}
                         </div>
-                        <div class="binary-slider-label binary-slider-label-small-margin"
-                             :class="{ 'av-hide': consents[categoryIndex].cookies[cookieIndex].accepted }">
+                        <div class="select-none mt-0 ml-2 rtl:mr-2 rtl:-mt-[8px]"
+                             :class="{ '!hidden': consents[categoryIndex].cookies[cookieIndex].accepted }">
                           {{ t('generalLabels.binarySliderLabels.declined') }}
                         </div>
                       </div>
@@ -140,7 +159,7 @@
                   <tr>
                     <td>{{ t('cookieLabels.purpose') }}</td>
                     <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ t('metaCookieTitles.purpose') }}</td>
-                    <td v-else>{{ cookie.purpose }}</td>
+                    <td v-else style="white-space: pre-line">{{ cookie.purpose }}</td>
                   </tr>
                   <tr v-if="'privacyURL' in cookie">
                     <td>{{ t('cookieLabels.privacy') }}</td>
@@ -200,6 +219,8 @@
   const showConsent = ref(false)
   const blurOverlayReverse = ref(false)
   const detailsCards = ref([])
+  const isInfoOpen = ref(false)
+  const currentTab = ref('cookies')
 
   // Props
   const props = withDefaults(defineProps<{
@@ -311,6 +332,10 @@
 
     document.documentElement.style.setProperty('--transform-current-width', currentWidth)
     document.documentElement.style.setProperty('--transform-current-height', currentHeight)
+  }
+
+  function toggleInfo() {
+    isInfoOpen.value = !isInfoOpen.value
   }
 
   function setTransformToXY(container: HTMLElement) {
@@ -635,7 +660,9 @@
 
 <style>
   :root {
+    --border-color: darkgray;
     --cookie-consent-animation-duration: 1s;
+    --cookie-consent-transition-duration: 0.4s;
     --cookie-consent-minimize-animation-duration: 1s;
     --cookie-consent-hide-duration: 1s;
     --cookie-consent-width: 350px;
@@ -654,81 +681,55 @@
 </style>
 
 <style scoped>
+  @import '/src/assets/css/index.css';
   @import "/src/assets/css/all.css";
 
-  * {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-
-    box-sizing: border-box;
-    transition: 0.4s;
-    z-index: 0;
-    outline: none;
+  .tab-container .active-tab {
+    border-bottom: 3px solid var(--border-color);
+    color: orange;
+  }
+  .tab-container .active-tab span {
+    display: inline-block;
+    height: 1rem;
+    vertical-align: middle;
+    font-weight: 600;
   }
 
-  #settings-symbol span {
-    top: 4px;
-    left: 0;
+  .tab-container div span {
+    display: inline-block;
+    vertical-align: middle;
+    padding-top: 0.5rem;
+    height: 1rem;
   }
 
-  .cookie-consent-hidden {
-    display: none;
+  hr {
+    border: 2px solid var(--border-color);
   }
 
-  #overlay {
-    width: 100%;
-    height: 100%;
-    background: rgba(51, 51, 51, 0.4);
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    perspective: 400px;
-  }
-
-  @media all and (max-width: 600px) {
-    #container {
-      border: 1px solid black;
-      margin: 8vh auto !important;
-    }
-  }
-
-
-  #container {
-    position: relative;
-    width: var(--cookie-consent-width);
-    height: var(--cookie-consent-height);
-    margin: 25vh auto;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-
-  .content button {
-    width: 100%;
-    margin: 6px 0;
-  }
-
-  .content .checkbox-container {
-    display: inline-flex;
-  }
-
-  .content div label {
-    margin-inline-start: 6px;
+  p {
     user-select: none;
   }
 
-
-  .back-to-main {
-    position: absolute;
-    top: 9px;
-    right: 32px;
+  #overlay {
+    perspective: 400px;
   }
 
-  #link-container {
-    position: sticky;
-    bottom: -8px;
-    left: 0;
-    right: 0;
-    padding-bottom: 8px;
+  #container {
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.19);
+    transform: translateZ(0);
+    perspective: 1000px;
+    backface-visibility: hidden;
+  }
+
+  .cookie-details-card > a {
+    margin-bottom: 8px;
+  }
+
+  #link-container > a::before {
+    content: '__';
+    font-size: 0.9rem;
+    color: white;
+    background: url('../assets/img/link.svg') no-repeat;
   }
 
   #link-container > a:not(:last-child)::after {
@@ -738,102 +739,44 @@
     color: #333333;
   }
 
-  #link-container a, #details-container a {
-    color: dodgerblue;
+  #link-container a {
     text-decoration: none;
   }
 
   #link-container > div > a {
     color: var(--cookie-consent-settings-color);
-    width: 100%;
-    height: 100%;
-    display: block;
-    padding: 2px;
   }
 
   #link-container > div {
     border: 1px solid var(--cookie-consent-settings-color);
     border-left: 6px solid var(--cookie-consent-settings-color);
     border-right: 6px solid var(--cookie-consent-settings-color);
-    margin: 6px 0;
-    border-radius: 6px;
   }
 
-
-  #details-container button {
-    margin: 6px 6px;
+  header > div h4, header > div h5 {
+    padding-inline-start: 8px;
   }
-
-  #details-container {
-    text-align: left;
-  }
-
-  .cookie-details-card:hover {
-    box-shadow: 0 0 6px gray;
-  }
-
-  .margin-small {
-    margin: 8px;
-  }
-
-  .heading {
-    display: inline-flex;
-    height: 45px;
-    margin-top: 12px;
-  }
-
-  .heading span:first-child {
-    font-size: 36px;
-    user-select: none;
-  }
-
-  .first-hr {
-    margin: 8px 0;
-    border-color: #9e9e9e !important;
-  }
-
-  .second-hr-main {
-    margin-top: 8px;
-    margin-bottom: 12px;
-    border-color: #9e9e9e !important;
-  }
-
-  .second-hr-details {
-    margin-top: 8px;
-    margin-bottom: 6px;
-    border-color: #9e9e9e !important;
-  }
-
-  #container[dir=rtl] .cookie-details-card p {
-    text-align: initial;
-  }
-
 
   .cookie-details-card {
-    width: 100%;
+    box-shadow: 0 0 6px gray;
+  }
+  .cookie-details-card:hover {
+    box-shadow: 0 0 0px gray;
+  }
+
+  .cookie-details-card {
     background: rgba(45, 45, 45, 0.08);
-    border-radius: 4px;
-    position: relative;
-    padding: 0 8px;
-    margin: 12px 4px;
   }
 
-  .padding-top {
-    padding-top: 14px !important;
-    padding-left: 4px !important;
+  .btn {
+    width: 100%;
   }
-
-  .cookie-details-card h5, .cookie-details-card p {
-    padding: 0 8px;
-    user-select: none;
-  }
-
-  .cookie-details-card h5 {
-    padding-top: 4px;
+  #details-container > header button {
+    margin-left: 10px;
   }
 </style>
 
-<i18n lang="json">
+<i18n>
 {
   "ar": {
     "generalLabels": {
@@ -842,7 +785,7 @@
         "back": "يعود"
       },
       "description": {
-        "details":  "ستجد هنا نظرة عامة على جميع ملفات تعريف الارتباط المستخدمة. يمكنك الموافقة على الفئات الفردية أو ملفات تعريف الارتباط الفردية ويمكنك عرض مزيد من المعلومات حول ملفات تعريف الارتباط الفردية.",
+        "details": "ستجد هنا نظرة عامة على جميع ملفات تعريف الارتباط المستخدمة. يمكنك الموافقة على الفئات الفردية أو ملفات تعريف الارتباط الفردية ويمكنك عرض مزيد من المعلومات حول ملفات تعريف الارتباط الفردية.",
         "main": "نحن نستخدم ملفات تعريف الارتباط على موقعنا لأغراض أساسية ، وكذلك للأغراض الإحصائية والتسويقية. يمكن للوسائط الخارجية أيضًا استخدام ملفات تعريف الارتباط."
       },
       "minimize": "تصغير",
@@ -897,7 +840,7 @@
         "back": "Обратно"
       },
       "description": {
-        "details":  "Тук ще намерите преглед на всички използвани бисквитки. Можете да се съгласите с отделни категории или отделни бисквитки и да получите допълнителна информация за отделните бисквитки.",
+        "details": "Тук ще намерите преглед на всички използвани бисквитки. Можете да се съгласите с отделни категории или отделни бисквитки и да получите допълнителна информация за отделните бисквитки.",
         "main": "Използваме \"бисквитки\" на нашия уебсайт за основни цели, както и за статистически и маркетингови цели. Външните медии също могат да използват"
       },
       "minimize": "Сведете до минимум",
@@ -952,7 +895,7 @@
         "back": "Zpět"
       },
       "description": {
-        "details":  "Zde najdete přehled všech používaných souborů cookie. Můžete souhlasit s jednotlivými kategoriemi nebo jednotlivými soubory cookie a nechat si zobrazit další informace o jednotlivých souborech cookie.",
+        "details": "Zde najdete přehled všech používaných souborů cookie. Můžete souhlasit s jednotlivými kategoriemi nebo jednotlivými soubory cookie a nechat si zobrazit další informace o jednotlivých souborech cookie.",
         "main": "Na našich webových stránkách používáme soubory cookie pro základní účely a pro statistické a marketingové účely. Externí média mohou také používat soubory cookie."
       },
       "minimize": "Minimalizujte",
@@ -1062,11 +1005,15 @@
         "back": "Zurück"
       },
       "description": {
-        "details":  "Hier findest Du eine Übersicht über alle verwendeten Cookies. Du kannst zu einzelnen Kategorien oder einzelnen Cookies zustimmen und kannst Dir weitere Informationen zu den einzelnen Cookies anzeigen lassen.",
+        "details": "Hier findest Du eine Übersicht über alle verwendeten Cookies. Du kannst zu einzelnen Kategorien oder einzelnen Cookies zustimmen und kannst Dir weitere Informationen zu den einzelnen Cookies anzeigen lassen.",
         "main": "Wir nutzen Cookies auf unserer Webseite für essenzielle Zwecke, sowie für statistische und Marketingzwecke. Auch externe Medien können Cookies verwenden."
       },
       "minimize": "Minimieren",
       "clearSite": "Daten löschen",
+      "info": {
+        "title": "Legende",
+        "text": "✓ = Alle Cookies dieser Kategorie akzeptiert\n▣ = Einige Cookies dieser Kategorie akzeptiert\n- = Keine Cookies dieser Kategorie akzeptiert"
+      },
       "button": {
         "acceptAll": "Alle Akzeptieren",
         "acceptSelection": "Auswahl Speichern"
@@ -1117,7 +1064,7 @@
         "back": "Πίσω"
       },
       "description": {
-        "details":  "Εδώ θα βρείτε μια επισκόπηση όλων των cookies που χρησιμοποιούνται. Μπορείτε να συμφωνήσετε με μεμονωμένες κατηγορίες ή μεμονωμένα cookies και να έχετε περισσότερες πληροφορίες σχετικά με τα μεμονωμένα cookies.",
+        "details": "Εδώ θα βρείτε μια επισκόπηση όλων των cookies που χρησιμοποιούνται. Μπορείτε να συμφωνήσετε με μεμονωμένες κατηγορίες ή μεμονωμένα cookies και να έχετε περισσότερες πληροφορίες σχετικά με τα μεμονωμένα cookies.",
         "main": "Χρησιμοποιούμε cookies στον ιστότοπό μας για βασικούς σκοπούς, καθώς και για στατιστικούς σκοπούς και σκοπούς μάρκετινγκ. Τα εξωτερικά μέσα ενδέχεται επίσης να χρησιμοποιούν cookies."
       },
       "minimize": "Ελαχιστοποίηση",
@@ -1227,7 +1174,7 @@
         "back": "Volver"
       },
       "description": {
-        "details":  "Aquí encontrará un resumen de todas las cookies utilizadas. Puede aceptar categorías individuales o cookies individuales y hacer que se muestre más información sobre las cookies individuales.",
+        "details": "Aquí encontrará un resumen de todas las cookies utilizadas. Puede aceptar categorías individuales o cookies individuales y hacer que se muestre más información sobre las cookies individuales.",
         "main": "Utilizamos cookies en nuestro sitio web para fines esenciales, así como para fines estadísticos y de marketing. Los medios de comunicación externos también pueden utilizar cookies."
       },
       "minimize": "Minimizar",
@@ -1282,7 +1229,7 @@
         "back": "Tagasi"
       },
       "description": {
-        "details":  "Siit leiate ülevaate kõigist kasutatavatest küpsistest. Saate nõustuda üksikute kategooriate või üksikute küpsiste kasutamisega ja saada lisateavet üksikute küpsiste kohta.",
+        "details": "Siit leiate ülevaate kõigist kasutatavatest küpsistest. Saate nõustuda üksikute kategooriate või üksikute küpsiste kasutamisega ja saada lisateavet üksikute küpsiste kohta.",
         "main": "Me kasutame oma veebisaidil küpsiseid põhilistel eesmärkidel, samuti statistilistel ja turunduslikel eesmärkidel. Ka väline meedia võib kasutada küpsiseid."
       },
       "minimize": "Minimeeri",
@@ -1337,7 +1284,7 @@
         "back": "Takaisin"
       },
       "description": {
-        "details":  "Täältä löydät yleiskatsauksen kaikista käytetyistä evästeistä. Voit hyväksyä yksittäiset luokat tai yksittäiset evästeet ja saada lisätietoja yksittäisistä evästeistä näkyviin.",
+        "details": "Täältä löydät yleiskatsauksen kaikista käytetyistä evästeistä. Voit hyväksyä yksittäiset luokat tai yksittäiset evästeet ja saada lisätietoja yksittäisistä evästeistä näkyviin.",
         "main": "Käytämme verkkosivustollamme evästeitä välttämättömiin tarkoituksiin sekä tilastollisiin ja markkinointitarkoituksiin. Myös ulkoiset mediat voivat käyttää evästeitä."
       },
       "minimize": "Minimoi",
@@ -1392,7 +1339,7 @@
         "back": "Dos"
       },
       "description": {
-        "details":  "Vous trouverez ici un aperçu de tous les cookies utilisés. Vous pouvez accepter des catégories individuelles ou des cookies individuels et obtenir des informations supplémentaires sur les cookies individuels.",
+        "details": "Vous trouverez ici un aperçu de tous les cookies utilisés. Vous pouvez accepter des catégories individuelles ou des cookies individuels et obtenir des informations supplémentaires sur les cookies individuels.",
         "main": "Nous utilisons des cookies sur notre site web à des fins essentielles, ainsi qu'à des fins statistiques et de marketing. Les médias externes peuvent également utiliser des cookies."
       },
       "minimize": "Minimoi",
@@ -1447,7 +1394,7 @@
         "back": "वापसी"
       },
       "description": {
-        "details":  "यहां आपको उपयोग की गई सभी कुकीज़ का अवलोकन मिलेगा। आप अलग-अलग श्रेणियों या अलग-अलग कुकीज़ के लिए सहमत हो सकते हैं और आप अलग-अलग कुकीज़ के बारे में अधिक जानकारी देख सकते हैं।",
+        "details": "यहां आपको उपयोग की गई सभी कुकीज़ का अवलोकन मिलेगा। आप अलग-अलग श्रेणियों या अलग-अलग कुकीज़ के लिए सहमत हो सकते हैं और आप अलग-अलग कुकीज़ के बारे में अधिक जानकारी देख सकते हैं।",
         "main": "हम अपनी वेबसाइट पर आवश्यक उद्देश्यों के साथ-साथ सांख्यिकीय और विपणन उद्देश्यों के लिए कुकीज़ का उपयोग करते हैं। बाहरी मीडिया भी कुकीज़ का उपयोग कर सकता है।"
       },
       "minimize": "छोटा करना",
@@ -1502,7 +1449,7 @@
         "back": "Povratak"
       },
       "description": {
-        "details":  "Ovdje ćete pronaći pregled svih korištenih kolačića. Možete pristati na pojedinačne kategorije ili pojedinačne kolačiće i možete vidjeti dodatne informacije o pojedinačnim kolačićima.",
+        "details": "Ovdje ćete pronaći pregled svih korištenih kolačića. Možete pristati na pojedinačne kategorije ili pojedinačne kolačiće i možete vidjeti dodatne informacije o pojedinačnim kolačićima.",
         "main": "Kolačiće na našoj web stranici koristimo u osnovne svrhe, kao i u statističke i marketinške svrhe. Vanjski mediji također mogu koristiti kolačiće."
       },
       "minimize": "Minimizirajte",
@@ -1557,7 +1504,7 @@
         "back": "Vissza"
       },
       "description": {
-        "details":  "Itt áttekintést talál az összes használt sütiről. Egyéni kategóriákhoz vagy egyes sütikhez hozzájárulhat, és további információkat kaphat az egyes sütikről.",
+        "details": "Itt áttekintést talál az összes használt sütiről. Egyéni kategóriákhoz vagy egyes sütikhez hozzájárulhat, és további információkat kaphat az egyes sütikről.",
         "main": "Weboldalunkon cookie-kat használunk alapvető célokra, valamint statisztikai és marketing célokra. A külső médiumok is használhatnak sütiket."
       },
       "minimize": "Minimalizálja a",
@@ -1612,7 +1559,7 @@
         "back": "Վերադարձ"
       },
       "description": {
-        "details":  "Այստեղ դուք կգտնեք օգտագործված բոլոր թխուկների ակնարկը: Դուք կարող եք համաձայնվել առանձին կատեգորիաների կամ առանձին թխուկների հետ և կարող եք դիտել լրացուցիչ տեղեկություններ առանձին թխուկների մասին:",
+        "details": "Այստեղ դուք կգտնեք օգտագործված բոլոր թխուկների ակնարկը: Դուք կարող եք համաձայնվել առանձին կատեգորիաների կամ առանձին թխուկների հետ և կարող եք դիտել լրացուցիչ տեղեկություններ առանձին թխուկների մասին:",
         "main": "Մենք օգտագործում ենք թխուկներ մեր կայքում հիմնական նպատակներով, ինչպես նաև վիճակագրական և մարքեթինգային նպատակներով: Արտաքին լրատվամիջոցները կարող են նաև օգտագործել թխուկներ:"
       },
       "minimize": "Փոքրացնել",
@@ -1667,7 +1614,7 @@
         "back": "Indietro"
       },
       "description": {
-        "details":  "Qui troverete una panoramica di tutti i cookie utilizzati. È possibile acconsentire a singole categorie o a singoli cookie e far visualizzare ulteriori informazioni sui singoli cookie.",
+        "details": "Qui troverete una panoramica di tutti i cookie utilizzati. È possibile acconsentire a singole categorie o a singoli cookie e far visualizzare ulteriori informazioni sui singoli cookie.",
         "main": "Utilizziamo i cookie sul nostro sito web per scopi essenziali, così come per scopi statistici e di marketing. Anche i media esterni possono utilizzare i cookie."
       },
       "minimize": "Minimizzare",
@@ -1777,7 +1724,7 @@
         "back": "Atgal"
       },
       "description": {
-        "details":  "Čia rasite visų naudojamų slapukų apžvalgą. Galite sutikti su atskiromis kategorijomis arba atskirais slapukais ir gauti daugiau informacijos apie atskirus slapukus.",
+        "details": "Čia rasite visų naudojamų slapukų apžvalgą. Galite sutikti su atskiromis kategorijomis arba atskirais slapukais ir gauti daugiau informacijos apie atskirus slapukus.",
         "main": "Savo svetainėje slapukus naudojame svarbiausiais tikslais, taip pat statistikos ir rinkodaros tikslais. Išorinė žiniasklaida taip pat gali naudoti slapukus."
       },
       "minimize": "Sumažinkite",
@@ -1832,7 +1779,7 @@
         "back": "Atpakaļ"
       },
       "description": {
-        "details":  "Šeit atradīsiet pārskatu par visām izmantotajām sīkdatnēm. Jūs varat piekrist atsevišķām kategorijām vai atsevišķām sīkdatnēm un saņemt papildu informāciju par atsevišķām sīkdatnēm.",
+        "details": "Šeit atradīsiet pārskatu par visām izmantotajām sīkdatnēm. Jūs varat piekrist atsevišķām kategorijām vai atsevišķām sīkdatnēm un saņemt papildu informāciju par atsevišķām sīkdatnēm.",
         "main": "Mēs izmantojam sīkfailus savā tīmekļa vietnē būtiskiem mērķiem, kā arī statistikas un mārketinga vajadzībām. Sīkfailus var izmantot arī ārējie plašsaziņas līdzekļi."
       },
       "minimize": "Minimizēt",
@@ -1942,7 +1889,7 @@
         "back": "Komme tilbake"
       },
       "description": {
-        "details":  "Her finner du en oversikt over alle informasjonskapsler som brukes. Du kan godta individuelle kategorier eller individuelle informasjonskapsler, og du kan se mer informasjon om de enkelte informasjonskapslene.",
+        "details": "Her finner du en oversikt over alle informasjonskapsler som brukes. Du kan godta individuelle kategorier eller individuelle informasjonskapsler, og du kan se mer informasjon om de enkelte informasjonskapslene.",
         "main": "Vi bruker informasjonskapsler på nettsiden vår til viktige formål, så vel som for statistikk- og markedsføringsformål. Eksterne medier kan også bruke informasjonskapsler."
       },
       "minimize": "Minimer",
@@ -1997,7 +1944,7 @@
         "back": "Powrót"
       },
       "description": {
-        "details":  "Tutaj znajdziesz przegląd wszystkich używanych plików cookie. Mogą Państwo wyrazić zgodę na poszczególne kategorie lub poszczególne pliki cookie i uzyskać dalsze informacje na temat poszczególnych plików cookie.",
+        "details": "Tutaj znajdziesz przegląd wszystkich używanych plików cookie. Mogą Państwo wyrazić zgodę na poszczególne kategorie lub poszczególne pliki cookie i uzyskać dalsze informacje na temat poszczególnych plików cookie.",
         "main": "Używamy plików cookies na naszej stronie internetowej w celach niezbędnych, statystycznych i marketingowych. Zewnętrzne media mogą również używać plików cookie."
       },
       "minimize": "Zminimalizuj",
@@ -2052,7 +1999,7 @@
         "back": "Voltar"
       },
       "description": {
-        "details":  "Aqui encontrará uma visão geral de todos os cookies utilizados. Pode concordar com categorias individuais ou cookies individuais e ter mais informações sobre os cookies individuais exibidos.",
+        "details": "Aqui encontrará uma visão geral de todos os cookies utilizados. Pode concordar com categorias individuais ou cookies individuais e ter mais informações sobre os cookies individuais exibidos.",
         "main": "Utilizamos cookies no nosso website para fins essenciais, bem como para fins estatísticos e de marketing. Os meios externos também podem utilizar cookies."
       },
       "minimize": "Minimizar",
@@ -2107,7 +2054,7 @@
         "back": "Înapoi"
       },
       "description": {
-        "details":  "Aici veți găsi o prezentare generală a tuturor modulelor cookie utilizate. Puteți să vă dați acordul pentru categorii individuale sau pentru cookie-uri individuale și să vi se afișeze informații suplimentare despre cookie-urile individuale.",
+        "details": "Aici veți găsi o prezentare generală a tuturor modulelor cookie utilizate. Puteți să vă dați acordul pentru categorii individuale sau pentru cookie-uri individuale și să vi se afișeze informații suplimentare despre cookie-urile individuale.",
         "main": "Utilizăm cookie-uri pe site-ul nostru web în scopuri esențiale, precum și în scopuri statistice și de marketing. Mediile externe pot utiliza, de asemenea, module cookie."
       },
       "minimize": "Minimizați",
@@ -2162,7 +2109,7 @@
         "back": "Назад"
       },
       "description": {
-        "details":  "Здесь вы найдете обзор всех используемых файлов cookie. Вы можете дать согласие на отдельные категории или отдельные файлы cookie и получить дополнительную информацию об отдельных файлах cookie.",
+        "details": "Здесь вы найдете обзор всех используемых файлов cookie. Вы можете дать согласие на отдельные категории или отдельные файлы cookie и получить дополнительную информацию об отдельных файлах cookie.",
         "main": "Мы используем файлы cookie на нашем сайте для основных целей, а также для статистических и маркетинговых целей. Внешние носители также могут использовать файлы cookie."
       },
       "minimize": "Минимизировать",
@@ -2217,7 +2164,7 @@
         "back": "Späť"
       },
       "description": {
-        "details":  "Tu nájdete prehľad všetkých používaných súborov cookie. Môžete odsúhlasiť jednotlivé kategórie alebo jednotlivé súbory cookie a nechať si zobraziť ďalšie informácie o jednotlivých súboroch cookie.",
+        "details": "Tu nájdete prehľad všetkých používaných súborov cookie. Môžete odsúhlasiť jednotlivé kategórie alebo jednotlivé súbory cookie a nechať si zobraziť ďalšie informácie o jednotlivých súboroch cookie.",
         "main": "Na našej webovej stránke používame súbory cookie na základné účely, ako aj na štatistické a marketingové účely. Súbory cookie môžu používať aj externé médiá."
       },
       "minimize": "Minimalizujte",
@@ -2272,7 +2219,7 @@
         "back": "Nazaj"
       },
       "description": {
-        "details":  "Tukaj boste našli pregled vseh uporabljenih piškotkov. Strinjate se lahko s posameznimi kategorijami ali posameznimi piškotki in prikažete dodatne informacije o posameznih piškotkih.",
+        "details": "Tukaj boste našli pregled vseh uporabljenih piškotkov. Strinjate se lahko s posameznimi kategorijami ali posameznimi piškotki in prikažete dodatne informacije o posameznih piškotkih.",
         "main": "Piškotke na našem spletnem mestu uporabljamo za osnovne namene ter za statistične in trženjske namene. Piškotke lahko uporabljajo tudi zunanji mediji."
       },
       "minimize": "Minimieren",
@@ -2327,7 +2274,7 @@
         "back": "Kthimi"
       },
       "description": {
-        "details":  "Këtu do të gjeni një përmbledhje të të gjitha cookies të përdorura. Ju mund të bini dakord për kategoritë individuale ose cookie-t individuale dhe mund të shikoni informacione të mëtejshme rreth skedarëve individualë.",
+        "details": "Këtu do të gjeni një përmbledhje të të gjitha cookies të përdorura. Ju mund të bini dakord për kategoritë individuale ose cookie-t individuale dhe mund të shikoni informacione të mëtejshme rreth skedarëve individualë.",
         "main": "Ne përdorim cookies në faqen tonë të internetit për qëllime thelbësore, si dhe për qëllime statistikore dhe marketingu. Mediat e jashtme mund të përdorin gjithashtu cookie."
       },
       "minimize": "Minimizoje",
@@ -2382,7 +2329,7 @@
         "back": "Tillbaka"
       },
       "description": {
-        "details":  "Här hittar du en översikt över alla cookies som används. Du kan godkänna enskilda kategorier eller enskilda cookies och få ytterligare information om de enskilda cookies som visas.",
+        "details": "Här hittar du en översikt över alla cookies som används. Du kan godkänna enskilda kategorier eller enskilda cookies och få ytterligare information om de enskilda cookies som visas.",
         "main": "Vi använder cookies på vår webbplats för viktiga ändamål samt för statistik och marknadsföring. Externa medier kan också använda cookies."
       },
       "minimize": "Zmanjšanje",
@@ -2437,7 +2384,7 @@
         "back": "Dönüş"
       },
       "description": {
-        "details":  "Burada kullanılan tüm çerezlerin bir özetini bulacaksınız. Bireysel kategorileri veya bireysel tanımlama bilgilerini kabul edebilir ve bireysel tanımlama bilgileri hakkında daha fazla bilgi görüntüleyebilirsiniz.",
+        "details": "Burada kullanılan tüm çerezlerin bir özetini bulacaksınız. Bireysel kategorileri veya bireysel tanımlama bilgilerini kabul edebilir ve bireysel tanımlama bilgileri hakkında daha fazla bilgi görüntüleyebilirsiniz.",
         "main": "Web sitemizde çerezleri temel amaçlar ve ayrıca istatistiksel ve pazarlama amaçları için kullanıyoruz. Harici medya da çerezleri kullanabilir."
       },
       "minimize": "küçültmek",
@@ -2492,7 +2439,7 @@
         "back": "Повернення"
       },
       "description": {
-        "details":  "Тут ви знайдете огляд усіх використовуваних файлів cookie. Ви можете погодитися з окремими категоріями або окремими файлами cookie та можете переглянути додаткову інформацію про окремі файли cookie.",
+        "details": "Тут ви знайдете огляд усіх використовуваних файлів cookie. Ви можете погодитися з окремими категоріями або окремими файлами cookie та можете переглянути додаткову інформацію про окремі файли cookie.",
         "main": "Ми використовуємо файли cookie на нашому веб-сайті для основних цілей, а також для статистичних і маркетингових цілей. Зовнішні носії також можуть використовувати файли cookie."
       },
       "minimize": "Звести до мінімуму",
@@ -2547,7 +2494,7 @@
         "back": "溯源"
       },
       "description": {
-        "details":  "在这里，你会发现所有使用的cookies的概述。您可以同意个别类别或个别cookies，并有关于个别cookies的进一步信息显示。",
+        "details": "在这里，你会发现所有使用的cookies的概述。您可以同意个别类别或个别cookies，并有关于个别cookies的进一步信息显示。",
         "main": "我们在网站上使用cookies是为了必要的目的，也是为了统计和营销目的。外部媒体也可能使用cookies。"
       },
       "minimize": "尽量减少",

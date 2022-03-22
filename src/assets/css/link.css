@@ -2,8 +2,8 @@ a {
     text-decoration: none;
     transition: 0.4s;
 }
-a:not(#link-container > div > a, .minimizer, .clear-site):hover {
-    color: orange !important;
+a:hover {
+    color: orange;
     transition: 0.4s;
     text-shadow: 0 0 1px orange;
 }

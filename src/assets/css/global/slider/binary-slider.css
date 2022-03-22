@@ -58,4 +58,5 @@
     top: 4px;
     left: 4px;
     pointer-events: none;
+    transition: 0.2s;
 }

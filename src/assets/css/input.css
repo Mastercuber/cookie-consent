@@ -14,16 +14,21 @@ input[type="checkbox"]:checked::before {
     /* Use `visibility` instead of `display` to avoid recalculating layout */
     visibility: visible;
 }
-input[type="checkbox"]:not(:checked)::after {
-    visibility: visible;
-}
 input[type="checkbox"]::before {
-    content: "\2714"; /* ✔ -> Unicode Zeichen */
-    position: absolute;
-    font-size: 1.5em;
-    right: 0px;
-    top: -3px;
+    content: "\2713"; /* ✓ -> Unicode Zeichen */
+    font-size: 24px;
     visibility: hidden;
+    color: green;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scaleX(1.2);
+}
+
+input[type=checkbox]:focus {
+    border: 1px solid orange;
+    border-radius: 4px;
 }
 
 input[type="checkbox"]:disabled {
@@ -35,11 +40,6 @@ input[type="checkbox"]:disabled {
     margin-top: 6px;
 }
 
-.checkbox-container {
-    margin-left: 12px;
-    position: relative;
-}
-
 input[type=checkbox]:hover, label:hover {
     cursor: pointer;
 }
@@ -47,11 +47,8 @@ input[type=checkbox]:hover, label:hover {
 .checkbox-partial-indicator {
     position: absolute;
     background: dodgerblue;
-    left: 7px;
-    top: 6px;
-    width: 12.1px;
-    height: 12.1px;
-    transform: translateX(1px) translateY(1px);
+    width: 12px;
+    height: 12px;
     pointer-events: none;
 }
 
@@ -67,12 +64,16 @@ input[type=checkbox]:hover, label:hover {
 }
 
 .checkbox-none-indicator {
-    position: absolute;
     background: gray;
-    left: 7px;
-    top: 1px;
-    width: 12.1px;
-    height: 4.1px;
-    transform: translateX(1px) translateY(10px);
-    pointer-events: none;
+    width: 12px;
+    height: 4px;
+    position: absolute;
+    top: calc(50% - 2px);
+}
+
+.checkbox-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
 }

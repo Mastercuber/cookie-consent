@@ -5,8 +5,6 @@ import VueTypeImports from 'vite-plugin-vue-type-imports'
 import dts from 'vite-plugin-dts'
 
 import { resolve } from 'path'
-// @ts-ignore
-import autoprefixer from 'autoprefixer'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,18 +12,15 @@ export default defineConfig({
     vue(),
     VueTypeImports(),
     vueI18n({
-      include: resolve(__dirname, 'src/locales/**'),
-      fullInstall: false
+      //include: resolve(__dirname, 'src/locales/**'),
+      runtimeOnly: true,
+      compositionOnly: true,
+      fullInstall: false,
+      defaultSFCLang: 'json',
+      globalSFCScope: true, // dadurch kann mit useI18n({ useScope: 'global', inheritLocale: true }) auch auf die Übersetzungen dieser Komponente zugegriffen werden
     }),
     dts()
   ],
-  css: {
-    postcss: {
-      plugins: [
-          autoprefixer()
-      ]
-    }
-  },
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src')
@@ -40,7 +35,8 @@ export default defineConfig({
       fileName: (format) => `cookie-consent.${format}.js`
     },
     ssr: false,
-    minify: false,
+    minify: true,
+    polyfillModulePreload: true,
     rollupOptions: {
       external: ['vue', 'vue-i18n'],
       output: {
@@ -48,6 +44,17 @@ export default defineConfig({
           vue: 'Vue'
         }
       }
+    }
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      treeShaking: true,
+      minify: true,
+      charset: 'utf8',
+      sourcemap: false,
+      logLevel: 'info',
+      color: true,
+      incremental: true,
     }
   }
 })

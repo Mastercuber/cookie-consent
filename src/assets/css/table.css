@@ -1,11 +1,5 @@
-.table-container {
-    height: 0;
-    transition: height 0.8s;
-    overflow: hidden;
-}
-
 table:not(:last-child) {
-    border-bottom: 2px solid lightseagreen;
+    border-bottom: 2px solid darkgray;
 }
 table {
     width: calc(100% - 3px);
@@ -13,7 +7,7 @@ table {
 }
 
 table tr, table tr:hover {
-    background: white !important;
+    background: white;
     cursor: default;
 }
 

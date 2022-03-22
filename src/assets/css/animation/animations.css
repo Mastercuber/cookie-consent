@@ -3,14 +3,23 @@
         width: var(--cookie-consent-width);
         height: 0;
         margin: 50vh auto;
+        transform: translateZ(0);
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
     }
     60% {
         width: var(--cookie-consent-details-width);
+        transform: translateZ(0);
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
     }
     100% {
         width: var(--cookie-consent-details-width);
         height: var(--cookie-consent-details-height);
+        transform: translateZ(0);
         margin: 25vh auto;
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
     }
 }
 
@@ -19,19 +28,31 @@
         width: var(--cookie-consent-details-width);
         height: var(--cookie-consent-details-height);
         margin: 25vh auto;
+        transform: translateZ(0);
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
     }
     50% {
         width: var(--cookie-consent-details-width);
         height: 0;
         margin: 50vh auto;
+        transform: translateZ(0);
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
     }
     60% {
         width: var(--cookie-consent-width);
+        transform: translateZ(0);
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
     }
     100% {
         width: var(--cookie-consent-width);
         height: var(--cookie-consent-height);
         margin: 25vh auto;
+        transform: translateZ(0);
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
     }
 }
 
@@ -77,9 +98,11 @@
     from {
         width: var(--transform-current-width);
         height: var(--transform-current-height);
-        transform: translateX(0) translateY(0);
+        transform: translateX(0) translateY(0) translateZ(0); /* translateZ(0) ist nur zum Aktivieren der Hardwarebeschleunigung da */
         overflow-y: auto;
         overflow-x: hidden;
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
     }
     1% {
         overflow: hidden;
@@ -87,9 +110,11 @@
     to {
         width: 50px;
         height: 50px;
-        transform: translateX(var(--transform-minimize-x)) translateY(var(--transform-minimize-y));
+        transform: translateX(var(--transform-minimize-x)) translateY(var(--transform-minimize-y)) translateZ(0); /* translateZ(0) ist nur zum Aktivieren der Hardwarebeschleunigung da */
         opacity: 0;
         overflow: hidden;
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
     }
 }
 
