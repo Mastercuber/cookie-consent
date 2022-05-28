@@ -7,7 +7,7 @@ declare global {
     }
 }
 
-export default function (metaCookieTitles: Cookie, useMetaCookie: boolean, storagePrefix: string, storageConsentsKey: string, categories: Array<Category>, consents: Array<Consent>) {
+export default function (metaCookie: Cookie, useMetaCookie: boolean, storagePrefix: string, storageConsentsKey: string, categories: Array<Category>, consents: Array<Consent>) {
     function loadConsentsWrapper() {
         const allIds = []
 
@@ -19,20 +19,15 @@ export default function (metaCookieTitles: Cookie, useMetaCookie: boolean, stora
                 for (let j = 0; j < categories[i].cookies.length; j++) {
                     const {cookies} = categories[i];
 
-                    if (cookies) {
 
-                        allIds.push({
-                            categoryId: categories[i].id,
-                            cookieId: cookies[j].id
-                        })
+                    allIds.push({
+                        categoryId: categories[i].id,
+                        cookieId: cookies[j].id
+                    })
 
-                        const {id} = cookies[j];
-                        if (`${storagePrefix}-${categories[i].id}-${id}` in localStorage) {
-                            consents[i].cookies[j].accepted = localStorage.getItem(`${storagePrefix}-${categories[i].id}-${cookies[j].id}`) === 'true'
-                            res.push(consents[i].cookies[j].accepted)
-                        } else
-                            res.push(false)
-                    }
+                    consents[i].cookies[j].accepted =
+                      localStorage.getItem(`${storagePrefix}-${categories[i].id}-${cookies[j].id}`) === 'true'
+                    res.push(consents[i].cookies[j].accepted)
                 }
 
                 const containsTruthyValue = res.includes(true)
@@ -54,7 +49,7 @@ export default function (metaCookieTitles: Cookie, useMetaCookie: boolean, stora
     if (useMetaCookie) {
         const {cookies} = categories[0];
         if (cookies) { // @ts-ignore
-            cookies.unshift(metaCookieTitles)
+            cookies.unshift(metaCookie)
         }
     }
 
@@ -109,6 +104,7 @@ export default function (metaCookieTitles: Cookie, useMetaCookie: boolean, stora
             const value = localStorage.getItem(`${this.storagePrefix}-${categoryId}-${cookieId}`)
             if (typeof value === 'string')
                 return value === 'true'
+            return false
         },
         hasAccepted() {
             return this.storageConsentsKey in localStorage

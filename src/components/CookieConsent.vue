@@ -15,7 +15,7 @@
                 <span class="cookie-consent-info font-bold" :title="t('generalLabels.info.title')" @click="toggleInfo" style="font-family: 'Verdana'">i</span>
                 <div class="rounded w-full h-max bg-blue-200 absolute top-[26px] left-0" :class="{ 'cookie-consent-info-hide': !isInfoOpen }">
                   <span class="absolute arrow-up top-[-4px] left-[5px]"></span>
-                  <p class="text-[13px] px-2 text-left my-1 mx-0">{{ t('generalLabels.info.text') }}</p>
+                  <p class="text-[13px] px-2 text-left my-1 mx-0" style="line-height: 1.2">{{ t('generalLabels.info.text') }}</p>
                 </div>
               </div>
               <a rel="nofollow" href="#" class="minimizer" @click="minimize($event)"
@@ -202,11 +202,10 @@
 
 <script setup lang="ts">
   import {nextTick, onBeforeMount, onMounted, reactive, ref, toRefs, withDefaults} from 'vue'
-  import type {Category, Cookie} from '../interfaces/CookieConsentProps'
-  import {CookieLabelsProps, GeneralLabelsProps, Link, RequiredLinksProps} from "../interfaces/CookieConsentProps";
+  import type {Category, Cookie, Props} from '../interfaces/CookieConsentProps'
+  import {Consent} from '../interfaces/Consent'
   import Consents from './Consents'
   import {useI18n} from 'vue-i18n'
-  import {Consent} from '../interfaces/Consent'
 
   const { t, locale } = useI18n()
 
@@ -221,68 +220,21 @@
   const detailsCards = ref([])
   const isInfoOpen = ref(false)
   const currentTab = ref('cookies')
+  const metaCookie = ref<Cookie>({
+    id: t('metaCookieTitles.id'),
+    name: t('metaCookieTitles.name'),
+    provider: t('metaCookieTitles.provider'),
+    purpose: t('metaCookieTitles.purpose'),
+    cookieName: t('metaCookieTitles.cookieName'),
+    cookieValidityPeriod: t('metaCookieTitles.cookieValidityPeriod'),
+  })
 
   // Props
-  const props = withDefaults(defineProps<{
-    categories: Array<Category>,
-    requiredLinks: RequiredLinksProps,
-    links?: Array<Link>,
-    generalLabels?: GeneralLabelsProps,
-    cookieLabels?: CookieLabelsProps,
-    useMetaCookie?: boolean,
-    metaCookieTitles?: Cookie,
-
-    animationDuration?: string,
-    minimizeAnimationDuration?: string,
-    hideDuration?: string
-  }>(), {
+  const props = withDefaults(defineProps<Props>(), {
     useMetaCookie: false,
-    metaCookieTitles: {
-      // @ts-ignore
-      id: 'meta-cookie',
-      name: 'Cookie-Zustimmungen',
-      provider: 'Eigentümer der Webseite',
-      purpose: 'Speichert die Zustimmungen bzw. Ablehnungen zu den einzelnen Kategorien, sowie einzelnen Cookies.',
-      cookieName: 'consents',
-      cookieValidityPeriod: '1 Jahr'
-    },
     animationDuration: '1.5s',
     minimizeAnimationDuration: '1s',
-    hideDuration: '1s',
-    generalLabels: {
-      // @ts-ignore
-      title: 'Datenschutzeinstellungen',
-      back: 'Zurück',
-      minimize: 'Minimieren',
-      binarySliderLabels: {
-        accepted: 'Akzeptiert',
-        declined: 'Abgelehnt',
-        partial: 'Teilweise akzeptiert'
-      },
-      button: {
-        acceptAll: 'Alle Akzeptieren',
-        acceptSelection: 'Auswahl Speichern'
-      },
-      description: {
-        main: 'Wir nutzen Cookies auf unserer Webseite für essenzielle Zwecke, sowie für statistische und Marketingzwecke. Auch externe Medien können Cookies verwenden.',
-        details: 'Hier findest Du eine Übersicht über alle verwendeten Cookies. Du kannst zu einzelnen Kategorien oder einzelnen Cookies zustimmen und kannst Dir weitere Informationen zu den einzelnen Cookies anzeigen lassen.'
-      },
-      showCookieInformation: 'Cookie-Information anzeigen',
-      cookieDetails: 'Cookie-Details',
-      individuellSettings: 'Individuelle Datenschutzeinstellungen'
-    },
-    cookieLabels: {
-      // @ts-ignore
-      accept: 'Akzeptieren',
-      name: 'Name',
-      provider: 'Anbieter',
-      purpose: 'Zweck',
-      privacy: 'Datenschutzerklärung',
-      hosts: 'Host',
-      cookieName: 'Cookie Name',
-      cookieValidityPeriod: 'Cookie Laufzeit',
-      links: 'Links'
-    }
+    hideDuration: '1s'
   })
 
   const {
@@ -290,21 +242,18 @@
     animationDuration,
     minimizeAnimationDuration,
     hideDuration,
-    cookieLabels,
-    generalLabels,
-    metaCookieTitles,
     categories,
     requiredLinks,
-    links
+    links,
   } = toRefs(props)
 
   if (!(storageConsentsKey.value in localStorage)) showConsent.value = true
 
-  // @ts-ignore
-  Consents(metaCookieTitles.value, useMetaCookie.value, storagePrefix.value, storageConsentsKey.value, categories.value, consents)
-
   // lifecycle hooks
   onBeforeMount(() => {
+    // @ts-ignore
+    Consents(metaCookie.value, useMetaCookie.value, storagePrefix.value, storageConsentsKey.value, categories.value, consents)
+
     document.documentElement.style.setProperty('--cookie-consent-animation-duration', animationDuration!.value!)
     document.documentElement.style.setProperty('--cookie-consent-minimize-animation-duration', minimizeAnimationDuration!.value!)
     document.documentElement.style.setProperty('--cookie-consent-hide-duration', hideDuration!.value!)
@@ -519,7 +468,7 @@
   function setMetaCookie(obj: {[key: string]: boolean}) {
     const expireDate = new Date()
     expireDate.setFullYear(expireDate.getFullYear() + 1)
-    document.cookie = `${metaCookieTitles!.value!.cookieName}=${JSON.stringify(obj)};samesite=Lax;secure=true;expires=${expireDate}`
+    document.cookie = `${t('metaCookieTitles.cookieName')}=${JSON.stringify(obj)};samesite=Lax;secure=true;expires=${expireDate}`
   }
 
   function acceptAll() {
@@ -640,7 +589,7 @@
 
       consents[categoryIndex].cookies[cookieIndex].accepted = true
 
-      // Ist die Rückgabe vom anfänglichen Umschalten true, dann prüfen ob alle anderen Schalter aktiviert sind.
+      // Ist die Rückgabe vom anfänglichen Umschalten true, dann prüfen, ob alle anderen Schalter aktiviert sind.
       const res = []
       // @ts-ignore
       for (const slider of binarySliders) {

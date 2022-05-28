@@ -26,17 +26,16 @@ export default defineConfig({
       '@': resolve(__dirname, 'src')
     }
   },
-  mode: 'production',
   build: {
     target: 'esnext',
     lib: {
-      entry: resolve(__dirname, 'src/components/CookieConsent.vue'),
+      entry: resolve('src', 'components', 'all.js'),
       name: 'CookieConsent',
       formats: ['es', 'umd'],
-      fileName: (format) => `cookie-consent.${format}.js`
+      fileName: (format) => `cookie-consent-fewer-languages.${format}.js`
     },
     ssr: false,
-    minify: 'esbuild',
+    minify: true,
     polyfillModulePreload: true,
     rollupOptions: {
       external: ['vue', 'vue-i18n'],

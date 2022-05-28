@@ -1,13 +1,16 @@
 {
   "name": "@avensio/cookie-consent",
-  "version": "0.1.22",
+  "version": "0.2.0",
   "scripts": {
     "dev": "vite",
+    "test": "vitest",
     "build": "vite build",
     "build:lib": "vite build -c vite.config.lib.ts",
+    "build:lib:plus:fewer-languages": "vite build -c vite.config.fewer-languages.lib.ts",
     "serve": "vite preview",
     "browserslist:update": "npx browserslist@latest --update-db",
-    "browserslist:show:selected": "npx browserslist"
+    "browserslist:show:selected": "npx browserslist",
+    "dependencies:update": "npm-check -u"
   },
   "files": [
     "dist"
@@ -46,20 +49,23 @@
     "last 6 versions"
   ],
   "devDependencies": {
-    "@intlify/vite-plugin-vue-i18n": "^3.2.1",
-    "@types/node": "^16.11.12",
-    "@vitejs/plugin-vue": "^1.10.2",
-    "autoprefixer": "^10.4.2",
-    "browserslist": "^4.18.1",
-    "postcss": "^8.4.5",
-    "postcss-nesting": "^10.1.2",
-    "tailwindcss": "^3.0.15",
-    "typescript": "^4.5.2",
-    "vite": "^2.7.0",
-    "vite-plugin-dts": "^0.9.6",
-    "vite-plugin-vue-type-imports": "^0.0.3",
-    "vue": "^3.2.24",
-    "vue-i18n": "^9.1.9",
-    "vue-tsc": "^0.29.8"
+    "@intlify/vite-plugin-vue-i18n": "^3.4.0",
+    "@types/node": "^17.0.35",
+    "@vitejs/plugin-vue": "^2.3.3",
+    "@vue/test-utils": "^2.0.0",
+    "autoprefixer": "^10.4.7",
+    "browserslist": "^4.20.3",
+    "jsdom": "^19.0.0",
+    "postcss": "^8.4.14",
+    "postcss-nesting": "^10.1.7",
+    "tailwindcss": "^3.0.24",
+    "typescript": "^4.7.2",
+    "vite": "^2.9.9",
+    "vite-plugin-dts": "^1.2.0",
+    "vite-plugin-vue-type-imports": "^0.2.0",
+    "vitest": "^0.12.9",
+    "vue": "^3.2.36",
+    "vue-i18n": "^9.1.10",
+    "vue-tsc": "^0.34.16"
   }
 }
