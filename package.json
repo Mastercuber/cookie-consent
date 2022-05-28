@@ -24,14 +24,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Mastercuber/Cookie-Consent-Vite.git"
+    "url": "git+https://github.com/Mastercuber/cookie-consent.git"
   },
   "author": "Armin Kunkel",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Mastercuber/Cookie-Consent-Vite/issues"
+    "url": "https://github.com/Mastercuber/cookie-consent/issues"
   },
-  "homepage": "https://github.com/Mastercuber/Cookie-Consent-Vite#readme",
+  "homepage": "https://github.com/Mastercuber/cookie-consent#readme",
   "main": "./dist/cookie-consent.umd.js",
   "module": "./dist/cookie-consent.es.js",
   "types": "./dist/src/components/CookieConsent.vue.d.ts",
