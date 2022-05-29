@@ -32,6 +32,8 @@ build-job:       # This job runs in the build stage, which runs first.
 unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
   script:
+    - npm config set registry https://repo.avensio.de/repository/npm-group/
+    - npm config set _auth $NPM_AUTH
     - npm install
     - npm test
 
@@ -48,5 +50,6 @@ deploy-job:      # This job runs in the deploy stage.
     - npm config set _auth $NPM_AUTH
     - npm install
     - npm config set registry https://repo.avensio.de/repository/npm-registry/
+    - npm config set _auth $NPM_AUTH
     - npm run build:all
     - npm publish
