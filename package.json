@@ -1,10 +1,12 @@
 {
   "name": "@avensio/cookie-consent",
-  "version": "0.2.0",
+  "version": "0.2.4",
+  "private": false,
   "scripts": {
     "dev": "vite",
     "test": "vitest",
     "build": "vite build",
+    "build:all": "npm run build:lib && npm run build build:lib:plus:fewer-languages",
     "build:lib": "vite build -c vite.config.lib.ts",
     "build:lib:plus:fewer-languages": "vite build -c vite.config.fewer-languages.lib.ts",
     "serve": "vite preview",
@@ -34,8 +36,13 @@
   "homepage": "https://github.com/Mastercuber/cookie-consent#readme",
   "main": "./dist/cookie-consent.umd.js",
   "module": "./dist/cookie-consent.es.js",
-  "types": "./dist/src/components/CookieConsent.vue.d.ts",
+  "types": "./dist/components/CookieConsent.vue.d.ts",
   "exports": {
+    "./fewer-languages/style.css": "./dist/fewer/style.css",
+    "./fewer-languages": {
+      "import": "./dist/fewer/cookie-consent-fewer-languages.es.js",
+      "require": "./dist/fewer/cookie-consent-fewer-languages.umd.js"
+    },
     "./style.css": "./dist/style.css",
     ".": {
       "import": "./dist/cookie-consent.es.js",

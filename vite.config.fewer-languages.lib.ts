@@ -18,8 +18,7 @@ export default defineConfig({
       fullInstall: false,
       defaultSFCLang: 'json',
       globalSFCScope: true
-    }),
-    dts()
+    })
   ],
   resolve: {
     alias: {
@@ -28,14 +27,16 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
+    emptyOutDir: false,
+    outDir: resolve(__dirname, 'dist', 'fewer'),
     lib: {
-      entry: resolve('src', 'components', 'all.js'),
+      entry: resolve('src', 'components', 'CookieConsentFewerLanguages.vue'),
       name: 'CookieConsent',
       formats: ['es', 'umd'],
       fileName: (format) => `cookie-consent-fewer-languages.${format}.js`
     },
     ssr: false,
-    minify: true,
+    minify: 'esbuild',
     polyfillModulePreload: true,
     rollupOptions: {
       external: ['vue', 'vue-i18n'],
