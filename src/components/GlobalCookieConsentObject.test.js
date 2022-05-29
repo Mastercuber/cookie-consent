@@ -2,7 +2,6 @@ import { mount } from '@vue/test-utils'
 import CookieConsent from "@/components/CookieConsent.vue"
 import {createI18n} from "vue-i18n"
 import messages from "@intlify/vite-plugin-vue-i18n/messages"
-import exp from "constants";
 
 const i18n = createI18n({
   legacy: false,

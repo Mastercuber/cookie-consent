@@ -85,13 +85,13 @@
                 <button @click="acceptAll()">{{ t('generalLabels.button.acceptAll') }}</button>
                 <button @click="acceptSelection()">{{ t('generalLabels.button.acceptSelection') }}</button>
               </div>
-              <div>
+<!--              <div>
                 <div class="w-full tab-container">
                   <div class="w-1/2 h-[45px] text-center inline-block cursor-pointer" :class="{ 'active-tab': currentTab === 'cookies' }" @click="currentTab = 'cookies'"><span>Cookies</span></div>
                   <div class="w-1/2 h-[45px] text-center inline-block cursor-pointer" :class="{ 'active-tab': currentTab === 'fonts' }" @click="currentTab = 'fonts'"><span>Fonts</span></div>
                 </div>
                 <hr class="mb-2 p-0 m-0 rounded-b-2xl hover:cursor-pointer"/>
-              </div>
+              </div>-->
             </header>
 
             <div v-for="(category, categoryIndex) in categories" class="cookie-details-card w-full rounded relative px-3 my-4 mx-2" :key="category.id"
@@ -518,15 +518,13 @@
         const currentHeight = +tableContainer.style.height.replace('px', '')
         let height = 0
 
-        // @ts-ignore
-        for (const table of tables) {
-          height += table.offsetHeight
-          height += 7
-        }
-
         if (currentHeight === 0) {
           if (tables.length > 1) {
             height -= 4 * (tables.length - 1)
+          }
+          // @ts-ignore
+          for (const table of tables) {
+            height += table.offsetHeight + 7
           }
           tableContainer.style.height = `${height}px`
         } else {
@@ -715,10 +713,15 @@
 
   .cookie-details-card {
     background: rgba(45, 45, 45, 0.08);
+    box-sizing: border-box;
+    width: auto;
   }
 
   .btn {
     width: 100%;
+  }
+  #details-container {
+    padding-bottom: 4px;
   }
   #details-container > header button {
     margin-left: 10px;
