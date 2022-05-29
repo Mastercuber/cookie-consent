@@ -1,5 +1,13 @@
 # Cookie Consent
-This is an internationalized Cookie Consent component for vue 3.
+This is an internationalized ([vue-i18n](https://vue-i18n.intlify.dev/)) Cookie Consent component for [vue 3](https://vuejs.org/).
+
+The first category must be the `essentials` category. Only Cookies in this first category are accepted per default and can't be declined.
+
+All Cookies of other categories are declined per default.
+
+For each Cookie you can pass optional `onAccepted` and `onDenied` functions, to hand in some code, which will be executed after `save selection` or `save all` is clicked.
+
+Translations for the passed categories and cookies must be provided, when switching a language.
 ## Component properties
 ```typescript
 export interface Props {
@@ -43,15 +51,63 @@ export interface Cookie {
 }
 ```
 ## Use component
-Import the CSS Style Declarations with 
+Import the CSS Style Declarations and the component with 
 ``` javascript
 import '@avensio/cookie-consent/style.css'
-```
-and then the component with
-```javascript
 import CookieConsent from '@avensio/cookie-consent'
 ```
-now it's possible to use this component in another vue component.
+For component properties see [here](#component-properties)
+
+To use a smaller version with **only 8** bundled languages instead of 32 use
+```javascript
+import '@avensio/cookie-consent/fewer-languages/style.css'
+import CookieConsent from '@avensio/cookie-consent/fewer-languages'
+```
+
+Full Usage Example:
+
+```vue
+<script setup>
+import '@avensio/cookie-consent/style.css'
+import CookieConsent from '@avensio/cookie-consent'
+
+const obj = {
+  lang: 'en',
+
+  requiredLinks: {
+    privacy: {
+      title: 'Privacy',
+      href: '/privacy'
+    },
+    impress: {
+      title: 'Imprint',
+      href: '/imprint'
+    }
+  },
+  categories: [
+    {
+      id: 'essential',
+      label: 'Essential',
+      description: 'Essential Cookies are needed for the website to function properly.',
+      cookies: [
+        {
+          id: 'session-cookie',
+          name: 'Session Cookie',
+          provider: 'Owner of the Website',
+          purpose: 'Saves as anynomous user the items in the shopping card and as authenticated user also additional infos',
+          cookieName: 'SESSION',
+          cookieValidityPeriod: '2 hours'
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<template>
+  <CookieConsent :categories="obj.categories" :required-links="obj.requiredLinks" />
+</template>
+```
 ## Language Codes (ISO-639-1)
 The language codes are listed in [IANA Subtag Registry](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry) (see also [IANA Protocols (Language Tags)](https://www.iana.org/protocols) and taken from [Wikipedia | List of ISO-639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
 
