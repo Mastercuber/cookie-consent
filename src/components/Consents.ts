@@ -1,4 +1,4 @@
-import {Category} from "../interfaces/CookieConsentProps";
+import {Category, Cookie as CookieProp} from "../interfaces/CookieConsentProps";
 import {Consent, Cookie} from "../interfaces/Consent";
 
 declare global {
@@ -10,6 +10,7 @@ declare global {
 export default function (metaCookie: Cookie, useMetaCookie: boolean, storagePrefix: string, storageConsentsKey: string, categories: Array<Category>, consents: Array<Consent>) {
     function loadConsentsWrapper() {
         const allIds = []
+        const savedConsents = JSON.parse(localStorage.getItem(storageConsentsKey) || '{}')
 
         for (let i = 1; categories != undefined && i < categories.length; i++) {
             const res = []
@@ -18,6 +19,7 @@ export default function (metaCookie: Cookie, useMetaCookie: boolean, storagePref
                 // @ts-ignore
                 for (let j = 0; j < categories[i].cookies.length; j++) {
                     const {cookies} = categories[i];
+                    if (!cookies) continue
 
 
                     allIds.push({
@@ -25,9 +27,18 @@ export default function (metaCookie: Cookie, useMetaCookie: boolean, storagePref
                         cookieId: cookies[j].id
                     })
 
-                    consents[i].cookies[j].accepted =
-                      localStorage.getItem(`${storagePrefix}-${categories[i].id}-${cookies[j].id}`) === 'true'
+                    consents[i].cookies[j].accepted = savedConsents[`${storagePrefix}-${categories[i].id}-${cookies[j].id}`] ?? false
+
                     res.push(consents[i].cookies[j].accepted)
+
+                    if (consents[i].cookies[j].accepted && typeof cookies[j]?.onAccepted === 'function') {
+                        // @ts-ignore
+                        cookies[j].onAccepted()
+                    }
+                    if (!consents[i].cookies[j].accepted && typeof cookies[j]?.onDenied === 'function') {
+                        // @ts-ignore
+                        cookies[j].onDenied()
+                    }
                 }
 
                 const containsTruthyValue = res.includes(true)
@@ -64,6 +75,7 @@ export default function (metaCookie: Cookie, useMetaCookie: boolean, storagePref
         const {cookies} = categories[i];
         if (cookies) {
             for (let j = 0; j < cookies.length; j++) {
+                // Accept all cookies of the first category
                 // @ts-ignore
                 consent.cookies.push({accepted: i === 0})
             }
@@ -78,15 +90,35 @@ export default function (metaCookie: Cookie, useMetaCookie: boolean, storagePref
         storagePrefix: storagePrefix,
         storageConsentsKey: storageConsentsKey,
         ids,
-        categories: categories,
-        consents: consents,
+        /**
+         * Accept or deny a cookie
+         *
+         * @param categoryId
+         * @param cookieId
+         * @param value
+         */
         set(categoryId: number, cookieId: number, value: boolean) {
-            const containsId = this.ids.find((id:any) => id.categoryId === categoryId && id.cookieId === cookieId)
+            const id = this.ids.find((id:any) => id.categoryId === categoryId && id.cookieId === cookieId)
 
-            if (containsId) {
-                localStorage.setItem(`${this.storagePrefix}-${categoryId}-${cookieId}`, `${value}`)
+            if (id) {
+                const key = `${this.storagePrefix}-${categoryId}-${cookieId}`
 
-                loadConsentsWrapper()
+                const savedConsents = JSON.parse(localStorage.getItem(this.storageConsentsKey) || '{}')
+                if (key in savedConsents) {
+                    savedConsents[key] = value
+
+                    const category = categories.find((category:Category) => category.id === id.categoryId)
+                    if (category && category.cookies) {
+                        const cookie = category.cookies.find((cookie:CookieProp) => cookie.id === id.cookieId)
+
+                        if (cookie && value && typeof cookie.onAccepted === 'function')
+                            cookie.onAccepted()
+                        if (cookie && !value && typeof cookie.onDenied === 'function')
+                            cookie.onDenied()
+                    }
+                }
+
+                localStorage.setItem(this.storageConsentsKey, JSON.stringify(savedConsents))
 
                 if (document.cookie.indexOf(this.storageConsentsKey) > -1) {
                     const d = new Date()
@@ -100,28 +132,38 @@ export default function (metaCookie: Cookie, useMetaCookie: boolean, storagePref
                 console.log(`id: ${this.storagePrefix}-${categoryId}-${cookieId} doesn't exist. See Consents.ids or localStorage`)
             }
         },
+        /**
+         * Obtain the current consent about a cookie
+         *
+         * @param categoryId
+         * @param cookieId
+         */
         get(categoryId: number, cookieId: number) {
             const value = localStorage.getItem(`${this.storagePrefix}-${categoryId}-${cookieId}`)
             if (typeof value === 'string')
                 return value === 'true'
-            return false
         },
-        hasAccepted() {
+        /**
+         * Did the user gave a consent or just minimized the Cookie Consent
+         */
+        get hasAccepted() {
             return this.storageConsentsKey in localStorage
         },
+        /**
+         * Clear the Consents
+         */
         clear() {
-            for (const key in localStorage) {
-                if (key.startsWith(this.storagePrefix) || key.startsWith(this.storageConsentsKey)) {
-                    localStorage.removeItem(key)
-                }
-            }
-            for (let i=0; i < this.categories.length; i++) {
-                for (let j=0; j < this.categories[i].cookies.length; j++) {
-                    if ('onDenied' in this.categories[i].cookies[j]) this.categories[i].cookies[j].onDenied()
-                    if (i > 0) {
-                        this.consents[i].cookies[j].accepted = false
-                        this.consents[i].accepted = false
-                        this.consents[i].partial = false
+            localStorage.removeItem(this.storageConsentsKey)
+
+            for (let i=0; i < categories.length; i++) {
+                if (categories[i].cookies) {
+                    for (let j=0; j < categories[i].cookies!.length; j++) {
+                        if (typeof categories[i].cookies![j].onDenied === 'function') categories[i].cookies![j].onDenied!()
+                        if (i > 0) {
+                            consents[i].cookies[j].accepted = false
+                            consents[i].accepted = false
+                            consents[i].partial = false
+                        }
                     }
                 }
             }

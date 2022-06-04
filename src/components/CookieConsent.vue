@@ -254,9 +254,9 @@
     // @ts-ignore
     Consents(metaCookie.value, useMetaCookie.value, storagePrefix.value, storageConsentsKey.value, categories.value, consents)
 
-    document.documentElement.style.setProperty('--cookie-consent-animation-duration', animationDuration!.value!)
-    document.documentElement.style.setProperty('--cookie-consent-minimize-animation-duration', minimizeAnimationDuration!.value!)
-    document.documentElement.style.setProperty('--cookie-consent-hide-duration', hideDuration!.value!)
+    document.documentElement.style.setProperty('--cookie-consent-animation-duration', animationDuration.value)
+    document.documentElement.style.setProperty('--cookie-consent-minimize-animation-duration', minimizeAnimationDuration.value)
+    document.documentElement.style.setProperty('--cookie-consent-hide-duration', hideDuration.value)
   })
 
   onMounted(() => {})
@@ -442,17 +442,15 @@
         const key = `${storagePrefix.value}-${categories.value[i].id}-${cookie.id}`
 
         if (cookieConsent.accepted) {
-          localStorage.setItem(key, 'true')
           obj[key] = true
 
-          if ('onAccepted' in cookie && cookie.onAccepted) {
+          if ('onAccepted' in cookie && typeof cookie.onAccepted === 'function') {
             cookie.onAccepted()
           }
         } else {
-          localStorage.setItem(key, 'false')
           obj[key] = false
 
-          if ('onDenied' in cookie && cookie.onDenied) {
+          if ('onDenied' in cookie && typeof cookie.onDenied === 'function') {
             cookie.onDenied()
           }
         }
@@ -461,7 +459,7 @@
 
     localStorage.setItem(storageConsentsKey.value, JSON.stringify(obj))
 
-    if (useMetaCookie!.value)
+    if (useMetaCookie.value)
       setMetaCookie(obj)
   }
 
@@ -492,7 +490,6 @@
         const cookie = categories.value[i].cookies[j]
         // @ts-ignore
         const key = `${storagePrefix.value}-${categories.value[i].id}-${cookie.id}`
-        localStorage.setItem(key, 'true')
         obj[key] = true
 
         if ('onAccepted' in cookie && typeof cookie.onAccepted === 'function') {
