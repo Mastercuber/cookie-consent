@@ -85,13 +85,13 @@
                 <button @click="acceptAll()">{{ t('generalLabels.button.acceptAll') }}</button>
                 <button @click="acceptSelection()">{{ t('generalLabels.button.acceptSelection') }}</button>
               </div>
-              <div>
-                <div class="w-full tab-container">
-                  <div class="w-1/2 h-[45px] text-center inline-block cursor-pointer" :class="{ 'active-tab': currentTab === 'cookies' }" @click="currentTab = 'cookies'"><span>Cookies</span></div>
-                  <div class="w-1/2 h-[45px] text-center inline-block cursor-pointer" :class="{ 'active-tab': currentTab === 'fonts' }" @click="currentTab = 'fonts'"><span>Fonts</span></div>
-                </div>
-                <hr class="mb-2 p-0 m-0 rounded-b-2xl hover:cursor-pointer"/>
-              </div>
+              <!--              <div>
+                              <div class="w-full tab-container">
+                                <div class="w-1/2 h-[45px] text-center inline-block cursor-pointer" :class="{ 'active-tab': currentTab === 'cookies' }" @click="currentTab = 'cookies'"><span>Cookies</span></div>
+                                <div class="w-1/2 h-[45px] text-center inline-block cursor-pointer" :class="{ 'active-tab': currentTab === 'fonts' }" @click="currentTab = 'fonts'"><span>Fonts</span></div>
+                              </div>
+                              <hr class="mb-2 p-0 m-0 rounded-b-2xl hover:cursor-pointer"/>
+                            </div>-->
             </header>
 
             <div v-for="(category, categoryIndex) in categories" class="cookie-details-card w-full rounded relative px-3 my-4 mx-2" :key="category.id"
@@ -201,410 +201,404 @@
 </template>
 
 <script setup lang="ts">
-  import {nextTick, onBeforeMount, onMounted, reactive, ref, toRefs, withDefaults} from 'vue'
-  import type {Category, Cookie, Props} from '../interfaces/CookieConsentProps'
-  import {Consent} from '../interfaces/Consent'
-  import Consents from './Consents'
-  import {useI18n} from 'vue-i18n'
+import {nextTick, onBeforeMount, onMounted, reactive, ref, toRefs, withDefaults} from 'vue'
+import type {Category, Cookie, Props} from '../interfaces/CookieConsentProps'
+import {Consent} from '../interfaces/Consent'
+import Consents from './Consents'
+import {useI18n} from 'vue-i18n'
 
-  const { t, locale } = useI18n()
+const { t, locale } = useI18n()
 
-  // Data
-  const consents: Array<Consent> = reactive([])
-  const storagePrefix = ref('consent')
-  const storageConsentsKey = ref('consents')
-  const isMainContainerVisible = ref(true)
-  const isMinimized = ref(false)
-  const showConsent = ref(false)
-  const blurOverlayReverse = ref(false)
-  const detailsCards = ref([])
-  const isInfoOpen = ref(false)
-  const currentTab = ref('cookies')
-  const metaCookie = ref<Cookie>({
-    id: t('metaCookieTitles.id'),
-    name: t('metaCookieTitles.name'),
-    provider: t('metaCookieTitles.provider'),
-    purpose: t('metaCookieTitles.purpose'),
-    cookieName: t('metaCookieTitles.cookieName'),
-    cookieValidityPeriod: t('metaCookieTitles.cookieValidityPeriod'),
-  })
+// Data
+const consents: Array<Consent> = reactive([])
+const isMainContainerVisible = ref(true)
+const isMinimized = ref(false)
+const showConsent = ref(false)
+const blurOverlayReverse = ref(false)
+const detailsCards = ref([])
+const isInfoOpen = ref(false)
+const currentTab = ref('cookies')
 
-  // Props
-  const props = withDefaults(defineProps<Props>(), {
-    useMetaCookie: false,
-    animationDuration: '1.5s',
-    minimizeAnimationDuration: '1s',
-    hideDuration: '1s'
-  })
+// Props
+const props = withDefaults(defineProps<Props>(), {
+  useMetaCookie: false,
+  animationDuration: '1.5s',
+  minimizeAnimationDuration: '1s',
+  hideDuration: '1s',
+  storagePrefix: 'consent',
+  storageConsentsKey: 'consents'
+})
 
-  const {
-    useMetaCookie,
-    animationDuration,
-    minimizeAnimationDuration,
-    hideDuration,
-    categories,
-    requiredLinks,
-    links,
-  } = toRefs(props)
+const {
+  useMetaCookie,
+  animationDuration,
+  minimizeAnimationDuration,
+  hideDuration,
+  categories,
+  requiredLinks,
+  links,
+  storagePrefix,
+  storageConsentsKey
+} = toRefs(props)
 
-  if (!(storageConsentsKey.value in localStorage)) showConsent.value = true
+const metaCookie = ref<Cookie>({
+  id: t('metaCookieTitles.id'),
+  name: t('metaCookieTitles.name'),
+  provider: t('metaCookieTitles.provider'),
+  purpose: t('metaCookieTitles.purpose'),
+  cookieName: storageConsentsKey.value,
+  cookieValidityPeriod: t('metaCookieTitles.cookieValidityPeriod'),
+})
 
-  // lifecycle hooks
-  onBeforeMount(() => {
-    // @ts-ignore
-    Consents(metaCookie.value, useMetaCookie.value, storagePrefix.value, storageConsentsKey.value, categories.value, consents)
+if (!(storageConsentsKey.value in localStorage)) showConsent.value = true
 
-    document.documentElement.style.setProperty('--cookie-consent-animation-duration', animationDuration!.value!)
-    document.documentElement.style.setProperty('--cookie-consent-minimize-animation-duration', minimizeAnimationDuration!.value!)
-    document.documentElement.style.setProperty('--cookie-consent-hide-duration', hideDuration!.value!)
-  })
+// lifecycle hooks
+onBeforeMount(() => {
+  // @ts-ignore
+  Consents(metaCookie.value, useMetaCookie.value, storagePrefix.value, storageConsentsKey.value, categories.value, consents)
 
-  onMounted(() => {})
+  document.documentElement.style.setProperty('--cookie-consent-animation-duration', animationDuration.value)
+  document.documentElement.style.setProperty('--cookie-consent-minimize-animation-duration', minimizeAnimationDuration.value)
+  document.documentElement.style.setProperty('--cookie-consent-hide-duration', hideDuration.value)
+})
 
-  // Functions
+onMounted(() => {})
 
-  function getCookieCountForCategory(category: Category) {
-    const count = category.cookies && Array.isArray(category.cookies) ? category.cookies.length : 0
-    return count.toLocaleString(locale.value)
+// Functions
+
+function getCookieCountForCategory(category: Category) {
+  const count = category.cookies && Array.isArray(category.cookies) ? category.cookies.length : 0
+  return count.toLocaleString(locale.value)
+}
+
+function setTransformToWidthAndHeight() {
+  let currentWidth, currentHeight
+
+  if (isMainContainerVisible.value) {
+    currentWidth = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-width')
+    currentHeight = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-height')
+  } else {
+    currentWidth = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-details-width')
+    currentHeight = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-details-height')
   }
 
-  function setTransformToWidthAndHeight() {
-    let currentWidth, currentHeight
+  document.documentElement.style.setProperty('--transform-current-width', currentWidth)
+  document.documentElement.style.setProperty('--transform-current-height', currentHeight)
+}
 
-    if (isMainContainerVisible.value) {
-      currentWidth = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-width')
-      currentHeight = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-height')
-    } else {
-      currentWidth = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-details-width')
-      currentHeight = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-details-height')
-    }
+function toggleInfo() {
+  isInfoOpen.value = !isInfoOpen.value
+}
 
-    document.documentElement.style.setProperty('--transform-current-width', currentWidth)
-    document.documentElement.style.setProperty('--transform-current-height', currentHeight)
+function setTransformToXY(container: HTMLElement) {
+  let offsetLeft, containerWidth
+  let offsetTop = window.innerHeight / 4
+
+  if (isMainContainerVisible.value) {
+    containerWidth = +getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-width').replace('px', '')
+  } else {
+    containerWidth = +getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-details-width').replace('px', '')
   }
+  offsetLeft = (window.innerWidth / 2) - (containerWidth / 2)
+  // Ohne diese Zeile funktioniert im Firefox die Minimierungsanimation nicht mehr immer... Warum auch immer..
+  // Auch nicht wenn der Parameter ganz entfernt wird! -.-
+  offsetTop = container.offsetTop || offsetTop
 
-  function toggleInfo() {
-    isInfoOpen.value = !isInfoOpen.value
+  const x = window.innerWidth - offsetLeft - 45 - (containerWidth / 2);
+  const y = window.innerHeight - offsetTop - 60;
+
+  document.documentElement.style.setProperty('--transform-minimize-x', `${x}px`)
+  document.documentElement.style.setProperty('--transform-minimize-y', `${y}px`)
+}
+
+function setCategoryConsent(event: Event, index: number) {
+  consents[index].partial = false
+  consents[index].accepted = (<HTMLInputElement> event.target).checked
+
+  for (let i = 0; i < consents[index].cookies.length; i++) {
+    consents[index].cookies[i].accepted = (<HTMLInputElement> event.target).checked
   }
+}
 
-  function setTransformToXY(container: HTMLElement) {
-    let offsetLeft, containerWidth
-    let offsetTop = window.innerHeight / 4
+function maximize(event: Event) {
+  event.preventDefault()
 
-    if (isMainContainerVisible.value) {
-      containerWidth = +getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-width').replace('px', '')
-    } else {
-      containerWidth = +getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-details-width').replace('px', '')
-    }
-    offsetLeft = (window.innerWidth / 2) - (containerWidth / 2)
-    // Ohne diese Zeile funktioniert im Firefox die Minimierungsanimation nicht mehr immer... Warum auch immer..
-    // Auch nicht wenn der Parameter ganz entfernt wird! -.-
-    offsetTop = container.offsetTop || offsetTop
+  setTransformToWidthAndHeight()
+  showConsent.value = true
 
-    const x = window.innerWidth - offsetLeft - 45 - (containerWidth / 2);
-    const y = window.innerHeight - offsetTop - 60;
-
-    document.documentElement.style.setProperty('--transform-minimize-x', `${x}px`)
-    document.documentElement.style.setProperty('--transform-minimize-y', `${y}px`)
-  }
-
-  function setCategoryConsent(event: Event, index: number) {
-    consents[index].partial = false
-    consents[index].accepted = (<HTMLInputElement> event.target).checked
-
-    for (let i = 0; i < consents[index].cookies.length; i++) {
-      consents[index].cookies[i].accepted = (<HTMLInputElement> event.target).checked
-    }
-  }
-
-  function maximize(event: Event) {
-    event.preventDefault()
-
-    setTransformToWidthAndHeight()
-    showConsent.value = true
-
-    nextTick(() => {
-      const overlay = <HTMLElement> document.getElementById('overlay')
-      const container = <HTMLElement> document.getElementById('container')
-
-      setTransformToXY(container)
-
-      overlay.classList.remove('blur-overlay')
-
-      isMinimized.value = false
-      blurOverlayReverse.value = true
-
-      container.classList.add('maximize')
-    })
-  }
-
-  function clearSite(event: Event) {
-    event.preventDefault()
-    window.Consents.clear()
-  }
-
-  function minimize(event: Event) {
-    event.preventDefault()
-
-    setTransformToWidthAndHeight()
-
-    const container = <HTMLElement> document.getElementById('container')
+  nextTick(() => {
     const overlay = <HTMLElement> document.getElementById('overlay')
-
-    overlay.classList.remove('blur-overlay-reverse')
-    container.classList.remove('transform-to-details')
-    container.classList.remove('transform-to-main')
-    container.classList.remove('maximize')
+    const container = <HTMLElement> document.getElementById('container')
 
     setTransformToXY(container)
 
-    overlay.classList.add('blur-overlay')
-    container.classList.add('minimize')
+    overlay.classList.remove('blur-overlay')
 
-    const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-minimize-animation-duration')
+    isMinimized.value = false
+    blurOverlayReverse.value = true
 
-    setTimeout(() => {
-      showConsent.value = false
-      isMinimized.value = true
-    }, ((+animationDuration.replace('s', '')) * 1000) - 50)
-  }
+    container.classList.add('maximize')
+  })
+}
 
-  function hideConsent() {
-    setTransformToWidthAndHeight()
+function clearSite(event: Event) {
+  event.preventDefault()
+  window.Consents.clear()
+}
 
-    const container = <HTMLElement> document.getElementById('container')
-    const overlay = <HTMLElement> document.getElementById('overlay')
-    overlay.classList.remove('blur-overlay-reverse')
+function minimize(event: Event) {
+  event.preventDefault()
 
-    setTransformToXY(container)
+  setTransformToWidthAndHeight()
 
-    overlay.classList.add('blur-overlay')
-    container.classList.add('hide-consent')
+  const container = <HTMLElement> document.getElementById('container')
+  const overlay = <HTMLElement> document.getElementById('overlay')
 
-    const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-hide-duration')
+  overlay.classList.remove('blur-overlay-reverse')
+  container.classList.remove('transform-to-details')
+  container.classList.remove('transform-to-main')
+  container.classList.remove('maximize')
 
-    setTimeout(() => {
-      showConsent.value = false
-      overlay.classList.remove('blur-overlay')
-      container.classList.remove('hide-consent')
-    }, ((+animationDuration.replace('s', '')) * 1000) - 50)
-  }
+  setTransformToXY(container)
 
-  function showMain(event: Event) {
-    event.preventDefault()
+  overlay.classList.add('blur-overlay')
+  container.classList.add('minimize')
 
-    const container = <HTMLElement> document.getElementById('container')
-    const opacityContainer = <HTMLElement> document.getElementById('cookie-consent-opacity-container')
+  const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-minimize-animation-duration')
 
-    opacityContainer.classList.remove('transform-opacity-to-details')
-    opacityContainer.classList.add('transform-opacity-to-main')
-    container.classList.remove('transform-to-details')
-    container.classList.remove('maximize')
-    container.classList.add('transform-to-main')
+  setTimeout(() => {
+    showConsent.value = false
+    isMinimized.value = true
+  }, ((+animationDuration.replace('s', '')) * 1000) - 50)
+}
 
-    const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-animation-duration')
+function hideConsent() {
+  setTransformToWidthAndHeight()
 
-    setTimeout(() => {
-      isMainContainerVisible.value = true
-    }, ((+animationDuration.replace('s', '')) / 2) * 1000)
-  }
+  const container = <HTMLElement> document.getElementById('container')
+  const overlay = <HTMLElement> document.getElementById('overlay')
+  overlay.classList.remove('blur-overlay-reverse')
 
-  function showDetails(event: Event) {
-    event.preventDefault()
+  setTransformToXY(container)
 
-    const container = <HTMLElement> document.getElementById('container')
-    const opacityContainer = <HTMLElement> document.getElementById('cookie-consent-opacity-container')
+  overlay.classList.add('blur-overlay')
+  container.classList.add('hide-consent')
 
-    opacityContainer.classList.remove('transform-opacity-to-main')
-    opacityContainer.classList.add('transform-opacity-to-details')
-    container.classList.remove('transform-to-main')
-    container.classList.remove('maximize')
-    container.classList.add('transform-to-details')
+  const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-hide-duration')
 
-    const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-animation-duration')
+  setTimeout(() => {
+    showConsent.value = false
+    overlay.classList.remove('blur-overlay')
+    container.classList.remove('hide-consent')
+  }, ((+animationDuration.replace('s', '')) * 1000) - 50)
+}
 
-    setTimeout(() => {
-      isMainContainerVisible.value = false
-    }, ((+animationDuration.replace('s', '')) / 2) * 1000)
-  }
+function showMain(event: Event) {
+  event.preventDefault()
 
-  function acceptSelection() {
-    hideConsent()
+  const container = <HTMLElement> document.getElementById('container')
+  const opacityContainer = <HTMLElement> document.getElementById('cookie-consent-opacity-container')
 
-    const obj: {[key: string]: boolean} = {}
+  opacityContainer.classList.remove('transform-opacity-to-details')
+  opacityContainer.classList.add('transform-opacity-to-main')
+  container.classList.remove('transform-to-details')
+  container.classList.remove('maximize')
+  container.classList.add('transform-to-main')
 
-    for (let i = 1; i < consents.length; i++) {
-      for (let j = 0; j < consents[i].cookies.length; j++) {
-        const cookieConsent = consents[i].cookies[j]
-        // @ts-ignore
-        const cookie: Cookie = categories.value[i].cookies[j]
-        // @ts-ignore
-        const key = `${storagePrefix.value}-${categories.value[i].id}-${cookie.id}`
+  const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-animation-duration')
 
-        if (cookieConsent.accepted) {
-          localStorage.setItem(key, 'true')
-          obj[key] = true
+  setTimeout(() => {
+    isMainContainerVisible.value = true
+  }, ((+animationDuration.replace('s', '')) / 2) * 1000)
+}
 
-          if ('onAccepted' in cookie && cookie.onAccepted) {
-            cookie.onAccepted()
-          }
-        } else {
-          localStorage.setItem(key, 'false')
-          obj[key] = false
+function showDetails(event: Event) {
+  event.preventDefault()
 
-          if ('onDenied' in cookie && cookie.onDenied) {
-            cookie.onDenied()
-          }
-        }
-      }
-    }
+  const container = <HTMLElement> document.getElementById('container')
+  const opacityContainer = <HTMLElement> document.getElementById('cookie-consent-opacity-container')
 
-    localStorage.setItem(storageConsentsKey.value, JSON.stringify(obj))
+  opacityContainer.classList.remove('transform-opacity-to-main')
+  opacityContainer.classList.add('transform-opacity-to-details')
+  container.classList.remove('transform-to-main')
+  container.classList.remove('maximize')
+  container.classList.add('transform-to-details')
 
-    if (useMetaCookie!.value)
-      setMetaCookie(obj)
-  }
+  const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-animation-duration')
 
-  function setMetaCookie(obj: {[key: string]: boolean}) {
-    const expireDate = new Date()
-    expireDate.setFullYear(expireDate.getFullYear() + 1)
-    document.cookie = `${t('metaCookieTitles.cookieName')}=${JSON.stringify(obj)};samesite=Lax;secure=true;expires=${expireDate}`
-  }
+  setTimeout(() => {
+    isMainContainerVisible.value = false
+  }, ((+animationDuration.replace('s', '')) / 2) * 1000)
+}
 
-  function acceptAll() {
-    hideConsent()
+function acceptSelection() {
+  hideConsent()
 
-    for (const consent of consents) {
-      consent.accepted = true
-      consent.partial = false
+  const obj: {[key: string]: boolean} = {}
 
-      for (const cookieConsent of consent.cookies) {
-        cookieConsent.accepted = true
-      }
-    }
-
-    const obj: {[key: string]: boolean} = {}
-
-    for (let i = 1; i < categories.value.length; i++) {
+  for (let i = 1; i < consents.length; i++) {
+    for (let j = 0; j < consents[i].cookies.length; j++) {
+      const cookieConsent = consents[i].cookies[j]
       // @ts-ignore
-      for (let j = 0; j < categories.value[i].cookies.length; j++) {
-        // @ts-ignore
-        const cookie = categories.value[i].cookies[j]
-        // @ts-ignore
-        const key = `${storagePrefix.value}-${categories.value[i].id}-${cookie.id}`
-        localStorage.setItem(key, 'true')
+      const cookie: Cookie = categories.value[i].cookies[j]
+      // @ts-ignore
+      const key = `${storagePrefix.value}-${categories.value[i].id}-${cookie.id}`
+
+      if (cookieConsent.accepted) {
         obj[key] = true
 
         if ('onAccepted' in cookie && typeof cookie.onAccepted === 'function') {
           cookie.onAccepted()
         }
+      } else {
+        obj[key] = false
+
+        if ('onDenied' in cookie && typeof cookie.onDenied === 'function') {
+          cookie.onDenied()
+        }
       }
     }
-
-    localStorage.setItem(storageConsentsKey.value, JSON.stringify(obj))
-    if (useMetaCookie!.value)
-      setMetaCookie(obj)
   }
 
-  function toggleCookieInformation(event: Event) {
-    event.preventDefault()
-    const parent = (<HTMLElement> event.target).parentElement
+  localStorage.setItem(storageConsentsKey.value, JSON.stringify(obj))
 
-    if (parent) {
-      const tableContainer = <HTMLElement> parent.querySelector('.table-container')
+  if (useMetaCookie.value)
+    setMetaCookie(obj)
+}
 
-      if (tableContainer) {
-        const tables = tableContainer.querySelectorAll('table')
-        const currentHeight = +tableContainer.style.height.replace('px', '')
-        let height = 0
+function setMetaCookie(obj: {[key: string]: boolean}) {
+  const expireDate = new Date()
+  expireDate.setFullYear(expireDate.getFullYear() + 1)
+  document.cookie = `${t('metaCookieTitles.cookieName')}=${JSON.stringify(obj)};samesite=Lax;secure=true;expires=${expireDate}`
+}
 
+function acceptAll() {
+  hideConsent()
+
+  for (const consent of consents) {
+    consent.accepted = true
+    consent.partial = false
+
+    for (const cookieConsent of consent.cookies) {
+      cookieConsent.accepted = true
+    }
+  }
+
+  const obj: {[key: string]: boolean} = {}
+
+  for (let i = 1; i < categories.value.length; i++) {
+    // @ts-ignore
+    for (let j = 0; j < categories.value[i].cookies.length; j++) {
+      // @ts-ignore
+      const cookie = categories.value[i].cookies[j]
+      // @ts-ignore
+      const key = `${storagePrefix.value}-${categories.value[i].id}-${cookie.id}`
+      obj[key] = true
+
+      if ('onAccepted' in cookie && typeof cookie.onAccepted === 'function') {
+        cookie.onAccepted()
+      }
+    }
+  }
+
+  localStorage.setItem(storageConsentsKey.value, JSON.stringify(obj))
+  if (useMetaCookie!.value)
+    setMetaCookie(obj)
+}
+
+function toggleCookieInformation(event: Event) {
+  event.preventDefault()
+  const parent = (<HTMLElement> event.target).parentElement
+
+  if (parent) {
+    const tableContainer = <HTMLElement> parent.querySelector('.table-container')
+
+    if (tableContainer) {
+      const tables = tableContainer.querySelectorAll('table')
+      const currentHeight = +tableContainer.style.height.replace('px', '')
+      let height = 0
+
+      if (currentHeight === 0) {
+        if (tables.length > 1) {
+          height -= 4 * (tables.length - 1)
+        }
         // @ts-ignore
         for (const table of tables) {
-          height += table.offsetHeight
-          height += 7
+          height += table.offsetHeight + 7
         }
-
-        if (currentHeight === 0) {
-          if (tables.length > 1) {
-            height -= 4 * (tables.length - 1)
-          }
-          tableContainer.style.height = `${height}px`
-        } else {
-          tableContainer.style.height = '0'
-        }
+        tableContainer.style.height = `${height}px`
+      } else {
+        tableContainer.style.height = '0'
       }
     }
   }
+}
 
-  function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number) {
-    // @ts-ignore
-    const added = event.target.classList.toggle('active')
+function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number) {
+  // @ts-ignore
+  const added = event.target.classList.toggle('active')
 
-    // when no cookie index is available, a category was toggled
-    if (cookieIndex === undefined) {
-      if (added) {
-        consents[categoryIndex].partial = false
-        consents[categoryIndex].accepted = true
+  // when no cookie index is available, a category was toggled
+  if (cookieIndex === undefined) {
+    if (added) {
+      consents[categoryIndex].partial = false
+      consents[categoryIndex].accepted = true
 
-        for (let i = 0; i < consents[categoryIndex].cookies.length; i++) {
-          consents[categoryIndex].cookies[i].accepted = true
-        }
-      } else {
-        consents[categoryIndex].partial = false
-        consents[categoryIndex].accepted = false
-
-        for (let i = 0; i < consents[categoryIndex].cookies.length; i++) {
-          consents[categoryIndex].cookies[i].accepted = false
-        }
+      for (let i = 0; i < consents[categoryIndex].cookies.length; i++) {
+        consents[categoryIndex].cookies[i].accepted = true
       }
-
-      return
-    }
-
-
-    const cookieDetailsCard = <HTMLElement> detailsCards.value[categoryIndex]
-    // when the return value from toggling is false, then also deactivate the category
-    if (!added) {
-      const binarySliders = cookieDetailsCard.querySelectorAll('.table-container .binary-slider')
-
-      // Ist die Rückgabe vom anfänglichen Umschalten false, dann prüfen ob alle anderen Schalter deaktiviert sind
-      const res = []
-      // @ts-ignore
-      for (const slider of binarySliders) {
-        res.push(slider.classList.contains('active'))
-      }
-
-      // Sind alle anderen Cookies deaktiviert, dann auch die Kategorie deaktivieren
-      if (!res.includes(true)) {
-        consents[categoryIndex].partial = false
-      } else {
-        consents[categoryIndex].partial = true
-      }
-
-      consents[categoryIndex].accepted = false
-      consents[categoryIndex].cookies[cookieIndex].accepted = false
-
     } else {
-      const binarySliders = cookieDetailsCard.querySelectorAll('.table-container .binary-slider')
+      consents[categoryIndex].partial = false
+      consents[categoryIndex].accepted = false
 
-      consents[categoryIndex].cookies[cookieIndex].accepted = true
-
-      // Ist die Rückgabe vom anfänglichen Umschalten true, dann prüfen, ob alle anderen Schalter aktiviert sind.
-      const res = []
-      // @ts-ignore
-      for (const slider of binarySliders) {
-        res.push(slider.classList.contains('active'))
-      }
-
-      // Sind alle anderen Cookies aktiviert, dann auch die Kategorie aktivieren
-      if (!res.includes(false)) {
-        consents[categoryIndex].partial = false
-        consents[categoryIndex].accepted = true
-      } else {
-        consents[categoryIndex].partial = true
+      for (let i = 0; i < consents[categoryIndex].cookies.length; i++) {
+        consents[categoryIndex].cookies[i].accepted = false
       }
     }
+
+    return
   }
+
+
+  const cookieDetailsCard = <HTMLElement> detailsCards.value[categoryIndex]
+  // when the return value from toggling is false, then also deactivate the category
+  if (!added) {
+    const binarySliders = cookieDetailsCard.querySelectorAll('.table-container .binary-slider')
+
+    // Ist die Rückgabe vom anfänglichen Umschalten false, dann prüfen ob alle anderen Schalter deaktiviert sind
+    const res = []
+    // @ts-ignore
+    for (const slider of binarySliders) {
+      res.push(slider.classList.contains('active'))
+    }
+
+    // Sind alle anderen Cookies deaktiviert, dann auch die Kategorie deaktivieren
+    consents[categoryIndex].partial = res.includes(true);
+
+    consents[categoryIndex].accepted = false
+    consents[categoryIndex].cookies[cookieIndex].accepted = false
+
+  } else {
+    const binarySliders = cookieDetailsCard.querySelectorAll('.table-container .binary-slider')
+
+    consents[categoryIndex].cookies[cookieIndex].accepted = true
+
+    // Ist die Rückgabe vom anfänglichen Umschalten true, dann prüfen, ob alle anderen Schalter aktiviert sind.
+    const res = []
+    // @ts-ignore
+    for (const slider of binarySliders) {
+      res.push(slider.classList.contains('active'))
+    }
+
+    // Sind alle anderen Cookies aktiviert, dann auch die Kategorie aktivieren
+    if (!res.includes(false)) {
+      consents[categoryIndex].partial = false
+      consents[categoryIndex].accepted = true
+    } else {
+      consents[categoryIndex].partial = true
+    }
+  }
+}
 </script>
 
 <style>
@@ -710,7 +704,7 @@
     box-shadow: 0 0 6px gray;
   }
   .cookie-details-card:hover {
-    box-shadow: 0 0 0px gray;
+    box-shadow: 0 0 0 gray;
   }
 
   .cookie-details-card {

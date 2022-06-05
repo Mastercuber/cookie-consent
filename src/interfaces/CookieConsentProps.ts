@@ -37,6 +37,8 @@ export interface Props {
 
     animationDuration?: string,
     minimizeAnimationDuration?: string,
-    hideDuration?: string
+    hideDuration?: string,
+    storagePrefix?: string,
+    storageConsentsKey?: string
 }
 export default Props

@@ -1,5 +1,7 @@
 import {Category, Cookie as CookieProp} from "../interfaces/CookieConsentProps";
 import {Consent, Cookie} from "../interfaces/Consent";
+// @ts-ignore
+import {deleteCookie, readCookie, writeCookie} from '../assets/cookies.js'
 
 declare global {
     interface Window {
@@ -10,7 +12,15 @@ declare global {
 export default function (metaCookie: Cookie, useMetaCookie: boolean, storagePrefix: string, storageConsentsKey: string, categories: Array<Category>, consents: Array<Consent>) {
     function loadConsentsWrapper() {
         const allIds = []
-        const savedConsents = JSON.parse(localStorage.getItem(storageConsentsKey) || '{}')
+        let savedConsents = {}
+        if (storageConsentsKey in localStorage) {
+            // @ts-ignore
+            savedConsents = JSON.parse(localStorage.getItem(storageConsentsKey))
+        } else if (useMetaCookie) {
+            savedConsents = readCookie(storageConsentsKey)
+            if (Object.keys(savedConsents).length > 0)
+                localStorage.setItem(storageConsentsKey, JSON.stringify(savedConsents))
+        }
 
         for (let i = 1; categories != undefined && i < categories.length; i++) {
             const res = []
@@ -27,6 +37,7 @@ export default function (metaCookie: Cookie, useMetaCookie: boolean, storagePref
                         cookieId: cookies[j].id
                     })
 
+                    // @ts-ignore
                     consents[i].cookies[j].accepted = savedConsents[`${storagePrefix}-${categories[i].id}-${cookies[j].id}`] ?? false
 
                     res.push(consents[i].cookies[j].accepted)
@@ -120,13 +131,10 @@ export default function (metaCookie: Cookie, useMetaCookie: boolean, storagePref
 
                 localStorage.setItem(this.storageConsentsKey, JSON.stringify(savedConsents))
 
-                if (document.cookie.indexOf(this.storageConsentsKey) > -1) {
-                    const d = new Date()
-                    d.setFullYear(d.getFullYear() + 1)
-
-                    const consents = JSON.parse(document.cookie.substr(document.cookie.indexOf(this.storageConsentsKey) + 9, document.cookie.indexOf(';') - 9))
+                if (useMetaCookie) {
+                    const consents = readCookie(this.storageConsentsKey)
                     consents[`${this.storagePrefix}-${categoryId}-${cookieId}`] = value
-                    document.cookie = `${this.storagePrefix}=${JSON.stringify(consents)};expires=${d};samesite=Lax;path=/;secure=true`
+                    writeCookie(consents)
                 }
             } else {
                 console.log(`id: ${this.storagePrefix}-${categoryId}-${cookieId} doesn't exist. See Consents.ids or localStorage`)
@@ -140,7 +148,7 @@ export default function (metaCookie: Cookie, useMetaCookie: boolean, storagePref
          */
         get(categoryId: number, cookieId: number) {
             const value = localStorage.getItem(`${this.storagePrefix}-${categoryId}-${cookieId}`)
-            if (typeof value === 'string')
+            if (value)
                 return value === 'true'
         },
         /**
@@ -154,6 +162,7 @@ export default function (metaCookie: Cookie, useMetaCookie: boolean, storagePref
          */
         clear() {
             localStorage.removeItem(this.storageConsentsKey)
+            deleteCookie()
 
             for (let i=0; i < categories.length; i++) {
                 if (categories[i].cookies) {

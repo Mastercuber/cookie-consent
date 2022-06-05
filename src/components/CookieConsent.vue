@@ -211,8 +211,6 @@
 
   // Data
   const consents: Array<Consent> = reactive([])
-  const storagePrefix = ref('consent')
-  const storageConsentsKey = ref('consents')
   const isMainContainerVisible = ref(true)
   const isMinimized = ref(false)
   const showConsent = ref(false)
@@ -220,21 +218,15 @@
   const detailsCards = ref([])
   const isInfoOpen = ref(false)
   const currentTab = ref('cookies')
-  const metaCookie = ref<Cookie>({
-    id: t('metaCookieTitles.id'),
-    name: t('metaCookieTitles.name'),
-    provider: t('metaCookieTitles.provider'),
-    purpose: t('metaCookieTitles.purpose'),
-    cookieName: t('metaCookieTitles.cookieName'),
-    cookieValidityPeriod: t('metaCookieTitles.cookieValidityPeriod'),
-  })
 
   // Props
   const props = withDefaults(defineProps<Props>(), {
     useMetaCookie: false,
     animationDuration: '1.5s',
     minimizeAnimationDuration: '1s',
-    hideDuration: '1s'
+    hideDuration: '1s',
+    storagePrefix: 'consent',
+    storageConsentsKey: 'consents'
   })
 
   const {
@@ -245,7 +237,18 @@
     categories,
     requiredLinks,
     links,
+    storagePrefix,
+    storageConsentsKey
   } = toRefs(props)
+
+  const metaCookie = ref<Cookie>({
+    id: t('metaCookieTitles.id'),
+    name: t('metaCookieTitles.name'),
+    provider: t('metaCookieTitles.provider'),
+    purpose: t('metaCookieTitles.purpose'),
+    cookieName: storageConsentsKey.value,
+    cookieValidityPeriod: t('metaCookieTitles.cookieValidityPeriod'),
+  })
 
   if (!(storageConsentsKey.value in localStorage)) showConsent.value = true
 
@@ -570,11 +573,7 @@
       }
 
       // Sind alle anderen Cookies deaktiviert, dann auch die Kategorie deaktivieren
-      if (!res.includes(true)) {
-        consents[categoryIndex].partial = false
-      } else {
-        consents[categoryIndex].partial = true
-      }
+      consents[categoryIndex].partial = res.includes(true);
 
       consents[categoryIndex].accepted = false
       consents[categoryIndex].cookies[cookieIndex].accepted = false
@@ -705,7 +704,7 @@
     box-shadow: 0 0 6px gray;
   }
   .cookie-details-card:hover {
-    box-shadow: 0 0 0px gray;
+    box-shadow: 0 0 0 gray;
   }
 
   .cookie-details-card {
