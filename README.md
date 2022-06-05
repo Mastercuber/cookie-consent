@@ -8,6 +8,26 @@ All Cookies of other categories are declined per default.
 For each Cookie you can pass optional `onAccepted` and `onDenied` functions, to hand in some code, which will be executed after `save selection` or `save all` is clicked.
 
 Translations for the passed categories and cookies must be provided, when switching a language.
+
+## Global Consents Object
+Before the component gets mounted to the DOM, a global `Consents` object is attached to the `window` object and, therefore, can be globally accessed.
+
+### Properties
+* `Consents.hasAccepted`: has consent already been given?
+* `Consents.ids`: an array of objects with 2 keys each (`categoryId` and `cookieId`)
+* `Consents.storagePrefix`: with this property it's possible to change the prefix used for storing the individuell consents  
+(default: `consent`) 
+* `Consents.storageConsentsKey`: with this property the storage key of all consents can be customized  
+(default: `consents`) (Cookie name and `localStorage` key)
+
+### Functions
+* `Consents.set(categoryId: number, cookieId: number, value: boolean): void`  
+Set a consent.  
+Prints a message to the console when the Cookie isn't existing
+* `Consents.get(categoryId: number, cookieId: number): boolean`  
+Receive the current consent for a Cookie.  
+Returns `undefined` if a Cookie isn't existing.
+* `Consents.clear()`: remove the Consents from the `localStorage`, delete the Cookie and call all `onDenied()` functions
 ## Component properties
 ```typescript
 export interface Props {
@@ -18,6 +38,8 @@ export interface Props {
     animationDuration?: string;
     minimizeAnimationDuration?: string;
     hideDuration?: string;
+    storagePrefix?: string;
+    storageConsentsKey?: string;
 }
 ```
 ## Additional interfaces
