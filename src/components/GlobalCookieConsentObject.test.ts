@@ -171,11 +171,6 @@ describe('Global Consents Object Tests', () => {
     expect(window.Consents.get('essential', 'session-cookie')).false
   })
 
-  it.skip('should set an existing key, when consent is given', () => {
-    wrapper.vm.acceptSelection()
-    expect(window.Consents.hasAccepted).true
-  })
-
   it('should not be possible to set non existing keys', () => {
     window.Consents.set('stidstic', 'matasdomo', true)
     expect(window.Consents.get('stidstic', 'matasdomo')).false
