@@ -1,91 +1,197 @@
 <template>
   <div id="cookie-consent">
-    <div class="settings-icon-container" @click="maximize($event)" :title="t('generalLabels.title')">
+    <div
+      class="settings-icon-container"
+      :title="t('generalLabels.title')"
+      @click="maximize($event)"
+    >
       <span class="settings-icon" />
     </div>
-    <div id="overlay" v-if="showConsent"
-         class="w-full h-full fixed top-0 left-0"
-         :class="{ 'hidden': isMinimized, 'blur-overlay-reverse': blurOverlayReverse }">
-      <div id="container" :dir="locale === 'ar' ? 'rtl' : 'ltr'"
-           class="rounded py-2 px-4 text-center bg-white relative w-[var(--cookie-consent-width)] h-[var(--cookie-consent-height)] overflow-x-hidden overflow-y-auto mx-auto my-[8vh] sm:my-[25vh]">
+    <div
+      v-if="showConsent"
+      id="overlay"
+      class="w-full h-full fixed top-0 left-0"
+      :class="{ 'hidden': isMinimized, 'blur-overlay-reverse': blurOverlayReverse }"
+    >
+      <div
+        id="container"
+        :dir="locale === 'ar' ? 'rtl' : 'ltr'"
+        class="rounded py-2 px-4 text-center bg-white relative w-[var(--cookie-consent-width)] h-[var(--cookie-consent-height)] overflow-x-hidden overflow-y-auto mx-auto my-[8vh] sm:my-[25vh]"
+      >
         <div id="cookie-consent-opacity-container">
           <div v-if="isMainContainerVisible">
             <header>
               <div class="relative z-10">
-                <span class="cookie-consent-info font-bold" :title="t('generalLabels.info.title')" @click="toggleInfo" style="font-family: 'Verdana'">i</span>
-                <div class="rounded w-full h-max bg-blue-200 absolute top-[26px] left-0" :class="{ 'cookie-consent-info-hide': !isInfoOpen }">
-                  <span class="absolute arrow-up top-[-4px] left-[5px]"></span>
-                  <p class="text-[13px] px-2 text-left my-1 mx-0" style="line-height: 1.2">{{ t('generalLabels.info.text') }}</p>
+                <span
+                  class="cookie-consent-info font-bold"
+                  :title="t('generalLabels.info.title')"
+                  style="font-family: 'Verdana'"
+                  @click="toggleInfo"
+                >i</span>
+                <div
+                  class="rounded w-full h-max bg-blue-200 absolute top-[26px] left-0"
+                  :class="{ 'cookie-consent-info-hide': !isInfoOpen }"
+                >
+                  <span class="absolute arrow-up top-[-4px] left-[5px]" />
+                  <p
+                    class="text-[13px] px-2 text-left my-1 mx-0"
+                    style="line-height: 1.2"
+                  >
+                    {{ t('generalLabels.info.text') }}
+                  </p>
                 </div>
               </div>
-              <a rel="nofollow" href="#" class="minimizer" @click="minimize($event)"
-                 :title="t('generalLabels.minimize')"></a>
-              <a rel="nofollow" href="#" class="clear-site" @click="clearSite($event)"
-                 :title="t('generalLabels.clearSite')"></a>
+              <a
+                rel="nofollow"
+                href="#"
+                class="minimizer"
+                :title="t('generalLabels.minimize')"
+                @click="minimize($event)"
+              />
+              <a
+                rel="nofollow"
+                href="#"
+                class="clear-site"
+                :title="t('generalLabels.clearSite')"
+                @click="clearSite($event)"
+              />
               <div class="inline-flex h-[45px] mt-4">
                 <span class="select-none text-[36px]">&#127850;</span>
-                <h4 class="select-none font-bold mt-[10px]">{{ t('generalLabels.title') }}</h4>
+                <h4 class="select-none font-bold mt-[10px]">
+                  {{ t('generalLabels.title') }}
+                </h4>
               </div>
-              <hr class="mt-5 mb-2 mx-0 rounded-b-2xl"/>
+              <hr class="mt-5 mb-2 mx-0 rounded-b-2xl">
               <p>{{ t('generalLabels.description.main') }}</p>
-              <hr class="mt-2 mb-3.5 rounded-t-2xl"/>
+              <hr class="mt-2 mb-3.5 rounded-t-2xl">
             </header>
 
             <div class="categories">
-              <div v-for="(category, index) in categories" class="relative ml-4 inline-flex" :key="category.id">
+              <div
+                v-for="(category, index) in props.categories"
+                :key="category.id"
+                class="relative ml-4 inline-flex"
+              >
                 <div class="relative w-[20px] h-[20px] flex checkbox-container">
-
-                  <input :id="`cookie-consent-checkbox-${category.id}`" type="checkbox"
-                         :checked="consents[index].accepted" :disabled="index === 0"
-                         @change="setCategoryConsent($event, index)" class="m-0" />
-                  <span v-if="index > 0 && consents[index].partial" class="checkbox-partial-indicator"></span>
-                  <span v-if="index > 0 && !consents[index].partial && !consents[index].accepted" class="checkbox-none-indicator"></span>
+                  <input
+                    :id="`cookie-consent-checkbox-${category.id}`"
+                    type="checkbox"
+                    :checked="consents[index].accepted"
+                    :disabled="index === 0"
+                    class="m-0"
+                    @change="setCategoryConsent($event, index)"
+                  >
+                  <span
+                    v-if="index > 0 && consents[index].partial"
+                    class="checkbox-partial-indicator"
+                  />
+                  <span
+                    v-if="index > 0 && !consents[index].partial && !consents[index].accepted"
+                    class="checkbox-none-indicator"
+                  />
                 </div>
-                <label :for="`cookie-consent-checkbox-${category.id}`" class="ml-2 rtl:mr-2 select-none hover:text-orange-400 -translate-y-[2px]">{{ category.label }}</label>
-
+                <label
+                  :for="`cookie-consent-checkbox-${category.id}`"
+                  class="ml-2 rtl:mr-2 select-none hover:text-orange-400 -translate-y-[2px]"
+                >{{ category.label }}</label>
               </div>
 
               <div>
-                <button class="btn" @click="acceptAll()">{{ t('generalLabels.button.acceptAll') }}</button>
-                <button class="btn" @click="acceptSelection()">{{ t('generalLabels.button.acceptSelection') }}</button>
+                <button
+                  class="btn"
+                  @click="acceptAll()"
+                >
+                  {{ t('generalLabels.button.acceptAll') }}
+                </button>
+                <button
+                  class="btn"
+                  @click="acceptSelection()"
+                >
+                  {{ t('generalLabels.button.acceptSelection') }}
+                </button>
               </div>
             </div>
 
-            <div id="link-container" class="bg-white rounded-t-lg sticky pb-3 -bottom-2">
+            <div
+              id="link-container"
+              class="bg-white rounded-t-lg sticky pb-3 -bottom-2"
+            >
               <div class="my-[6px] rounded-lg">
-                <a rel="nofollow" href="#" @click="showDetails($event)" class="font-bold shadow-green-700 hover:shadow-[0_0_10px_green] text-[var(--cookie-consent-settings-color)] w-full h-full p-0.5 block">{{
-                    t('generalLabels.individualSettings')
-                  }}</a>
+                <a
+                  rel="nofollow"
+                  href="#"
+                  class="font-bold shadow-green-700 hover:shadow-[0_0_10px_green] text-[var(--cookie-consent-settings-color)] w-full h-full p-0.5 block"
+                  @click="showDetails($event)"
+                >{{
+                  t('generalLabels.individualSettings')
+                }}</a>
               </div>
-              <a class="hover:text-orange-400" rel="nofollow" href="#" @click="showDetails($event)"><b>{{ t('generalLabels.cookieDetails') }}</b></a>
-              <a rel="nofollow" :href="t('generalLabels.requiredLinks.privacy.href')"><b>{{
-                  t('generalLabels.requiredLinks.privacy.title')
-                }}</b></a>
-              <a rel="nofollow" :href="t('generalLabels.requiredLinks.impress.href')"><b>{{
-                  t('generalLabels.requiredLinks.impress.title')
-                }}</b></a>
-              <a rel="nofollow" v-for="link in links" :key="link.title" :href="link.href"><b>{{ link.title }}</b></a>
+              <a
+                class="hover:text-orange-400"
+                rel="nofollow"
+                href="#"
+                @click="showDetails($event)"
+              ><b>{{ t('generalLabels.cookieDetails') }}</b></a>
+              <a
+                rel="nofollow"
+                :href="t('generalLabels.requiredLinks.privacy.href')"
+              ><b>{{
+                t('generalLabels.requiredLinks.privacy.title')
+              }}</b></a>
+              <a
+                rel="nofollow"
+                :href="t('generalLabels.requiredLinks.impress.href')"
+              ><b>{{
+                t('generalLabels.requiredLinks.impress.title')
+              }}</b></a>
+              <a
+                v-for="link in links"
+                :key="link.title"
+                rel="nofollow"
+                :href="link.href"
+              ><b>{{ link.title }}</b></a>
             </div>
           </div>
 
-          <div v-else id="details-container" class="text-left">
+          <div
+            v-else
+            id="details-container"
+            class="text-left"
+          >
             <header>
-              <a rel="nofollow" href="#" class="absolute top-[6px] right-10 font-bold"
-                 @click="showMain($event)">{{ t('generalLabels.details.back') }}</a>
-              <a rel="nofollow" href="#" class="minimizer" @click="minimize($event)"
-                 :title="t('generalLabels.minimize')"><span>-</span></a>
+              <a
+                rel="nofollow"
+                href="#"
+                class="absolute top-[6px] right-10 font-bold"
+                @click="showMain($event)"
+              >{{ t('generalLabels.details.back') }}</a>
+              <a
+                rel="nofollow"
+                href="#"
+                class="minimizer"
+                :title="t('generalLabels.minimize')"
+                @click="minimize($event)"
+              ><span>-</span></a>
               <div class="inline-flex h-[45px] mt-4">
                 <span class="select-none text-[36px]">&#127850;</span>
-                <h4 class="select-none font-bold mt-[10px]">{{ t('generalLabels.title') }}</h4>
+                <h4 class="select-none font-bold mt-[10px]">
+                  {{ t('generalLabels.title') }}
+                </h4>
               </div>
-              <hr class="my-2 mx-0 rounded-b-2xl"/>
-              <p class="text-center">{{ t('generalLabels.description.details') }}</p>
-              <hr class="mt-2 mb-3.5 rounded-t-2xl"/>
+              <hr class="my-2 mx-0 rounded-b-2xl">
+              <p class="text-center">
+                {{ t('generalLabels.description.details') }}
+              </p>
+              <hr class="mt-2 mb-3.5 rounded-t-2xl">
               <div>
-                <button @click="acceptAll()">{{ t('generalLabels.button.acceptAll') }}</button>
-                <button @click="acceptSelection()">{{ t('generalLabels.button.acceptSelection') }}</button>
+                <button @click="acceptAll()">
+                  {{ t('generalLabels.button.acceptAll') }}
+                </button>
+                <button @click="acceptSelection()">
+                  {{ t('generalLabels.button.acceptSelection') }}
+                </button>
               </div>
-<!--              <div>
+              <!--              <div>
                 <div class="w-full tab-container">
                   <div class="w-1/2 h-[45px] text-center inline-block cursor-pointer" :class="{ 'active-tab': currentTab === 'cookies' }" @click="currentTab = 'cookies'"><span>Cookies</span></div>
                   <div class="w-1/2 h-[45px] text-center inline-block cursor-pointer" :class="{ 'active-tab': currentTab === 'fonts' }" @click="currentTab = 'fonts'"><span>Fonts</span></div>
@@ -94,53 +200,85 @@
               </div>-->
             </header>
 
-            <div v-for="(category, categoryIndex) in categories" class="cookie-details-card w-full rounded relative px-3 my-4 mx-2" :key="category.id"
-                 :ref="el => { detailsCards[categoryIndex] = el }">
-              <div class="rtl:right-auto rtl:left-0 inline-flex absolute right-0 top-0" v-if="categoryIndex > 0">
-                <span class="select-none mt-[12px] rtl:mt-[6px]"
-                      :class="{ 'hidden': !consents[categoryIndex].accepted }">{{
-                    t('generalLabels.binarySliderLabels.accepted')
-                  }}</span>
-                <span class="select-none mt-[12px] rtl:mt-[6px]"
-                      :class="{ 'hidden': consents[categoryIndex].accepted || consents[categoryIndex].partial }">{{
-                    t('generalLabels.binarySliderLabels.declined')
-                  }}</span>
-                <span class="select-none mt-[12px] rtl:mt-[6px]"
-                      :class="{ 'hidden': !consents[categoryIndex].partial }">{{
-                    t('generalLabels.binarySliderLabels.partial')
-                  }}</span>
+            <div
+              v-for="(category, categoryIndex) in props.categories"
+              :key="category.id"
+              :ref="el => { detailsCards[categoryIndex] = el }"
+              class="cookie-details-card w-full rounded relative px-3 my-4 mx-2"
+            >
+              <div
+                v-if="categoryIndex > 0"
+                class="rtl:right-auto rtl:left-0 inline-flex absolute right-0 top-0"
+              >
+                <span
+                  class="select-none mt-[12px] rtl:mt-[6px]"
+                  :class="{ 'hidden': !consents[categoryIndex].accepted }"
+                >{{
+                  t('generalLabels.binarySliderLabels.accepted')
+                }}</span>
+                <span
+                  class="select-none mt-[12px] rtl:mt-[6px]"
+                  :class="{ 'hidden': consents[categoryIndex].accepted || consents[categoryIndex].partial }"
+                >{{
+                  t('generalLabels.binarySliderLabels.declined')
+                }}</span>
+                <span
+                  class="select-none mt-[12px] rtl:mt-[6px]"
+                  :class="{ 'hidden': !consents[categoryIndex].partial }"
+                >{{
+                  t('generalLabels.binarySliderLabels.partial')
+                }}</span>
                 <div>
-                  <div :id="`cookie-consent-details-checkbox-${category.id}`" class="binary-slider m-[8px]"
-                       :class="{ active: consents[categoryIndex].accepted, partial: consents[categoryIndex].partial }"
-                       @click="toggleConsent($event, categoryIndex)">
-                    <span class="binary-slider-circle"></span>
+                  <div
+                    :id="`cookie-consent-details-checkbox-${category.id}`"
+                    class="binary-slider m-[8px]"
+                    :class="{ active: consents[categoryIndex].accepted, partial: consents[categoryIndex].partial }"
+                    @click="toggleConsent($event, categoryIndex)"
+                  >
+                    <span class="binary-slider-circle" />
                   </div>
                 </div>
               </div>
               <div class="label-container pt-4">
-                <h5 class="mt-2 mb-1 ltr:before:content-[''] ltr:before:border-2 ltr:before:border-solid ltr:before:border-black ltr:before:mr-4 rtl:border-r-4 rtl:border-solid rtl:border-black rtl:text-right rtl:pr-2 font-bold">{{ category.label }} ({{ getCookieCountForCategory(category) }})</h5>
+                <h5 class="mt-2 mb-1 ltr:before:content-[''] ltr:before:border-2 ltr:before:border-solid ltr:before:border-black ltr:before:mr-4 rtl:border-r-4 rtl:border-solid rtl:border-black rtl:text-right rtl:pr-2 font-bold">
+                  {{ category.label }} ({{ getCookieCountForCategory(category) }})
+                </h5>
               </div>
 
               <p>{{ category.description }}</p>
-              <a rel="nofollow" href="#" class="text-center block font-bold"
-                 @click="toggleCookieInformation($event)">{{ t('generalLabels.showCookieInformation') }}</a>
+              <a
+                rel="nofollow"
+                href="#"
+                class="text-center block font-bold"
+                @click="toggleCookieInformation($event)"
+              >{{ t('generalLabels.showCookieInformation') }}</a>
 
               <div class="table-container h-0 transition-all duration-700 overflow-hidden">
-                <table v-for="(cookie, cookieIndex) in category.cookies" :key="cookie.cookieName">
+                <table
+                  v-for="(cookie, cookieIndex) in category.cookies"
+                  :key="cookie.cookieName"
+                >
                   <tr v-if="categoryIndex > 0">
                     <td>{{ t('cookieLabels.accept') }}</td>
                     <td>
                       <div class="table-binary-slider-container">
-                        <div class="binary-slider" @click="toggleConsent($event, categoryIndex, cookieIndex)"
-                             :class="{ active: consents[categoryIndex].cookies[cookieIndex].accepted }">
-                          <span class="binary-slider-circle"></span>
+                        <div
+                          class="binary-slider"
+                          :class="{ 'active': consents[categoryIndex].cookies[cookieIndex].accepted }"
+                          @click="toggleConsent($event, categoryIndex, cookieIndex)"
+                        >
+                          <span class="binary-slider-circle" />
                         </div>
-                        <div class="select-none mt-0 ml-2 rtl:mr-2 rtl:-mt-[8px]"
-                             :class="{ '!hidden': !consents[categoryIndex].cookies[cookieIndex].accepted }">
+                        <div
+                          class="select-none mt-0 ml-2 rtl:mr-2 rtl:-mt-[8px]"
+                          :class="{ '!hidden': !consents[categoryIndex].cookies[cookieIndex].accepted }"
+                        >
                           {{ t('generalLabels.binarySliderLabels.accepted') }}
                         </div>
-                        <div class="select-none mt-0 ml-2 rtl:mr-2 rtl:-mt-[8px]"
-                             :class="{ '!hidden': consents[categoryIndex].cookies[cookieIndex].accepted }">
+                        <div
+                          class="select-none mt-0 ml-2 rtl:mr-2 rtl:-mt-[8px]"
+                          :class="{ '!hidden': consents[categoryIndex].cookies[cookieIndex].accepted }"
+                        >
                           {{ t('generalLabels.binarySliderLabels.declined') }}
                         </div>
                       </div>
@@ -148,457 +286,479 @@
                   </tr>
                   <tr>
                     <td>{{ t('cookieLabels.name') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ t('metaCookieTitles.name') }}</td>
-                    <td v-else>{{ cookie.name }}</td>
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0">
+                      {{ t('metaCookieTitles.name') }}
+                    </td>
+                    <td v-else>
+                      {{ cookie.name }}
+                    </td>
                   </tr>
                   <tr>
                     <td>{{ t('cookieLabels.provider') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ t('metaCookieTitles.provider') }}</td>
-                    <td v-else>{{ cookie.provider }}</td>
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0">
+                      {{ t('metaCookieTitles.provider') }}
+                    </td>
+                    <td v-else>
+                      {{ cookie.provider }}
+                    </td>
                   </tr>
                   <tr>
                     <td>{{ t('cookieLabels.purpose') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ t('metaCookieTitles.purpose') }}</td>
-                    <td v-else style="white-space: pre-line">{{ cookie.purpose }}</td>
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0">
+                      {{ t('metaCookieTitles.purpose') }}
+                    </td>
+                    <td
+                      v-else
+                      style="white-space: pre-line"
+                    >
+                      {{ cookie.purpose }}
+                    </td>
                   </tr>
                   <tr v-if="'privacyURL' in cookie">
                     <td>{{ t('cookieLabels.privacy') }}</td>
-                    <td><a rel="nofollow" :href="cookie.privacyURL">{{ cookie.privacyURL }}</a></td>
+                    <td>
+                      <a
+                        rel="nofollow"
+                        :href="cookie.privacyURL"
+                      >{{ cookie.privacyURL }}</a>
+                    </td>
                   </tr>
                   <tr v-if="'hosts' in cookie">
                     <td>{{ t('cookieLabels.hosts') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ t('metaCookieTitles.hosts') }}</td>
-                    <td v-else>{{ cookie.hosts }}</td>
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0">
+                      {{ t('metaCookieTitles.hosts') }}
+                    </td>
+                    <td v-else>
+                      {{ cookie.hosts }}
+                    </td>
                   </tr>
                   <tr v-if="'cookieName' in cookie">
                     <td>{{ t('cookieLabels.cookieName') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{ t('metaCookieTitles.cookieName') }}</td>
-                    <td v-else><i>{{ cookie.cookieName }}</i></td>
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0">
+                      {{ t('metaCookieTitles.cookieName') }}
+                    </td>
+                    <td v-else>
+                      <i>{{ cookie.cookieName }}</i>
+                    </td>
                   </tr>
                   <tr v-if="'cookieValidityPeriod' in cookie">
                     <td>{{ t('cookieLabels.cookieValidityPeriod') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">{{
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0">
+                      {{
                         t('metaCookieTitles.cookieValidityPeriod')
                       }}
                     </td>
-                    <td v-else>{{ cookie.cookieValidityPeriod }}</td>
+                    <td v-else>
+                      {{ cookie.cookieValidityPeriod }}
+                    </td>
                   </tr>
                   <tr v-if="'links' in cookie && cookie.links && cookie.links.length > 0">
                     <td>{{ t('cookieLabels.links') }}</td>
-                    <td><a rel="nofollow" v-for="link in cookie.links" :key="link.title" :href="link.href"
-                           target="_blank">{{ link.title || link.href }}</a></td>
+                    <td>
+                      <a
+                        v-for="link in cookie.links"
+                        :key="link.title"
+                        rel="nofollow"
+                        :href="link.href"
+                        target="_blank"
+                      >{{ link.title || link.href }}</a>
+                    </td>
                   </tr>
                 </table>
               </div>
             </div>
-
           </div>
         </div>
-
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import {nextTick, onBeforeMount, onMounted, reactive, ref, toRefs, withDefaults} from 'vue'
-  import type {Category, Cookie, Props} from '../interfaces/CookieConsentProps'
-  import {Consent} from '../interfaces/Consent'
-  import Consents from './Consents'
-  import {useI18n} from 'vue-i18n'
+import { nextTick, onBeforeMount, onMounted, reactive, ref, withDefaults } from 'vue'
+import type { Category, Cookie, Props } from '../interfaces/CookieConsentProps'
+import { Consent } from '../interfaces/Consent'
+import Consents from './Consents'
+import { useI18n } from 'vue-i18n'
 
-  const { t, locale } = useI18n()
+const { t, locale } = useI18n()
 
-  // Data
-  const consents: Array<Consent> = reactive([])
-  const isMainContainerVisible = ref(true)
-  const isMinimized = ref(false)
-  const showConsent = ref(false)
-  const blurOverlayReverse = ref(false)
-  const detailsCards = ref([])
-  const isInfoOpen = ref(false)
-  const currentTab = ref('cookies')
+// Data
+const consents: Array<Consent> = reactive([])
+const isMainContainerVisible = ref(true)
+const isMinimized = ref(false)
+const showConsent = ref(false)
+const blurOverlayReverse = ref(false)
+const detailsCards = ref([])
+const isInfoOpen = ref(false)
+/*const currentTab = ref('cookies')*/
 
-  // Props
-  const props = withDefaults(defineProps<Props>(), {
-    useMetaCookie: false,
-    animationDuration: '1.5s',
-    minimizeAnimationDuration: '1s',
-    hideDuration: '1s',
-    storagePrefix: 'consent',
-    storageConsentsKey: 'consents'
-  })
+// Props
+const props = withDefaults(defineProps<Props>(), {
+  useMetaCookie: false,
+  animationDuration: '1.5s',
+  minimizeAnimationDuration: '1s',
+  hideDuration: '1s',
+  storagePrefix: 'consent',
+  storageConsentsKey: 'consents'
+})
 
-  const {
-    useMetaCookie,
-    animationDuration,
-    minimizeAnimationDuration,
-    hideDuration,
-    categories,
-    requiredLinks,
-    links,
-    storagePrefix,
-    storageConsentsKey
-  } = toRefs(props)
+const metaCookie = ref<Cookie>({
+  id: t('metaCookieTitles.id'),
+  name: t('metaCookieTitles.name'),
+  provider: t('metaCookieTitles.provider'),
+  purpose: t('metaCookieTitles.purpose'),
+  cookieName: props.storageConsentsKey,
+  cookieValidityPeriod: t('metaCookieTitles.cookieValidityPeriod'),
+})
 
-  const metaCookie = ref<Cookie>({
-    id: t('metaCookieTitles.id'),
-    name: t('metaCookieTitles.name'),
-    provider: t('metaCookieTitles.provider'),
-    purpose: t('metaCookieTitles.purpose'),
-    cookieName: storageConsentsKey.value,
-    cookieValidityPeriod: t('metaCookieTitles.cookieValidityPeriod'),
-  })
+if (!(props.storageConsentsKey in localStorage)) showConsent.value = true
 
-  if (!(storageConsentsKey.value in localStorage)) showConsent.value = true
+// lifecycle hooks
+onBeforeMount(() => {
+  // @ts-ignore
+  Consents(metaCookie.value, props.useMetaCookie, props.storagePrefix, props.storageConsentsKey, props.categories, consents)
 
-  // lifecycle hooks
-  onBeforeMount(() => {
-    // @ts-ignore
-    Consents(metaCookie.value, useMetaCookie.value, storagePrefix.value, storageConsentsKey.value, categories.value, consents)
+  document.documentElement.style.setProperty('--cookie-consent-animation-duration', props.animationDuration)
+  document.documentElement.style.setProperty('--cookie-consent-minimize-animation-duration', props.minimizeAnimationDuration)
+  document.documentElement.style.setProperty('--cookie-consent-hide-duration', props.hideDuration)
+})
 
-    document.documentElement.style.setProperty('--cookie-consent-animation-duration', animationDuration.value)
-    document.documentElement.style.setProperty('--cookie-consent-minimize-animation-duration', minimizeAnimationDuration.value)
-    document.documentElement.style.setProperty('--cookie-consent-hide-duration', hideDuration.value)
-  })
+onMounted(() => {})
 
-  onMounted(() => {})
+// Functions
 
-  // Functions
+function getCookieCountForCategory(category: Category) {
+  const count = category.cookies && Array.isArray(category.cookies) ? category.cookies.length : 0
+  return count.toLocaleString(locale.value)
+}
 
-  function getCookieCountForCategory(category: Category) {
-    const count = category.cookies && Array.isArray(category.cookies) ? category.cookies.length : 0
-    return count.toLocaleString(locale.value)
+function setTransformToWidthAndHeight() {
+  let currentWidth, currentHeight
+
+  if (isMainContainerVisible.value) {
+    currentWidth = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-width')
+    currentHeight = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-height')
+  } else {
+    currentWidth = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-details-width')
+    currentHeight = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-details-height')
   }
 
-  function setTransformToWidthAndHeight() {
-    let currentWidth, currentHeight
+  document.documentElement.style.setProperty('--transform-current-width', currentWidth)
+  document.documentElement.style.setProperty('--transform-current-height', currentHeight)
+}
 
-    if (isMainContainerVisible.value) {
-      currentWidth = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-width')
-      currentHeight = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-height')
-    } else {
-      currentWidth = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-details-width')
-      currentHeight = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-details-height')
-    }
+function toggleInfo() {
+  isInfoOpen.value = !isInfoOpen.value
+}
 
-    document.documentElement.style.setProperty('--transform-current-width', currentWidth)
-    document.documentElement.style.setProperty('--transform-current-height', currentHeight)
+function setTransformToXY(container: HTMLElement) {
+  let containerWidth
+  let offsetTop = window.innerHeight / 4
+
+  if (isMainContainerVisible.value) {
+    containerWidth = +getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-width').replace('px', '')
+  } else {
+    containerWidth = +getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-details-width').replace('px', '')
   }
+  const offsetLeft = window.innerWidth / 2 - containerWidth / 2
+  // Ohne diese Zeile funktioniert im Firefox die Minimierungsanimation nicht mehr immer... Warum auch immer..
+  // Auch nicht wenn der Parameter ganz entfernt wird! -.-
+  offsetTop = container.offsetTop || offsetTop
 
-  function toggleInfo() {
-    isInfoOpen.value = !isInfoOpen.value
+  const x = window.innerWidth - offsetLeft - 45 - containerWidth / 2
+  const y = window.innerHeight - offsetTop - 60
+
+  document.documentElement.style.setProperty('--transform-minimize-x', `${x}px`)
+  document.documentElement.style.setProperty('--transform-minimize-y', `${y}px`)
+}
+
+function setCategoryConsent(event: Event, index: number) {
+  consents[index].partial = false
+  consents[index].accepted = <HTMLInputElement> event.target.checked
+
+  for (let i = 0; i < consents[index].cookies.length; i++) {
+    consents[index].cookies[i].accepted = <HTMLInputElement> event.target.checked
   }
+}
 
-  function setTransformToXY(container: HTMLElement) {
-    let offsetLeft, containerWidth
-    let offsetTop = window.innerHeight / 4
+function maximize(event: Event) {
+  event.preventDefault()
 
-    if (isMainContainerVisible.value) {
-      containerWidth = +getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-width').replace('px', '')
-    } else {
-      containerWidth = +getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-details-width').replace('px', '')
-    }
-    offsetLeft = (window.innerWidth / 2) - (containerWidth / 2)
-    // Ohne diese Zeile funktioniert im Firefox die Minimierungsanimation nicht mehr immer... Warum auch immer..
-    // Auch nicht wenn der Parameter ganz entfernt wird! -.-
-    offsetTop = container.offsetTop || offsetTop
+  setTransformToWidthAndHeight()
+  showConsent.value = true
 
-    const x = window.innerWidth - offsetLeft - 45 - (containerWidth / 2);
-    const y = window.innerHeight - offsetTop - 60;
-
-    document.documentElement.style.setProperty('--transform-minimize-x', `${x}px`)
-    document.documentElement.style.setProperty('--transform-minimize-y', `${y}px`)
-  }
-
-  function setCategoryConsent(event: Event, index: number) {
-    consents[index].partial = false
-    consents[index].accepted = (<HTMLInputElement> event.target).checked
-
-    for (let i = 0; i < consents[index].cookies.length; i++) {
-      consents[index].cookies[i].accepted = (<HTMLInputElement> event.target).checked
-    }
-  }
-
-  function maximize(event: Event) {
-    event.preventDefault()
-
-    setTransformToWidthAndHeight()
-    showConsent.value = true
-
-    nextTick(() => {
-      const overlay = <HTMLElement> document.getElementById('overlay')
-      const container = <HTMLElement> document.getElementById('container')
-
-      setTransformToXY(container)
-
-      overlay.classList.remove('blur-overlay')
-
-      isMinimized.value = false
-      blurOverlayReverse.value = true
-
-      container.classList.add('maximize')
-    })
-  }
-
-  function clearSite(event: Event) {
-    event.preventDefault()
-    window.Consents.clear()
-  }
-
-  function minimize(event: Event) {
-    event.preventDefault()
-
-    setTransformToWidthAndHeight()
-
-    const container = <HTMLElement> document.getElementById('container')
+  nextTick(() => {
     const overlay = <HTMLElement> document.getElementById('overlay')
-
-    overlay.classList.remove('blur-overlay-reverse')
-    container.classList.remove('transform-to-details')
-    container.classList.remove('transform-to-main')
-    container.classList.remove('maximize')
+    const container = <HTMLElement> document.getElementById('container')
 
     setTransformToXY(container)
 
-    overlay.classList.add('blur-overlay')
-    container.classList.add('minimize')
+    overlay.classList.remove('blur-overlay')
 
-    const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-minimize-animation-duration')
+    isMinimized.value = false
+    blurOverlayReverse.value = true
 
-    setTimeout(() => {
-      showConsent.value = false
-      isMinimized.value = true
-    }, ((+animationDuration.replace('s', '')) * 1000) - 50)
-  }
+    container.classList.add('maximize')
+  })
+}
 
-  function hideConsent() {
-    setTransformToWidthAndHeight()
+function clearSite(event: Event) {
+  event.preventDefault()
+  window.Consents.clear()
+}
 
-    const container = <HTMLElement> document.getElementById('container')
-    const overlay = <HTMLElement> document.getElementById('overlay')
-    overlay.classList.remove('blur-overlay-reverse')
+function minimize(event: Event) {
+  event.preventDefault()
 
-    setTransformToXY(container)
+  setTransformToWidthAndHeight()
 
-    overlay.classList.add('blur-overlay')
-    container.classList.add('hide-consent')
+  const container = <HTMLElement> document.getElementById('container')
+  const overlay = <HTMLElement> document.getElementById('overlay')
 
-    const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-hide-duration')
+  overlay.classList.remove('blur-overlay-reverse')
+  container.classList.remove('transform-to-details')
+  container.classList.remove('transform-to-main')
+  container.classList.remove('maximize')
 
-    setTimeout(() => {
-      showConsent.value = false
-      overlay.classList.remove('blur-overlay')
-      container.classList.remove('hide-consent')
-    }, ((+animationDuration.replace('s', '')) * 1000) - 50)
-  }
+  setTransformToXY(container)
 
-  function showMain(event: Event) {
-    event.preventDefault()
+  overlay.classList.add('blur-overlay')
+  container.classList.add('minimize')
 
-    const container = <HTMLElement> document.getElementById('container')
-    const opacityContainer = <HTMLElement> document.getElementById('cookie-consent-opacity-container')
+  const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-minimize-animation-duration')
 
-    opacityContainer.classList.remove('transform-opacity-to-details')
-    opacityContainer.classList.add('transform-opacity-to-main')
-    container.classList.remove('transform-to-details')
-    container.classList.remove('maximize')
-    container.classList.add('transform-to-main')
+  setTimeout(() => {
+    showConsent.value = false
+    isMinimized.value = true
+  }, +animationDuration.replace('s', '') * 1000 - 50)
+}
 
-    const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-animation-duration')
+function hideConsent() {
+  setTransformToWidthAndHeight()
 
-    setTimeout(() => {
-      isMainContainerVisible.value = true
-    }, ((+animationDuration.replace('s', '')) / 2) * 1000)
-  }
+  const container = <HTMLElement> document.getElementById('container')
+  const overlay = <HTMLElement> document.getElementById('overlay')
+  overlay.classList.remove('blur-overlay-reverse')
 
-  function showDetails(event: Event) {
-    event.preventDefault()
+  setTransformToXY(container)
 
-    const container = <HTMLElement> document.getElementById('container')
-    const opacityContainer = <HTMLElement> document.getElementById('cookie-consent-opacity-container')
+  overlay.classList.add('blur-overlay')
+  container.classList.add('hide-consent')
 
-    opacityContainer.classList.remove('transform-opacity-to-main')
-    opacityContainer.classList.add('transform-opacity-to-details')
-    container.classList.remove('transform-to-main')
-    container.classList.remove('maximize')
-    container.classList.add('transform-to-details')
+  const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-hide-duration')
 
-    const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-animation-duration')
+  setTimeout(() => {
+    showConsent.value = false
+    overlay.classList.remove('blur-overlay')
+    container.classList.remove('hide-consent')
+  }, +animationDuration.replace('s', '') * 1000 - 50)
+}
 
-    setTimeout(() => {
-      isMainContainerVisible.value = false
-    }, ((+animationDuration.replace('s', '')) / 2) * 1000)
-  }
+function showMain(event: Event) {
+  event.preventDefault()
 
-  function acceptSelection() {
-    hideConsent()
+  const container = <HTMLElement> document.getElementById('container')
+  const opacityContainer = <HTMLElement> document.getElementById('cookie-consent-opacity-container')
 
-    const obj: {[key: string]: boolean} = {}
+  opacityContainer.classList.remove('transform-opacity-to-details')
+  opacityContainer.classList.add('transform-opacity-to-main')
+  container.classList.remove('transform-to-details')
+  container.classList.remove('maximize')
+  container.classList.add('transform-to-main')
 
-    for (let i = 1; i < consents.length; i++) {
-      for (let j = 0; j < consents[i].cookies.length; j++) {
-        const cookieConsent = consents[i].cookies[j]
-        // @ts-ignore
-        const cookie: Cookie = categories.value[i].cookies[j]
-        // @ts-ignore
-        const key = `${storagePrefix.value}-${categories.value[i].id}-${cookie.id}`
+  const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-animation-duration')
 
-        if (cookieConsent.accepted) {
-          obj[key] = true
+  setTimeout(() => {
+    isMainContainerVisible.value = true
+  }, +animationDuration.replace('s', '') / 2 * 1000)
+}
 
-          if ('onAccepted' in cookie && typeof cookie.onAccepted === 'function') {
-            cookie.onAccepted()
-          }
-        } else {
-          obj[key] = false
+function showDetails(event: Event) {
+  event.preventDefault()
 
-          if ('onDenied' in cookie && typeof cookie.onDenied === 'function') {
-            cookie.onDenied()
-          }
-        }
-      }
-    }
+  const container = <HTMLElement> document.getElementById('container')
+  const opacityContainer = <HTMLElement> document.getElementById('cookie-consent-opacity-container')
 
-    localStorage.setItem(storageConsentsKey.value, JSON.stringify(obj))
+  opacityContainer.classList.remove('transform-opacity-to-main')
+  opacityContainer.classList.add('transform-opacity-to-details')
+  container.classList.remove('transform-to-main')
+  container.classList.remove('maximize')
+  container.classList.add('transform-to-details')
 
-    if (useMetaCookie.value)
-      setMetaCookie(obj)
-  }
+  const animationDuration = getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-animation-duration')
 
-  function setMetaCookie(obj: {[key: string]: boolean}) {
-    const expireDate = new Date()
-    expireDate.setFullYear(expireDate.getFullYear() + 1)
-    document.cookie = `${t('metaCookieTitles.cookieName')}=${JSON.stringify(obj)};samesite=Lax;secure=true;expires=${expireDate}`
-  }
+  setTimeout(() => {
+    isMainContainerVisible.value = false
+  }, +animationDuration.replace('s', '') / 2 * 1000)
+}
 
-  function acceptAll() {
-    hideConsent()
+function acceptSelection() {
+  hideConsent()
 
-    for (const consent of consents) {
-      consent.accepted = true
-      consent.partial = false
+  const obj: {[key: string]: boolean} = {}
 
-      for (const cookieConsent of consent.cookies) {
-        cookieConsent.accepted = true
-      }
-    }
-
-    const obj: {[key: string]: boolean} = {}
-
-    for (let i = 1; i < categories.value.length; i++) {
+  for (let i = 1; i < consents.length; i++) {
+    for (let j = 0; j < consents[i].cookies.length; j++) {
+      const cookieConsent = consents[i].cookies[j]
       // @ts-ignore
-      for (let j = 0; j < categories.value[i].cookies.length; j++) {
-        // @ts-ignore
-        const cookie = categories.value[i].cookies[j]
-        // @ts-ignore
-        const key = `${storagePrefix.value}-${categories.value[i].id}-${cookie.id}`
+      const cookie: Cookie = props.categories[i].cookies[j]
+      // @ts-ignore
+      const key = `${props.storagePrefix}-${props.categories[i].id}-${cookie.id}`
+
+      if (cookieConsent.accepted) {
         obj[key] = true
 
         if ('onAccepted' in cookie && typeof cookie.onAccepted === 'function') {
           cookie.onAccepted()
         }
-      }
-    }
+      } else {
+        obj[key] = false
 
-    localStorage.setItem(storageConsentsKey.value, JSON.stringify(obj))
-    if (useMetaCookie!.value)
-      setMetaCookie(obj)
-  }
-
-  function toggleCookieInformation(event: Event) {
-    event.preventDefault()
-    const parent = (<HTMLElement> event.target).parentElement
-
-    if (parent) {
-      const tableContainer = <HTMLElement> parent.querySelector('.table-container')
-
-      if (tableContainer) {
-        const tables = tableContainer.querySelectorAll('table')
-        const currentHeight = +tableContainer.style.height.replace('px', '')
-        let height = 0
-
-        if (currentHeight === 0) {
-          if (tables.length > 1) {
-            height -= 4 * (tables.length - 1)
-          }
-          // @ts-ignore
-          for (const table of tables) {
-            height += table.offsetHeight + 7
-          }
-          tableContainer.style.height = `${height}px`
-        } else {
-          tableContainer.style.height = '0'
+        if ('onDenied' in cookie && typeof cookie.onDenied === 'function') {
+          cookie.onDenied()
         }
       }
     }
   }
 
-  function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number) {
+  localStorage.setItem(props.storageConsentsKey, JSON.stringify(obj))
+
+  if (props.useMetaCookie) setMetaCookie(obj)
+}
+
+function setMetaCookie(obj: {[key: string]: boolean}) {
+  const expireDate = new Date()
+  expireDate.setFullYear(expireDate.getFullYear() + 1)
+  document.cookie = `${t('metaCookieTitles.cookieName')}=${JSON.stringify(obj)};samesite=Lax;secure=true;expires=${expireDate}`
+}
+
+function acceptAll() {
+  hideConsent()
+
+  for (const consent of consents) {
+    consent.accepted = true
+    consent.partial = false
+
+    for (const cookieConsent of consent.cookies) {
+      cookieConsent.accepted = true
+    }
+  }
+
+  const obj: {[key: string]: boolean} = {}
+
+  for (let i = 1; i < props.categories.length; i++) {
     // @ts-ignore
-    const added = event.target.classList.toggle('active')
-
-    // when no cookie index is available, a category was toggled
-    if (cookieIndex === undefined) {
-      if (added) {
-        consents[categoryIndex].partial = false
-        consents[categoryIndex].accepted = true
-
-        for (let i = 0; i < consents[categoryIndex].cookies.length; i++) {
-          consents[categoryIndex].cookies[i].accepted = true
-        }
-      } else {
-        consents[categoryIndex].partial = false
-        consents[categoryIndex].accepted = false
-
-        for (let i = 0; i < consents[categoryIndex].cookies.length; i++) {
-          consents[categoryIndex].cookies[i].accepted = false
-        }
-      }
-
-      return
-    }
-
-
-    const cookieDetailsCard = <HTMLElement> detailsCards.value[categoryIndex]
-    // when the return value from toggling is false, then also deactivate the category
-    if (!added) {
-      const binarySliders = cookieDetailsCard.querySelectorAll('.table-container .binary-slider')
-
-      // Ist die Rückgabe vom anfänglichen Umschalten false, dann prüfen ob alle anderen Schalter deaktiviert sind
-      const res = []
+    for (let j = 0; j < props.categories[i].cookies.length; j++) {
       // @ts-ignore
-      for (const slider of binarySliders) {
-        res.push(slider.classList.contains('active'))
-      }
-
-      // Sind alle anderen Cookies deaktiviert, dann auch die Kategorie deaktivieren
-      consents[categoryIndex].partial = res.includes(true);
-
-      consents[categoryIndex].accepted = false
-      consents[categoryIndex].cookies[cookieIndex].accepted = false
-
-    } else {
-      const binarySliders = cookieDetailsCard.querySelectorAll('.table-container .binary-slider')
-
-      consents[categoryIndex].cookies[cookieIndex].accepted = true
-
-      // Ist die Rückgabe vom anfänglichen Umschalten true, dann prüfen, ob alle anderen Schalter aktiviert sind.
-      const res = []
+      const cookie = props.categories[i].cookies[j]
       // @ts-ignore
-      for (const slider of binarySliders) {
-        res.push(slider.classList.contains('active'))
-      }
+      const key = `${props.storagePrefix}-${props.categories[i].id}-${cookie.id}`
+      obj[key] = true
 
-      // Sind alle anderen Cookies aktiviert, dann auch die Kategorie aktivieren
-      if (!res.includes(false)) {
-        consents[categoryIndex].partial = false
-        consents[categoryIndex].accepted = true
-      } else {
-        consents[categoryIndex].partial = true
+      if ('onAccepted' in cookie && typeof cookie.onAccepted === 'function') {
+        cookie.onAccepted()
       }
     }
   }
+
+  localStorage.setItem(props.storageConsentsKey, JSON.stringify(obj))
+  if (props.useMetaCookie) setMetaCookie(obj)
+}
+
+function toggleCookieInformation(event: Event) {
+  event.preventDefault()
+  const parent = <HTMLElement> event.target.parentElement
+
+  if (parent) {
+    const tableContainer = <HTMLElement> parent.querySelector('.table-container')
+
+    if (tableContainer) {
+      const tables = tableContainer.querySelectorAll('table')
+      const currentHeight = +tableContainer.style.height.replace('px', '')
+      let height = 0
+
+      if (currentHeight === 0) {
+        if (tables.length > 1) {
+          height -= 4 * (tables.length - 1)
+        }
+        // @ts-ignore
+        for (const table of tables) {
+          height += table.offsetHeight + 7
+        }
+        tableContainer.style.height = `${height}px`
+      } else {
+        tableContainer.style.height = '0'
+      }
+    }
+  }
+}
+
+function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number) {
+  // @ts-ignore
+  const added = event.target.classList.toggle('active')
+
+  // when no cookie index is available, a category was toggled
+  if (!cookieIndex) {
+    if (added) {
+      consents[categoryIndex].partial = false
+      consents[categoryIndex].accepted = true
+
+      for (let i = 0; i < consents[categoryIndex].cookies.length; i++) {
+        consents[categoryIndex].cookies[i].accepted = true
+      }
+    } else {
+      consents[categoryIndex].partial = false
+      consents[categoryIndex].accepted = false
+
+      for (let i = 0; i < consents[categoryIndex].cookies.length; i++) {
+        consents[categoryIndex].cookies[i].accepted = false
+      }
+    }
+
+    return
+  }
+
+
+  const cookieDetailsCard = <HTMLElement> detailsCards.value[categoryIndex]
+  // when the return value from toggling is false, then also deactivate the category
+  if (!added) {
+    const binarySliders = cookieDetailsCard.querySelectorAll('.table-container .binary-slider')
+
+    // Ist die Rückgabe vom anfänglichen Umschalten false, dann prüfen ob alle anderen Schalter deaktiviert sind
+    const res = []
+    // @ts-ignore
+    for (const slider of binarySliders) {
+      res.push(slider.classList.contains('active'))
+    }
+
+    // Sind alle anderen Cookies deaktiviert, dann auch die Kategorie deaktivieren
+    consents[categoryIndex].partial = res.includes(true)
+
+    consents[categoryIndex].accepted = false
+    consents[categoryIndex].cookies[cookieIndex].accepted = false
+
+  } else {
+    const binarySliders = cookieDetailsCard.querySelectorAll('.table-container .binary-slider')
+
+    consents[categoryIndex].cookies[cookieIndex].accepted = true
+
+    // Ist die Rückgabe vom anfänglichen Umschalten true, dann prüfen, ob alle anderen Schalter aktiviert sind.
+    const res = []
+    // @ts-ignore
+    for (const slider of binarySliders) {
+      res.push(slider.classList.contains('active'))
+    }
+
+    // Sind alle anderen Cookies aktiviert, dann auch die Kategorie aktivieren
+    if (!res.includes(false)) {
+      consents[categoryIndex].partial = false
+      consents[categoryIndex].accepted = true
+    } else {
+      consents[categoryIndex].partial = true
+    }
+  }
+}
 </script>
 
 <style>
@@ -739,6 +899,10 @@
       },
       "minimize": "تصغير",
       "clearSite": "حذف البيانات",
+      "info": {
+        "title": "عنوان تفسيري",
+        "text": "✓ = تم قبول جميع ملفات تعريف الارتباط في هذه الفئة\n▣ = تم قبول بعض ملفات تعريف الارتباط في هذه الفئة\n- = لم يتم قبول ملفات تعريف الارتباط في هذه الفئة"
+      },
       "button": {
         "acceptAll": "كل قبول",
         "acceptSelection": "اختيار حفظ"
@@ -794,6 +958,10 @@
       },
       "minimize": "Сведете до минимум",
       "clearSite": "Изтриване на данни",
+      "info": {
+        "title": "Легенда",
+        "text": "✓ = Всички бисквитки в тази категория приети\n▣ = Някои бисквитки в тази категория приеха\n- = В тази категория няма приемани бисквитки"
+      },
       "button": {
         "acceptAll": "Приемете всички",
         "acceptSelection": "Запазване на избора"
@@ -849,6 +1017,10 @@
       },
       "minimize": "Minimalizujte",
       "clearSite": "Odstranění dat",
+      "info": {
+        "title": "Legenda",
+        "text": "✓ = Všechny soubory cookie v této kategorii jsou přijaty\n▣ = Některé soubory cookie přijaté v této kategorii\n- = V této kategorii nejsou přijímány žádné soubory cookie"
+      },
       "button": {
         "acceptAll": "Přijmout všechny",
         "acceptSelection": "Uložit výběr"
@@ -904,6 +1076,10 @@
       },
       "minimize": "Minimer",
       "clearSite": "Slet data",
+      "info": {
+        "title": "Legende",
+        "text": "✓ = Alle cookies i denne kategori accepteres\n▣ = Nogle af de cookies, der accepteres i denne kategori\n- = Ingen cookies accepteres i denne kategori"
+      },
       "button": {
         "acceptAll": "Accepter alle",
         "acceptSelection": "Accepter valg"
@@ -1018,6 +1194,10 @@
       },
       "minimize": "Ελαχιστοποίηση",
       "clearSite": "Διαγραφή δεδομένων",
+      "info": {
+        "title": "Υπόμνημα",
+        "text": "✓ = Όλα τα cookies σε αυτή την κατηγορία αποδεκτά\n▣ = Μερικά cookies που γίνονται δεκτά σε αυτή την κατηγορία\n- = Δεν γίνονται δεκτά cookies σε αυτή την κατηγορία"
+      },
       "button": {
         "acceptAll": "Αποδοχή όλων",
         "acceptSelection": "Αποθήκευση επιλογής"
@@ -1073,6 +1253,10 @@
       },
       "minimize": "Minimize",
       "clearSite": "Delete data",
+      "info": {
+        "title": "Legend",
+        "text": "✓ = All cookies in this category accepted\n▣ = Some cookies accepted in this category\n- = No cookies accepted in this category"
+      },
       "button": {
         "acceptAll": "Accept All",
         "acceptSelection": "Accept Selection"
@@ -1128,6 +1312,10 @@
       },
       "minimize": "Minimizar",
       "clearSite": "Borrar datos",
+      "info": {
+        "title": "Leyenda",
+        "text": "✓ = Se aceptan todas las cookies de esta categoría\n▣ = Algunas cookies aceptadas en esta categoría\n- = No se aceptan cookies en esta categoría"
+      },
       "button": {
         "acceptAll": "Aceptar todo",
         "acceptSelection": "Guardar selección"
@@ -1183,6 +1371,10 @@
       },
       "minimize": "Minimeeri",
       "clearSite": "Andmete kustutamine",
+      "info": {
+        "title": "Legend",
+        "text": "✓ = Kõik küpsised selles kategoorias on aktsepteeritud\n▣ = Mõned selles kategoorias aktsepteeritud küpsised\n- = Selles kategoorias ei ole küpsised lubatud"
+      },
       "button": {
         "acceptAll": "Võtke kõik vastu",
         "acceptSelection": "Salvesta valik"
@@ -1238,6 +1430,10 @@
       },
       "minimize": "Minimoi",
       "clearSite": "Tietojen poistaminen",
+      "info": {
+        "title": "Selite",
+        "text": "✓ = Kaikki tämän luokan evästeet hyväksytty\n▣ = Joitakin tähän luokkaan hyväksyttyjä evästeitä\n- = Tässä kategoriassa ei hyväksytä evästeitä"
+      },
       "button": {
         "acceptAll": "Hyväksy kaikki",
         "acceptSelection": "Tallenna valinta"
@@ -1293,6 +1489,10 @@
       },
       "minimize": "Minimoi",
       "clearSite": "Supprimer les données",
+      "info": {
+        "title": "Légende",
+        "text": "✓ = Tous les cookies de cette catégorie acceptés\n▣ = Quelques cookies de cette catégorie acceptés\n- = Aucun cookie de cette catégorie n'est accepté"
+      },
       "button": {
         "acceptAll": "Accepter tous",
         "acceptSelection": "Sauvegarder la sélection"
@@ -1348,6 +1548,10 @@
       },
       "minimize": "छोटा करना",
       "clearSite": "डेटा हटाएं",
+      "info": {
+        "title": "दंतकथा",
+        "text": "✓ = इस श्रेणी में सभी कुकीज़ ने स्वीकार किया\n▣ = इस श्रेणी में कुछ कुकीज़ स्वीकार किए जाते हैं\n- = इस श्रेणी में कोई कुकीज़ स्वीकार नहीं की"
+      },
       "button": {
         "acceptAll": "सभी स्वीकार करते हैं",
         "acceptSelection": "चयन सहेजें"
@@ -1403,6 +1607,10 @@
       },
       "minimize": "Minimizirajte",
       "clearSite": "Izbriši podatke",
+      "info": {
+        "title": "Legenda",
+        "text": "✓ = Svi kolačići u ovoj kategoriji prihvaćeni su\n▣ = Neki kolačići u ovoj kategoriji prihvaćeni su\n- = Nije prihvaćen nijedan kolačići u ovoj kategoriji"
+      },
       "button": {
         "acceptAll": "Svi prihvaćaju",
         "acceptSelection": "Spremi odabir"
@@ -1458,6 +1666,10 @@
       },
       "minimize": "Minimalizálja a",
       "clearSite": "Adatok törlése",
+      "info": {
+        "title": "Legenda",
+        "text": "✓ = Minden cookie ebben a kategóriában elfogadott\n▣ = Néhány ebben a kategóriában elfogadott cookie\n- = Ebben a kategóriában nem fogadunk el sütiket"
+      },
       "button": {
         "acceptAll": "Fogadjon el mindent",
         "acceptSelection": "Kiválasztás mentése"
@@ -1513,6 +1725,10 @@
       },
       "minimize": "Փոքրացնել",
       "clearSite": "Ջնջել տվյալները",
+      "info": {
+        "title": "Լեգենդ",
+        "text": "✓ = Այս կատեգորիայում բոլոր Տեղեկանիշն ընդունված է\n▣ = Այս կատեգորիայում որոշ բլիթներ ընդունված են\n- = Այս կատեգորիայում ոչ մի բլիթ չի ընդունվում"
+      },
       "button": {
         "acceptAll": "Բոլորն ընդունում են",
         "acceptSelection": "Պահպանել ընտրությունը"
@@ -1568,6 +1784,10 @@
       },
       "minimize": "Minimizzare",
       "clearSite": "Cancellare i dati",
+      "info": {
+        "title": "Leggenda",
+        "text": "✓ = Tutti i cookie di questa categoria accettati\n▣ = Alcuni cookie accettati in questa categoria\n- = Nessun cookie accettato in questa categoria"
+      },
       "button": {
         "acceptAll": "Accetta tutti",
         "acceptSelection": "Salva la selezione"
@@ -1623,6 +1843,10 @@
       },
       "minimize": "Minimiséieren",
       "clearSite": "Läschen Daten",
+      "info": {
+        "title": "Legend",
+        "text": "✓ = All Cookien an dëser Kategorie akzeptéiert\n▣ = E puer Cookien an dëser Kategorie akzeptéiert\n- = Keng Cookien an dëser Kategorie ugeholl"
+      },
       "button": {
         "acceptAll": "All akzeptéieren",
         "acceptSelection": "Späicheren Auswiel"
@@ -1678,6 +1902,10 @@
       },
       "minimize": "Sumažinkite",
       "clearSite": "Ištrinti duomenis",
+      "info": {
+        "title": "Legenda",
+        "text": "✓ = Priimami visi šios kategorijos slapukai\n▣ = Kai kurie šioje kategorijoje priimtini slapukai\n- = Šioje kategorijoje slapukai nepriimami"
+      },
       "button": {
         "acceptAll": "Priimti visus",
         "acceptSelection": "Išsaugoti pasirinkimą"
@@ -1733,6 +1961,10 @@
       },
       "minimize": "Minimizēt",
       "clearSite": "Dzēst datus",
+      "info": {
+        "title": "Leģenda",
+        "text": "✓ = Visi šīs kategorijas sīkfaili ir pieņemti\n▣ = Dažas šajā kategorijā pieņemtās sīkdatnes\n- = Šajā kategorijā sīkfaili netiek pieņemti"
+      },
       "button": {
         "acceptAll": "Pieņemt visus",
         "acceptSelection": "Saglabāt atlasi"
@@ -1788,6 +2020,10 @@
       },
       "minimize": "Minimaliseer",
       "clearSite": "Gegevens wissen",
+      "info": {
+        "title": "Legende",
+        "text": "✓ = Alle cookies in deze categorie geaccepteerd\n▣ = Enkele cookies die in deze categorie worden geaccepteerd\n- = Geen cookies aanvaard in deze categorie"
+      },
       "button": {
         "acceptAll": "Accepteer alle",
         "acceptSelection": "Selectie opslaan"
@@ -1843,6 +2079,10 @@
       },
       "minimize": "Minimer",
       "clearSite": "Slett data",
+      "info": {
+        "title": "Legende",
+        "text": "✓ = Alle informasjonskapsler i denne kategorien akseptert\n▣ = Noen informasjonskapsler i denne kategorien akseptert\n- = Ingen informasjonskapsler i denne kategorien akseptert"
+      },
       "button": {
         "acceptAll": "Alle godtar",
         "acceptSelection": "Lagre utvalg"
@@ -1898,6 +2138,10 @@
       },
       "minimize": "Zminimalizuj",
       "clearSite": "Usuń dane",
+      "info": {
+        "title": "Legenda",
+        "text": "✓ = Wszystkie ciasteczka w tej kategorii zaakceptowane\n▣ = Niektóre pliki cookie akceptowane w tej kategorii\n- = W tej kategorii nie akceptuje się plików cookie"
+      },
       "button": {
         "acceptAll": "Przyjmij wszystkie",
         "acceptSelection": "Zapisz wybór"
@@ -1953,6 +2197,10 @@
       },
       "minimize": "Minimizar",
       "clearSite": "Apagar dados",
+      "info": {
+        "title": "Lenda",
+        "text": "✓ = Todos os cookies nesta categoria são aceites\n▣ = Alguns cookies aceites nesta categoria\n- = Não são aceites cookies nesta categoria"
+      },
       "button": {
         "acceptAll": "Aceitar todos",
         "acceptSelection": "Salvar selecção"
@@ -2008,6 +2256,10 @@
       },
       "minimize": "Minimizați",
       "clearSite": "Ștergeți datele",
+      "info": {
+        "title": "Legenda",
+        "text": "✓ = Toate cookie-urile din această categorie sunt acceptate\n▣ = Unele cookie-uri acceptate în această categorie\n- = Nu se acceptă cookie-uri în această categorie"
+      },
       "button": {
         "acceptAll": "Acceptă toate",
         "acceptSelection": "Salvați selecția"
@@ -2063,6 +2315,10 @@
       },
       "minimize": "Минимизировать",
       "clearSite": "Удалить данные",
+      "info": {
+        "title": "Легенда",
+        "text": "✓ = Все печенья в этой категории приняты\n▣ = Некоторые файлы cookie, принятые в этой категории\n- = В этой категории файлы cookie не принимаются"
+      },
       "button": {
         "acceptAll": "Принять все",
         "acceptSelection": "Сохранить выбор"
@@ -2118,6 +2374,10 @@
       },
       "minimize": "Minimalizujte",
       "clearSite": "Odstránenie údajov",
+      "info": {
+        "title": "Legenda",
+        "text": "✓ = Všetky súbory cookie v tejto kategórii sú akceptované\n▣ = Niektoré súbory cookie akceptované v tejto kategórii\n- = V tejto kategórii nie sú akceptované žiadne súbory cookie"
+      },
       "button": {
         "acceptAll": "Prijať všetky",
         "acceptSelection": "Uložiť výber"
@@ -2173,6 +2433,10 @@
       },
       "minimize": "Minimieren",
       "clearSite": "Brisanje podatkov",
+      "info": {
+        "title": "Legenda",
+        "text": "✓ = Sprejeti vsi piškotki v tej kategoriji\n▣ = Nekateri piškotki, sprejeti v tej kategoriji\n- = Piškotki v tej kategoriji niso sprejeti"
+      },
       "button": {
         "acceptAll": "Sprejmite vse",
         "acceptSelection": "Shranjevanje izbire"
@@ -2228,6 +2492,10 @@
       },
       "minimize": "Minimizoje",
       "clearSite": "Fshi të dhënat",
+      "info": {
+        "title": "Legjendë",
+        "text": "✓ = Të gjitha cookies në këtë kategori pranuan\n▣ = Disa cookie në këtë kategori pranuan\n- = Asnjë cookie në këtë kategori nuk pranohet"
+      },
       "button": {
         "acceptAll": "Të gjithë pranojnë",
         "acceptSelection": "Ruaj përzgjedhjen"
@@ -2283,6 +2551,10 @@
       },
       "minimize": "Zmanjšanje",
       "clearSite": "Ta bort uppgifter",
+      "info": {
+        "title": "Legend",
+        "text": "✓ = Alla kakor i denna kategori accepteras\n▣ = Några kakor som accepteras i denna kategori\n- = Inga kakor accepteras i denna kategori"
+      },
       "button": {
         "acceptAll": "Acceptera alla",
         "acceptSelection": "Spara val"
@@ -2338,6 +2610,10 @@
       },
       "minimize": "küçültmek",
       "clearSite": "Verileri sil",
+      "info": {
+        "title": "Efsane",
+        "text": "✓ = Bu kategorideki tüm çerezler kabul edildi\n▣ = Bu kategoride kabul edilen bazı çerezler\n- = Bu kategoride çerez kabul edilmez"
+      },
       "button": {
         "acceptAll": "Hepsi kabul ediyor",
         "acceptSelection": "Seçimi kaydet"
@@ -2393,6 +2669,10 @@
       },
       "minimize": "Звести до мінімуму",
       "clearSite": "Видалити дані",
+      "info": {
+        "title": "Легенда",
+        "text": "✓ = Всі файли cookie цієї категорії прийняті\n▣ = Деякі файли cookie, прийняті в цій категорії\n- = У цій категорії файли cookie не приймаються"
+      },
       "button": {
         "acceptAll": "Всі приймають",
         "acceptSelection": "Зберегти виділення"
@@ -2448,6 +2728,10 @@
       },
       "minimize": "尽量减少",
       "clearSite": "删除数据",
+      "info": {
+        "title": "传说",
+        "text": "✓ = 接受该类别中的所有\n▣ = 该类别中接受的一些\n- = 此类别中不接受cookies"
+      },
       "button": {
         "acceptAll": "接受所有",
         "acceptSelection": "保存选择"

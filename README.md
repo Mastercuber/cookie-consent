@@ -164,7 +164,7 @@ Every translation block of this Cookie-Consent is named after the appropriate [I
 * Slovenian sl
 * Albanian sq
 * Swedish sv
-* Turkish tk
+* Turkish tr
 * Ukrainian uk
 * Chinese zh
 

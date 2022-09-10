@@ -1,4 +1,4 @@
-export function readCookie(key) {
+export function readCookie(key = 'consents') {
   let index = document.cookie.indexOf(key + '=')
   if (index === -1) return {}
   const s = document.cookie.substring(index)
@@ -11,12 +11,13 @@ export function readCookie(key) {
   }
 }
 
-export function writeCookie(consents, sameSite = 'Lax', path = '/', secure = true) {
+export function writeCookie(consents, key = 'consents', sameSite = 'Lax', path = '/', secure = true) {
   const d = new Date()
   d.setFullYear(d.getFullYear() + 1)
-  document.cookie = `${window.Consents.storageConsentsKey}=${JSON.stringify(consents)};expires=${d};samesite=${sameSite};path=${path};secure=${secure}`
+  document.cookie = `${key}=${JSON.stringify(consents)};expires=${d};samesite=${sameSite};path=${path};secure=${secure}`
 }
 
-export function deleteCookie() {
-  document.cookie = `${window.Consents.storageConsentsKey}=;expires=Thu, 01-Jan-70 00:00:01 GMT;`
+export function deleteCookie(key = 'consents', value = '') {
+  const cookieValue = readCookie(key)
+  document.cookie = `${key}=${cookieValue};expires=Thu, 01-Jan-70 00:00:01 GMT;`
 }

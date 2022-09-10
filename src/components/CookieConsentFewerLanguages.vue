@@ -734,6 +734,10 @@ function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number
       },
       "minimize": "Minimer",
       "clearSite": "Slet data",
+      "info": {
+        "title": "Legende",
+        "text": "✓ = Alle cookies i denne kategori accepteres\n▣ = Nogle af de cookies, der accepteres i denne kategori\n- = Ingen cookies accepteres i denne kategori"
+      },
       "button": {
         "acceptAll": "Accepter alle",
         "acceptSelection": "Accepter valg"
@@ -848,6 +852,10 @@ function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number
       },
       "minimize": "Minimize",
       "clearSite": "Delete data",
+      "info": {
+        "title": "Legend",
+        "text": "✓ = All cookies in this category accepted\n▣ = Some cookies accepted in this category\n- = No cookies accepted in this category"
+      },
       "button": {
         "acceptAll": "Accept All",
         "acceptSelection": "Accept Selection"
@@ -903,6 +911,10 @@ function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number
       },
       "minimize": "Minimizar",
       "clearSite": "Borrar datos",
+      "info": {
+        "title": "Leyenda",
+        "text": "✓ = Se aceptan todas las cookies de esta categoría\n▣ = Algunas cookies aceptadas en esta categoría\n- = No se aceptan cookies en esta categoría"
+      },
       "button": {
         "acceptAll": "Aceptar todo",
         "acceptSelection": "Guardar selección"
@@ -958,6 +970,10 @@ function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number
       },
       "minimize": "Minimoi",
       "clearSite": "Supprimer les données",
+      "info": {
+        "title": "Légende",
+        "text": "✓ = Tous les cookies de cette catégorie acceptés\n▣ = Quelques cookies de cette catégorie acceptés\n- = Aucun cookie de cette catégorie n'est accepté"
+      },
       "button": {
         "acceptAll": "Accepter tous",
         "acceptSelection": "Sauvegarder la sélection"
@@ -1013,6 +1029,10 @@ function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number
       },
       "minimize": "Minimizzare",
       "clearSite": "Cancellare i dati",
+      "info": {
+        "title": "Leggenda",
+        "text": "✓ = Tutti i cookie di questa categoria accettati\n▣ = Alcuni cookie accettati in questa categoria\n- = Nessun cookie accettato in questa categoria"
+      },
       "button": {
         "acceptAll": "Accetta tutti",
         "acceptSelection": "Salva la selezione"
@@ -1068,6 +1088,10 @@ function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number
       },
       "minimize": "Minimaliseer",
       "clearSite": "Gegevens wissen",
+      "info": {
+        "title": "Legende",
+        "text": "✓ = Alle cookies in deze categorie geaccepteerd\n▣ = Enkele cookies die in deze categorie worden geaccepteerd\n- = Geen cookies aanvaard in deze categorie"
+      },
       "button": {
         "acceptAll": "Accepteer alle",
         "acceptSelection": "Selectie opslaan"
@@ -1123,6 +1147,10 @@ function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number
       },
       "minimize": "Zminimalizuj",
       "clearSite": "Usuń dane",
+      "info": {
+        "title": "Legenda",
+        "text": "✓ = Wszystkie ciasteczka w tej kategorii zaakceptowane\n▣ = Niektóre pliki cookie akceptowane w tej kategorii\n- = W tej kategorii nie akceptuje się plików cookie"
+      },
       "button": {
         "acceptAll": "Przyjmij wszystkie",
         "acceptSelection": "Zapisz wybór"

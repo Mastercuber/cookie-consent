@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueI18n from '@intlify/vite-plugin-vue-i18n'
 import VueTypeImports from 'vite-plugin-vue-type-imports'
+import eslint from 'vite-plugin-eslint'
 import dts from 'vite-plugin-dts'
 
 import { resolve } from 'path'
@@ -10,16 +11,23 @@ import { resolve } from 'path'
 export default defineConfig({
   test: {
     globals: true,
-    environment: 'jsdom',
-    include: [resolve('src', 'components', '*.test.js')],
-    maxThreads: 32
+    environment: 'happy-dom',
+    include: [
+      resolve('src', 'components', '*.test.ts'),
+      resolve('src', 'assets', '*.test.ts')
+    ],
+    maxThreads: 32,
+    coverage:{
+      reporter:['text', 'json', 'html']
+    }
   },
   plugins: [
     vue(),
     VueTypeImports(),
     vueI18n({
-      include: resolve(__dirname, 'src/locales/**'),
-      fullInstall: false
+      fullInstall: false,
+      compositionOnly: true,
+      runtimeOnly: false,
     }),
     dts()
   ],

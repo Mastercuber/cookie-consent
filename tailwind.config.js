@@ -7,9 +7,7 @@ module.exports = {
   ],
   theme: {
     extend: {
-      animation: {
-        top: 'animate-top 0.4s'
-      },
+      animation: { top: 'animate-top 0.4s' },
       keyframes: {
         'animate-top': {
           from: {
