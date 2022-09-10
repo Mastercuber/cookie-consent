@@ -1,7 +1,7 @@
-import { shallowMount } from '@vue/test-utils'
+import {shallowMount} from '@vue/test-utils'
 import CookieConsent from '@/components/CookieConsent.vue'
-import { createI18n } from 'vue-i18n'
-import {expect} from "vitest";
+import {createI18n} from 'vue-i18n'
+import {expect} from "vitest"
 
 
 const i18n = createI18n({
@@ -13,7 +13,7 @@ describe('Global Consents Object Tests', () => {
   let wrapper: any
   beforeEach(() => {
     wrapper = shallowMount(CookieConsent, {
-      global: { plugins: [i18n] },
+      global: {plugins: [i18n]},
       props: {
         lang: 'de',
         useMetaCookie: true,
@@ -155,26 +155,52 @@ describe('Global Consents Object Tests', () => {
     })
     expect(wrapper).not.null
   })
-  it('should have some properties', () => {
-    expect(window.Consents).not.null
 
-    expect(window.Consents.storagePrefix).toBe('consent')
-    expect(window.Consents.storageConsentsKey).toBe('consents')
-    expect(window.Consents.ids).length(9)
-    expect(window.Consents.hasAccepted).false
-    expect(window.Consents.get('essential', 'session-cookie')).false
-    expect(window.Consents.get('non-existing-category', 'session-cookie')).false
+  it('should set consent for one cookie to accepted', () => {
+    expect(wrapper.vm.consents[1].cookies[0].accepted).false
+    wrapper.vm.toggleConsent({
+      target: {
+        classList: {
+          toggle(str = '') {
+            return true
+          }
+        }
+      }
+    }, 1, 0)
+    expect(wrapper.vm.consents[1].cookies[0].accepted).true
+    expect(wrapper.vm.consents[2].cookies[0].accepted).false
+    expect(wrapper.vm.consents[2].cookies[1].accepted).false
   })
 
-  it('shouldn\'t set an existing key, when consent isn\'t given', () => {
-    expect(window.Consents.hasAccepted).false
-    expect(window.Consents.get('essential', 'session-cookie')).false
-    window.Consents.set('essential', 'session-cookie', true)
-    expect(window.Consents.get('essential', 'session-cookie')).false
+  it('should set consent for one cookie to declined', () => {
+    expect(wrapper.vm.consents[1].cookies[0].accepted).false
+    wrapper.vm.toggleConsent({
+      target: {
+        classList: {
+          toggle(str = '') {
+            return false
+          }
+        }
+      }
+    }, 1, 0)
+    expect(wrapper.vm.consents[1].cookies[0].accepted).false
+    expect(wrapper.vm.consents[2].cookies[0].accepted).false
+    expect(wrapper.vm.consents[2].cookies[1].accepted).false
   })
 
-  it('should not be possible to set non existing keys', () => {
-    window.Consents.set('stidstic', 'matasdomo', true)
-    expect(window.Consents.get('stidstic', 'matasdomo')).false
+  it('should not set consent to declined for cookies of the essentials category', () => {
+    expect(wrapper.vm.consents[0].cookies[0].accepted).true
+    expect(wrapper.vm.consents[0].cookies[1].accepted).true
+    wrapper.vm.toggleConsent({
+      target: {
+        classList: {
+          toggle(str = '') {
+            return true
+          }
+        }
+      }
+    }, 0, 0)
+    expect(wrapper.vm.consents[0].cookies[0].accepted).true
+    expect(wrapper.vm.consents[0].cookies[1].accepted).true
   })
 })

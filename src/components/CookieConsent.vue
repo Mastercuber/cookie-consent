@@ -375,7 +375,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onBeforeMount, onMounted, reactive, ref, withDefaults } from 'vue'
+import {nextTick, onBeforeMount, onMounted, reactive, ref, unref, withDefaults} from 'vue'
 import type { Category, Cookie, Props } from '../interfaces/CookieConsentProps'
 import { Consent } from '../interfaces/Consent'
 import Consents from './Consents'
@@ -699,7 +699,7 @@ function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number
   const added = event.target.classList.toggle('active')
 
   // when no cookie index is available, a category was toggled
-  if (!cookieIndex) {
+  if (!cookieIndex && cookieIndex !== 0) {
     if (added) {
       consents[categoryIndex].partial = false
       consents[categoryIndex].accepted = true
@@ -720,7 +720,7 @@ function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number
   }
 
 
-  const cookieDetailsCard = <HTMLElement> detailsCards.value[categoryIndex]
+  const cookieDetailsCard = <HTMLElement> unref(detailsCards)[categoryIndex]
   // when the return value from toggling is false, then also deactivate the category
   if (!added) {
     const binarySliders = cookieDetailsCard.querySelectorAll('.table-container .binary-slider')
