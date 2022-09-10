@@ -1,6 +1,6 @@
 {
   "name": "@avensio/cookie-consent",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "private": false,
   "scripts": {
     "dev": "vite",
@@ -51,7 +51,7 @@
     }
   },
   "publishConfig": {
-    "registry": "https://repo.avensio.de/repository/npm-registry/"
+    "registry": "https://registry.npmjs.com/"
   },
   "browserslist": [
     "last 6 versions"
