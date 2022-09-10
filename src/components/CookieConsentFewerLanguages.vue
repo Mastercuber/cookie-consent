@@ -720,7 +720,7 @@ function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number
   }
 </style>
 
-<i18n>
+<i18n global>
 {
   "da": {
     "generalLabels": {

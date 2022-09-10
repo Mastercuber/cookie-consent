@@ -11,14 +11,7 @@ export default defineConfig({
   plugins: [
     vue(),
     VueTypeImports(),
-    vueI18n({
-      //include: resolve(__dirname, 'src/locales/**'),
-      runtimeOnly: true,
-      compositionOnly: true,
-      fullInstall: false,
-      defaultSFCLang: 'json',
-      globalSFCScope: true
-    }),
+    vueI18n(),
     dts()
   ],
   resolve: {
@@ -35,9 +28,7 @@ export default defineConfig({
       formats: ['es', 'umd'],
       fileName: (format) => `cookie-consent.${format}.js`
     },
-    ssr: false,
     minify: 'esbuild',
-    polyfillModulePreload: true,
     rollupOptions: {
       external: ['vue', 'vue-i18n'],
       output: {
