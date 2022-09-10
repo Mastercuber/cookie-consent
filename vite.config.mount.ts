@@ -21,13 +21,6 @@ export default defineConfig({
       fullInstall: false
     })
   ],
-  css: {
-    postcss: {
-      plugins: [
-          autoprefixer()
-      ]
-    }
-  },
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src')
@@ -36,16 +29,13 @@ export default defineConfig({
   build: {
     target: 'esnext',
     lib: {
-      entry: resolve(__dirname, 'src/main.ts'),
-      name: 'CookieConsent',
-      formats: ['es', 'umd'],
-      fileName: (format) => `cookie-consent.${format}.js`
+      entry: resolve(__dirname, 'index.html'),
+      formats: ['es']
     },
     ssr: false,
     minify: true,
     reportCompressedSize: true,
     rollupOptions: {
-      external: ['vue'],
       output: {
         globals: {
           vue: 'Vue'

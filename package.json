@@ -1,6 +1,6 @@
 {
   "name": "@avensio/cookie-consent",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "private": false,
   "scripts": {
     "dev": "vite",
@@ -34,7 +34,7 @@
   "bugs": {
     "url": "https://github.com/Mastercuber/cookie-consent/issues"
   },
-  "homepage": "https://github.com/Mastercuber/cookie-consent#readme",
+  "homepage": "https://mastercuber.github.io/Cookie-Consent/",
   "main": "./dist/cookie-consent.umd.js",
   "module": "./dist/cookie-consent.es.js",
   "types": "./dist/components/CookieConsent.vue.d.ts",
