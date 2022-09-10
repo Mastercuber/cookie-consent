@@ -4,10 +4,10 @@
       <span class="settings-icon" />
     </div>
     <div id="overlay" v-if="showConsent"
-         class="animate-top w-full h-full bg-gray-600 bg-opacity-40 fixed top-0 left-0"
+         class="w-full h-full fixed top-0 left-0"
          :class="{ 'hidden': isMinimized, 'blur-overlay-reverse': blurOverlayReverse }">
       <div id="container" :dir="locale === 'ar' ? 'rtl' : 'ltr'"
-           class="transform-gpu rounded py-2 px-4 text-center bg-white relative w-[var(--cookie-consent-width)] h-[var(--cookie-consent-height)] overflow-x-hidden overflow-y-auto mx-auto my-[8vh] sm:my-[25vh]">
+           class="rounded py-2 px-4 text-center bg-white relative w-[var(--cookie-consent-width)] h-[var(--cookie-consent-height)] overflow-x-hidden overflow-y-auto mx-auto my-[8vh] sm:my-[25vh]">
         <div id="cookie-consent-opacity-container">
           <div v-if="isMainContainerVisible">
             <header>
@@ -654,14 +654,15 @@
   }
 
   #overlay {
-    perspective: 400px;
+    perspective: 1000px;
+    transform-style: preserve-3d;
   }
 
   #container {
     box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.19);
     transform: translateZ(0);
-    perspective: 1000px;
     backface-visibility: hidden;
+    transform-style: preserve-3d;
   }
 
   .cookie-details-card > a {
