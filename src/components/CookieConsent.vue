@@ -699,7 +699,7 @@ function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number
   const added = event.target.classList.toggle('active')
 
   // when no cookie index is available, a category was toggled
-  if (!cookieIndex && cookieIndex !== 0) {
+  if (!isNaN(categoryIndex)) {
     if (added) {
       consents[categoryIndex].partial = false
       consents[categoryIndex].accepted = true
@@ -718,7 +718,6 @@ function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number
 
     return
   }
-
 
   const cookieDetailsCard = <HTMLElement> unref(detailsCards)[categoryIndex]
   // when the return value from toggling is false, then also deactivate the category
