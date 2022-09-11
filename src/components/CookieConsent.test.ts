@@ -1,4 +1,4 @@
-import {shallowMount} from '@vue/test-utils'
+import {mount, shallowMount} from '@vue/test-utils'
 import CookieConsent from '@/components/CookieConsent.vue'
 import {createI18n} from 'vue-i18n'
 import {expect} from "vitest"
@@ -9,7 +9,7 @@ const i18n = createI18n({
   locale: 'de'
 })
 
-describe('Global Consents Object Tests', () => {
+describe('Cookie Consent Tests', () => {
   let wrapper: any
   beforeEach(() => {
     wrapper = shallowMount(CookieConsent, {
@@ -156,6 +156,14 @@ describe('Global Consents Object Tests', () => {
     expect(wrapper).not.null
   })
 
+  it('should contain some containers and properties', () => {
+    expect(wrapper.vm.$el.querySelector('#container')).not.null
+    expect(wrapper.vm.$el.querySelector('#overlay')).not.null
+    expect(wrapper.vm.$el.querySelector('#link-container')).not.null
+
+    expect(wrapper.vm.$props.categories).length(5)
+  })
+
   it('should set consent for one cookie to accepted', () => {
     expect(wrapper.vm.consents[1].cookies[0].accepted).false
     wrapper.vm.toggleConsent({
@@ -168,6 +176,26 @@ describe('Global Consents Object Tests', () => {
       }
     }, 1, 0)
     expect(wrapper.vm.consents[1].cookies[0].accepted).true
+    expect(wrapper.vm.consents[1].cookies[1].accepted).false
+    expect(wrapper.vm.consents[1].cookies[2].accepted).false
+    expect(wrapper.vm.consents[2].cookies[0].accepted).false
+    expect(wrapper.vm.consents[2].cookies[1].accepted).false
+  })
+
+  it('should set consent for one category to accepted', () => {
+    expect(wrapper.vm.consents[1].cookies[0].accepted).false
+    wrapper.vm.toggleConsent({
+      target: {
+        classList: {
+          toggle(str = '') {
+            return true
+          }
+        }
+      }
+    }, 1)
+    expect(wrapper.vm.consents[1].cookies[0].accepted).true
+    expect(wrapper.vm.consents[1].cookies[1].accepted).true
+    expect(wrapper.vm.consents[1].cookies[2].accepted).true
     expect(wrapper.vm.consents[2].cookies[0].accepted).false
     expect(wrapper.vm.consents[2].cookies[1].accepted).false
   })
@@ -184,6 +212,24 @@ describe('Global Consents Object Tests', () => {
       }
     }, 1, 0)
     expect(wrapper.vm.consents[1].cookies[0].accepted).false
+    expect(wrapper.vm.consents[2].cookies[0].accepted).false
+    expect(wrapper.vm.consents[2].cookies[1].accepted).false
+  })
+
+  it('should set consent for one category to declined', () => {
+    expect(wrapper.vm.consents[1].cookies[0].accepted).false
+    wrapper.vm.toggleConsent({
+      target: {
+        classList: {
+          toggle(str = '') {
+            return false
+          }
+        }
+      }
+    }, 1)
+    expect(wrapper.vm.consents[1].cookies[0].accepted).false
+    expect(wrapper.vm.consents[1].cookies[1].accepted).false
+    expect(wrapper.vm.consents[1].cookies[2].accepted).false
     expect(wrapper.vm.consents[2].cookies[0].accepted).false
     expect(wrapper.vm.consents[2].cookies[1].accepted).false
   })
