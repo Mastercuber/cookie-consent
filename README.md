@@ -21,13 +21,12 @@ Before the component gets mounted to the DOM, a global `Consents` object is atta
 (default: `consents`) (Cookie name and `localStorage` key)
 
 ### Functions
-* `Consents.set(categoryId: number, cookieId: number, value: boolean): void`  
-Set a consent.  
-Prints a message to the console when the Cookie isn't existing
+* `Consents.set(categoryId: number, cookieId: number, value: boolean): void`    
+Set a consent
 * `Consents.get(categoryId: number, cookieId: number): boolean`  
-Receive the current consent for a Cookie.  
-Returns `undefined` if a Cookie isn't existing.
-* `Consents.clear()`: remove the Consents from the `localStorage`, delete the Cookie and call all `onDenied()` functions
+Receive the current consent for a Cookie
+* `Consents.clear()`   
+Remove the Consents from the `localStorage`, delete the Cookie and call all `onDenied()` functions
 ## Component properties
 ```typescript
 export interface Props {
