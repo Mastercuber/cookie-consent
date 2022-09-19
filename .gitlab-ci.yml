@@ -27,7 +27,7 @@ build-job:       # This job runs in the build stage, which runs first.
       - dist/
   script:
     - npm install
-    - npm run build:all
+    - npm run build:lib
 
 unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
@@ -44,12 +44,12 @@ lint-test-job:   # This job also runs in the test stage.
     - npm install
     - npm run lint
 
-deploy-job:      # This job runs in the deploy stage.
+deploy-job:      # This job runs in the deployment stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
     - npm config set registry https://repo.avensio.de/repository/npm-group/
     - npm install
     - npm config set registry https://repo.avensio.de/repository/npm-registry/
     - npm config set _auth $NPM_AUTH
-    - npm run build:all
+    - npm run build:lib
     - npm publish
