@@ -5,11 +5,15 @@
       "back": "Tagasi"
     },
     "description": {
-      "details":  "Siit leiate ülevaate kõigist kasutatavatest küpsistest. Saate nõustuda üksikute kategooriate või üksikute küpsiste kasutamisega ja saada lisateavet üksikute küpsiste kohta.",
+      "details": "Siit leiate ülevaate kõigist kasutatavatest küpsistest. Saate nõustuda üksikute kategooriate või üksikute küpsiste kasutamisega ja saada lisateavet üksikute küpsiste kohta.",
       "main": "Me kasutame oma veebisaidil küpsiseid põhilistel eesmärkidel, samuti statistilistel ja turunduslikel eesmärkidel. Ka väline meedia võib kasutada küpsiseid."
     },
     "minimize": "Minimeeri",
     "clearSite": "Andmete kustutamine",
+    "info": {
+      "title": "Legend",
+      "text": "✓ = Kõik küpsised selles kategoorias on aktsepteeritud\n▣ = Mõned selles kategoorias aktsepteeritud küpsised\n- = Selles kategoorias ei ole küpsised lubatud"
+    },
     "button": {
       "acceptAll": "Võtke kõik vastu",
       "acceptSelection": "Salvesta valik"
@@ -49,7 +53,6 @@
     "name": "Küpsiste leping",
     "provider": "Veebilehe omanik",
     "purpose": "Salvestab üksikute küpsiste heakskiitmise või tagasilükkamise.",
-    "cookieName": "consents",
     "cookieValidityPeriod": "1 aasta"
   }
 }

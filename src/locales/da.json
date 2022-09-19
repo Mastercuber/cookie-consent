@@ -10,6 +10,10 @@
     },
     "minimize": "Minimer",
     "clearSite": "Slet data",
+    "info": {
+      "title": "Legende",
+      "text": "✓ = Alle cookies i denne kategori accepteres\n▣ = Nogle af de cookies, der accepteres i denne kategori\n- = Ingen cookies accepteres i denne kategori"
+    },
     "button": {
       "acceptAll": "Accepter alle",
       "acceptSelection": "Accepter valg"
@@ -49,7 +53,6 @@
     "name": "Samtykke til cookies",
     "provider": "Webstedsoperatør",
     "purpose": "Gemmer samtykke og afvisning af individuelle cookies",
-    "cookieName": "consents",
     "cookieValidityPeriod": "1 Year"
   }
 }

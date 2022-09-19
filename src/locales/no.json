@@ -5,11 +5,15 @@
       "back": "Komme tilbake"
     },
     "description": {
-      "details":  "Her finner du en oversikt over alle informasjonskapsler som brukes. Du kan godta individuelle kategorier eller individuelle informasjonskapsler, og du kan se mer informasjon om de enkelte informasjonskapslene.",
+      "details": "Her finner du en oversikt over alle informasjonskapsler som brukes. Du kan godta individuelle kategorier eller individuelle informasjonskapsler, og du kan se mer informasjon om de enkelte informasjonskapslene.",
       "main": "Vi bruker informasjonskapsler på nettsiden vår til viktige formål, så vel som for statistikk- og markedsføringsformål. Eksterne medier kan også bruke informasjonskapsler."
     },
     "minimize": "Minimer",
     "clearSite": "Slett data",
+    "info": {
+      "title": "Legende",
+      "text": "✓ = Alle informasjonskapsler i denne kategorien akseptert\n▣ = Noen informasjonskapsler i denne kategorien akseptert\n- = Ingen informasjonskapsler i denne kategorien akseptert"
+    },
     "button": {
       "acceptAll": "Alle godtar",
       "acceptSelection": "Lagre utvalg"
@@ -49,7 +53,6 @@
     "name": "Samtykke til informasjonskapsler",
     "provider": "Nettstedseier",
     "purpose": "Lagrer godkjenningene eller avslagene til de enkelte informasjonskapslene.",
-    "cookieName": "consents",
     "cookieValidityPeriod": "1 år"
   }
 }

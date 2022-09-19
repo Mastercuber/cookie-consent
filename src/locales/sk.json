@@ -5,11 +5,15 @@
       "back": "Späť"
     },
     "description": {
-      "details":  "Tu nájdete prehľad všetkých používaných súborov cookie. Môžete odsúhlasiť jednotlivé kategórie alebo jednotlivé súbory cookie a nechať si zobraziť ďalšie informácie o jednotlivých súboroch cookie.",
+      "details": "Tu nájdete prehľad všetkých používaných súborov cookie. Môžete odsúhlasiť jednotlivé kategórie alebo jednotlivé súbory cookie a nechať si zobraziť ďalšie informácie o jednotlivých súboroch cookie.",
       "main": "Na našej webovej stránke používame súbory cookie na základné účely, ako aj na štatistické a marketingové účely. Súbory cookie môžu používať aj externé médiá."
     },
     "minimize": "Minimalizujte",
     "clearSite": "Odstránenie údajov",
+    "info": {
+      "title": "Legenda",
+      "text": "✓ = Všetky súbory cookie v tejto kategórii sú akceptované\n▣ = Niektoré súbory cookie akceptované v tejto kategórii\n- = V tejto kategórii nie sú akceptované žiadne súbory cookie"
+    },
     "button": {
       "acceptAll": "Prijať všetky",
       "acceptSelection": "Uložiť výber"
@@ -49,7 +53,6 @@
     "name": "Dohoda o súboroch cookie",
     "provider": "Vlastník webovej stránky",
     "purpose": "Uloží schválenia alebo zamietnutia pre jednotlivé súbory cookie.",
-    "cookieName": "consents",
     "cookieValidityPeriod": "1 rok"
   }
 }

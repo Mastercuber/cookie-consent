@@ -5,11 +5,15 @@
       "back": "Volver"
     },
     "description": {
-      "details":  "Aquí encontrará un resumen de todas las cookies utilizadas. Puede aceptar categorías individuales o cookies individuales y hacer que se muestre más información sobre las cookies individuales.",
+      "details": "Aquí encontrará un resumen de todas las cookies utilizadas. Puede aceptar categorías individuales o cookies individuales y hacer que se muestre más información sobre las cookies individuales.",
       "main": "Utilizamos cookies en nuestro sitio web para fines esenciales, así como para fines estadísticos y de marketing. Los medios de comunicación externos también pueden utilizar cookies."
     },
     "minimize": "Minimizar",
     "clearSite": "Borrar datos",
+    "info": {
+      "title": "Leyenda",
+      "text": "✓ = Se aceptan todas las cookies de esta categoría\n▣ = Algunas cookies aceptadas en esta categoría\n- = No se aceptan cookies en esta categoría"
+    },
     "button": {
       "acceptAll": "Aceptar todo",
       "acceptSelection": "Guardar selección"
@@ -49,7 +53,6 @@
     "name": "Acuerdo sobre cookies",
     "provider": "Propietario del sitio web",
     "purpose": "Guarda las aprobaciones o rechazos de las cookies individuales.",
-    "cookieName": "consents",
     "cookieValidityPeriod": "1 año"
   }
 }

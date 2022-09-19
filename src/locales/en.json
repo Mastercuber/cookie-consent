@@ -10,6 +10,10 @@
     },
     "minimize": "Minimize",
     "clearSite": "Delete data",
+    "info": {
+      "title": "Legend",
+      "text": "✓ = All cookies in this category accepted\n▣ = Some cookies accepted in this category\n- = No cookies accepted in this category"
+    },
     "button": {
       "acceptAll": "Accept All",
       "acceptSelection": "Accept Selection"
@@ -49,7 +53,6 @@
     "name": "Cookie-Consent",
     "provider": "Provider of the website",
     "purpose": "Stores the consent or refusal of individual cookies",
-    "cookieName": "consents",
     "cookieValidityPeriod": "1 Year"
   }
 }

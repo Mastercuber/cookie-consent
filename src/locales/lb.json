@@ -10,6 +10,10 @@
     },
     "minimize": "Minimiséieren",
     "clearSite": "Läschen Daten",
+    "info": {
+      "title": "Legend",
+      "text": "✓ = All Cookien an dëser Kategorie akzeptéiert\n▣ = E puer Cookien an dëser Kategorie akzeptéiert\n- = Keng Cookien an dëser Kategorie ugeholl"
+    },
     "button": {
       "acceptAll": "All akzeptéieren",
       "acceptSelection": "Späicheren Auswiel"
@@ -49,7 +53,6 @@
     "name": "Cookie Zoustëmmung",
     "provider": "Websäit Besëtzer",
     "purpose": "Späichert d'Zustimmungen oder Oflehnungen op déi eenzel Cookien.",
-    "cookieName": "consents",
     "cookieValidityPeriod": "1 Joer"
   }
 }

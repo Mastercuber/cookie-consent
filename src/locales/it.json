@@ -5,11 +5,15 @@
       "back": "Indietro"
     },
     "description": {
-      "details":  "Qui troverete una panoramica di tutti i cookie utilizzati. È possibile acconsentire a singole categorie o a singoli cookie e far visualizzare ulteriori informazioni sui singoli cookie.",
+      "details": "Qui troverete una panoramica di tutti i cookie utilizzati. È possibile acconsentire a singole categorie o a singoli cookie e far visualizzare ulteriori informazioni sui singoli cookie.",
       "main": "Utilizziamo i cookie sul nostro sito web per scopi essenziali, così come per scopi statistici e di marketing. Anche i media esterni possono utilizzare i cookie."
     },
     "minimize": "Minimizzare",
     "clearSite": "Cancellare i dati",
+    "info": {
+      "title": "Leggenda",
+      "text": "✓ = Tutti i cookie di questa categoria accettati\n▣ = Alcuni cookie accettati in questa categoria\n- = Nessun cookie accettato in questa categoria"
+    },
     "button": {
       "acceptAll": "Accetta tutti",
       "acceptSelection": "Salva la selezione"
@@ -49,7 +53,6 @@
     "name": "Accordo sui cookie",
     "provider": "Proprietario del sito web",
     "purpose": "Salva le approvazioni o i rifiuti per i singoli cookie..",
-    "cookieName": "consents",
     "cookieValidityPeriod": "1 anno"
   }
 }

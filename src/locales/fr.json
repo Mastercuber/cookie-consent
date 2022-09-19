@@ -5,11 +5,15 @@
       "back": "Dos"
     },
     "description": {
-      "details":  "Vous trouverez ici un aperçu de tous les cookies utilisés. Vous pouvez accepter des catégories individuelles ou des cookies individuels et obtenir des informations supplémentaires sur les cookies individuels.",
+      "details": "Vous trouverez ici un aperçu de tous les cookies utilisés. Vous pouvez accepter des catégories individuelles ou des cookies individuels et obtenir des informations supplémentaires sur les cookies individuels.",
       "main": "Nous utilisons des cookies sur notre site web à des fins essentielles, ainsi qu'à des fins statistiques et de marketing. Les médias externes peuvent également utiliser des cookies."
     },
     "minimize": "Minimoi",
     "clearSite": "Supprimer les données",
+    "info": {
+      "title": "Légende",
+      "text": "✓ = Tous les cookies de cette catégorie acceptés\n▣ = Quelques cookies de cette catégorie acceptés\n- = Aucun cookie de cette catégorie n'est accepté"
+    },
     "button": {
       "acceptAll": "Accepter tous",
       "acceptSelection": "Sauvegarder la sélection"
@@ -49,7 +53,6 @@
     "name": "Accord sur les cookies",
     "provider": "Propriétaire du site web",
     "purpose": "Sauvegarde les approbations ou les rejets pour les cookies individuels.",
-    "cookieName": "consents",
     "cookieValidityPeriod": "1 an"
   }
 }

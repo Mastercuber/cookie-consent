@@ -5,11 +5,15 @@
       "back": "Nazaj"
     },
     "description": {
-      "details":  "Tukaj boste našli pregled vseh uporabljenih piškotkov. Strinjate se lahko s posameznimi kategorijami ali posameznimi piškotki in prikažete dodatne informacije o posameznih piškotkih.",
+      "details": "Tukaj boste našli pregled vseh uporabljenih piškotkov. Strinjate se lahko s posameznimi kategorijami ali posameznimi piškotki in prikažete dodatne informacije o posameznih piškotkih.",
       "main": "Piškotke na našem spletnem mestu uporabljamo za osnovne namene ter za statistične in trženjske namene. Piškotke lahko uporabljajo tudi zunanji mediji."
     },
     "minimize": "Minimieren",
     "clearSite": "Brisanje podatkov",
+    "info": {
+      "title": "Legenda",
+      "text": "✓ = Sprejeti vsi piškotki v tej kategoriji\n▣ = Nekateri piškotki, sprejeti v tej kategoriji\n- = Piškotki v tej kategoriji niso sprejeti"
+    },
     "button": {
       "acceptAll": "Sprejmite vse",
       "acceptSelection": "Shranjevanje izbire"
@@ -49,7 +53,6 @@
     "name": "Sporazum o piškotkih",
     "provider": "Lastnik spletnega mesta",
     "purpose": "Shrani odobritve ali zavrnitve za posamezne piškotke.",
-    "cookieName": "consents",
     "cookieValidityPeriod": "1 leto"
   }
 }

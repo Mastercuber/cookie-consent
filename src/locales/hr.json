@@ -5,11 +5,15 @@
       "back": "Povratak"
     },
     "description": {
-      "details":  "Ovdje ćete pronaći pregled svih korištenih kolačića. Možete pristati na pojedinačne kategorije ili pojedinačne kolačiće i možete vidjeti dodatne informacije o pojedinačnim kolačićima.",
+      "details": "Ovdje ćete pronaći pregled svih korištenih kolačića. Možete pristati na pojedinačne kategorije ili pojedinačne kolačiće i možete vidjeti dodatne informacije o pojedinačnim kolačićima.",
       "main": "Kolačiće na našoj web stranici koristimo u osnovne svrhe, kao i u statističke i marketinške svrhe. Vanjski mediji također mogu koristiti kolačiće."
     },
     "minimize": "Minimizirajte",
     "clearSite": "Izbriši podatke",
+    "info": {
+      "title": "Legenda",
+      "text": "✓ = Svi kolačići u ovoj kategoriji prihvaćeni su\n▣ = Neki kolačići u ovoj kategoriji prihvaćeni su\n- = Nije prihvaćen nijedan kolačići u ovoj kategoriji"
+    },
     "button": {
       "acceptAll": "Svi prihvaćaju",
       "acceptSelection": "Spremi odabir"
@@ -49,7 +53,6 @@
     "name": "Suglasnost za kolačiće",
     "provider": "Vlasnik web stranice",
     "purpose": "Sprema odobrenja ili odbijanja u pojedinačne kolačiće.",
-    "cookieName": "consents",
     "cookieValidityPeriod": "1 godina"
   }
 }

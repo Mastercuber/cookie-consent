@@ -5,11 +5,15 @@
       "back": "Kthimi"
     },
     "description": {
-      "details":  "Këtu do të gjeni një përmbledhje të të gjitha cookies të përdorura. Ju mund të bini dakord për kategoritë individuale ose cookie-t individuale dhe mund të shikoni informacione të mëtejshme rreth skedarëve individualë.",
+      "details": "Këtu do të gjeni një përmbledhje të të gjitha cookies të përdorura. Ju mund të bini dakord për kategoritë individuale ose cookie-t individuale dhe mund të shikoni informacione të mëtejshme rreth skedarëve individualë.",
       "main": "Ne përdorim cookies në faqen tonë të internetit për qëllime thelbësore, si dhe për qëllime statistikore dhe marketingu. Mediat e jashtme mund të përdorin gjithashtu cookie."
     },
     "minimize": "Minimizoje",
     "clearSite": "Fshi të dhënat",
+    "info": {
+      "title": "Legjendë",
+      "text": "✓ = Të gjitha cookies në këtë kategori pranuan\n▣ = Disa cookie në këtë kategori pranuan\n- = Asnjë cookie në këtë kategori nuk pranohet"
+    },
     "button": {
       "acceptAll": "Të gjithë pranojnë",
       "acceptSelection": "Ruaj përzgjedhjen"
@@ -49,7 +53,6 @@
     "name": "Pëlqimet për cookie",
     "provider": "Pronari i faqes në internet",
     "purpose": "Ruan miratimet ose refuzimet në kukit individualë.",
-    "cookieName": "consents",
     "cookieValidityPeriod": "1 vit"
   }
 }

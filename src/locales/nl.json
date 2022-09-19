@@ -10,6 +10,10 @@
     },
     "minimize": "Minimaliseer",
     "clearSite": "Gegevens wissen",
+    "info": {
+      "title": "Legende",
+      "text": "✓ = Alle cookies in deze categorie geaccepteerd\n▣ = Enkele cookies die in deze categorie worden geaccepteerd\n- = Geen cookies aanvaard in deze categorie"
+    },
     "button": {
       "acceptAll": "Accepteer alle",
       "acceptSelection": "Selectie opslaan"
@@ -49,7 +53,6 @@
     "name": "Cookie-overeenkomst",
     "provider": "Website eigenaar",
     "purpose": "Slaat de goedkeuringen of afkeuringen voor de individuele cookies op.",
-    "cookieName": "consents",
     "cookieValidityPeriod": "1 jaar"
   }
 }
