@@ -5,7 +5,7 @@ import Consents from "./Consents";
 import {useI18n} from "vue-i18n";
 
 export function useCookieConsent(props: Props) {
-  const {t, locale} = useI18n()
+  const {t, locale, fallbackLocale} = useI18n()
   const i18n = useI18n()
   // Data
   const consents: Array<Consent> = reactive([])
@@ -394,10 +394,19 @@ export function useCookieConsent(props: Props) {
   }
 
   function loadTranslation(cc: string) {
+    debugger
     cc = cc.substring(0, 2)
     if (supportedLanguages.includes(cc)) {
       import(`../locales/${cc}.json`).then(res => {
         i18n.mergeLocaleMessage(cc, res.default)
+      })
+    } else if (supportedLanguages.includes(unref(fallbackLocale).toString())) {
+      import(`../locales/${unref(fallbackLocale)}.json`).then(res => {
+        i18n.mergeLocaleMessage(unref(fallbackLocale).toString(), res.default)
+      })
+    } else {
+      import(`../locales/en.json`).then(res => {
+        i18n.mergeLocaleMessage('en', res.default)
       })
     }
   }
