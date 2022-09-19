@@ -394,7 +394,6 @@ export function useCookieConsent(props: Props) {
   }
 
   function loadTranslation(cc: string) {
-    debugger
     cc = cc.substring(0, 2)
     if (supportedLanguages.includes(cc)) {
       import(`../locales/${cc}.json`).then(res => {
