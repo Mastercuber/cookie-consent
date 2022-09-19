@@ -1,15 +1,15 @@
 {
   "name": "@avensio/cookie-consent",
-  "version": "0.2.13",
+  "version": "0.3.1",
   "private": false,
   "scripts": {
     "dev": "vite",
+    "dev:docs": "vitepress dev docs",
     "test": "vitest --coverage --run --globals --silent",
     "lint": "eslint . --fix",
+    "build:docs": "vitepress build docs",
     "build": "vite build",
-    "build:all": "npm run build:lib && npm run build:lib:plus:fewer-languages",
     "build:lib": "vite build -c vite.config.lib.ts",
-    "build:lib:plus:fewer-languages": "vite build -c vite.config.fewer-languages.lib.ts",
     "serve": "vite preview",
     "browserslist:update": "npx browserslist@latest --update-db",
     "browserslist:show:selected": "npx browserslist",
@@ -45,6 +45,7 @@
       "require": "./dist/fewer/cookie-consent-fewer-languages.umd.js"
     },
     "./style.css": "./dist/style.css",
+    "./messages": "./src/locales/index.js",
     ".": {
       "import": "./dist/cookie-consent.es.js",
       "require": "./dist/cookie-consent.umd.js"
@@ -61,25 +62,27 @@
     "vue-i18n": "^9.2.2"
   },
   "devDependencies": {
-    "@intlify/vite-plugin-vue-i18n": "^3.4.0",
-    "@types/node": "^17.0.35",
-    "@typescript-eslint/parser": "^5.36.2",
-    "@vitejs/plugin-vue": "^2.3.3",
-    "@vitest/ui": "^0.23.2",
-    "@vue/test-utils": "^2.0.0",
-    "autoprefixer": "^10.4.7",
-    "browserslist": "^4.20.3",
-    "eslint": "^8.23.0",
-    "eslint-plugin-vue": "^9.4.0",
+    "@types/node": "^18.7.18",
+    "@typescript-eslint/parser": "^5.37.0",
+    "@vitejs/plugin-vue": "^3.1.0",
+    "@vitest/coverage-c8": "^0.23.4",
+    "@vitest/ui": "^0.23.4",
+    "@vue/test-utils": "^2.0.2",
+    "autoprefixer": "^10.4.11",
+    "browserslist": "^4.21.4",
+    "eslint": "^8.23.1",
+    "eslint-plugin-vue": "^9.5.1",
     "happy-dom": "^6.0.4",
+    "pathe": "^0.3.7",
     "postcss": "^8.4.14",
-    "postcss-nesting": "^10.1.7",
-    "tailwindcss": "^3.0.24",
-    "typescript": "^4.7.2",
-    "vite": "^2.9.9",
-    "vite-plugin-dts": "^1.2.0",
-    "vite-plugin-vue-type-imports": "^0.2.0",
-    "vitest": "^0.12.9",
-    "vue-tsc": "^0.34.16"
+    "postcss-nesting": "^10.2.0",
+    "tailwindcss": "^3.1.8",
+    "typescript": "^4.8.3",
+    "vite": "^3.1.2",
+    "vite-plugin-dts": "^1.5.0",
+    "vite-plugin-vue-type-imports": "^0.2.2",
+    "vitepress": "^1.0.0-alpha.15",
+    "vitest": "^0.23.4",
+    "vue-tsc": "^0.40.13"
   }
 }

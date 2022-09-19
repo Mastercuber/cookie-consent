@@ -1,52 +1,55 @@
-import { Category, Cookie as CookieProp } from '../interfaces/CookieConsentProps'
-import { Consent, Cookie } from '../interfaces/Consent'
+import {Category, Cookie as CookieProp, Props} from '../interfaces/CookieConsentProps'
+import {Consent, Cookie} from '../interfaces/Consent'
 // @ts-ignore
-import { deleteCookie, readCookie, writeCookie } from '../assets/cookies.js'
+import {deleteCookie, readCookie, writeCookie} from '../assets/cookies.js'
+import {Ref, unref} from "vue";
 
 // eslint-disable
 declare global {
-    interface Window {
-        Consents: any
-    }
+  interface Window {
+    Consents: any
+  }
 }
 // eslint-enable
 
-export default function(metaCookie: Cookie, useMetaCookie: boolean, storagePrefix: string, storageConsentsKey: string, categories: Array<Category>, consents: Array<Consent>) {
+export default function (metaCookie: Cookie, props: Props, consents: Ref<Array<Consent>>) {
   function loadConsentsWrapper() {
     const allIds = []
     let savedConsents = {}
-    if (storageConsentsKey in localStorage) {
-      savedConsents = JSON.parse(localStorage.getItem(storageConsentsKey) || '{}')
-    } else if (useMetaCookie) {
-      savedConsents = readCookie(storageConsentsKey)
-      if (Object.keys(savedConsents).length > 0) localStorage.setItem(storageConsentsKey, JSON.stringify(savedConsents))
+    // @ts-ignore
+    if (props.storageConsentsKey in localStorage) {
+      savedConsents = JSON.parse(localStorage.getItem(props.storageConsentsKey || '') || '{}')
+    } else if (props.useMetaCookie) {
+      savedConsents = readCookie(props.storageConsentsKey)
+      // @ts-ignore
+      if (Object.keys(savedConsents).length > 0) localStorage.setItem(props.storageConsentsKey, JSON.stringify(savedConsents))
     }
 
-    for (let i = 1; categories != undefined && i < categories.length; i++) {
+    for (let i = 1; props.categories != undefined && i < props.categories.length; i++) {
       const res = []
 
-      if ('cookies' in categories[i]) {
+      if ('cookies' in props.categories[i]) {
         // @ts-ignore
-        for (let j = 0; j < categories[i].cookies.length; j++) {
-          const { cookies } = categories[i]
+        for (let j = 0; j < props.categories[i].cookies.length; j++) {
+          const {cookies} = props.categories[i]
           if (!cookies) continue
 
 
           allIds.push({
-            categoryId: categories[i].id,
+            categoryId: props.categories[i].id,
             cookieId: cookies[j].id
           })
 
           // @ts-ignore
-          consents[i].cookies[j].accepted = savedConsents[`${storagePrefix}-${categories[i].id}-${cookies[j].id}`] ?? false
+          unref(consents)[i].cookies[j].accepted = savedConsents[`${props.storagePrefix}-${props.categories[i].id}-${cookies[j].id}`] ?? false
 
-          res.push(consents[i].cookies[j].accepted)
+          res.push(unref(consents)[i].cookies[j].accepted)
 
-          if (consents[i].cookies[j].accepted && typeof cookies[j]?.onAccepted === 'function') {
+          if (unref(consents)[i].cookies[j].accepted && typeof cookies[j]?.onAccepted === 'function') {
             // @ts-ignore
             cookies[j].onAccepted()
           }
-          if (!consents[i].cookies[j].accepted && typeof cookies[j]?.onDenied === 'function') {
+          if (!unref(consents)[i].cookies[j].accepted && typeof cookies[j]?.onDenied === 'function') {
             // @ts-ignore
             cookies[j].onDenied()
           }
@@ -57,39 +60,39 @@ export default function(metaCookie: Cookie, useMetaCookie: boolean, storagePrefi
 
         // accept all cookies of the category
         if (containsTruthyValue && !containsFalsyValue) {
-          consents[i].accepted = true
+          unref(consents)[i].accepted = true
         }
         // accept some cookies of the category
-        else if (containsTruthyValue && containsFalsyValue) consents[i].partial = true
+        else if (containsTruthyValue && containsFalsyValue) unref(consents)[i].partial = true
       }
     }
 
     return allIds
   }
 
-  if (useMetaCookie) {
-    const { cookies } = categories[0]
+  if (props.useMetaCookie) {
+    const {cookies} = props.categories[0]
     if (cookies) { // @ts-ignore
       cookies.unshift(metaCookie)
     }
   }
 
   // initialise consents
-  for (let i = 0; i < categories.length; i++) {
+  for (let i = 0; i < props.categories.length; i++) {
     const consent = {
       accepted: i === 0,
       partial: false,
       cookies: []
     }
 
-    const { cookies } = categories[i]
+    const {cookies} = props.categories[i]
     if (cookies) {
       for (let j = 0; j < cookies.length; j++) {
         // Accept all cookies of the first category
         // @ts-ignore
-        consent.cookies.push({ accepted: i === 0 })
+        consent.cookies.push({accepted: i === 0})
       }
-      consents.push(consent)
+      unref(consents).push(consent)
     }
   }
 
@@ -97,18 +100,18 @@ export default function(metaCookie: Cookie, useMetaCookie: boolean, storagePrefi
   const ids = loadConsentsWrapper()
 
   window.Consents = {
-    storagePrefix: storagePrefix,
-    storageConsentsKey: storageConsentsKey,
+    storagePrefix: props.storagePrefix,
+    storageConsentsKey: props.storageConsentsKey,
     ids,
     /**
-         * Accept or deny a cookie
-         *
-         * @param categoryId
-         * @param cookieId
-         * @param value
-         */
+     * Accept or deny a cookie
+     *
+     * @param categoryId
+     * @param cookieId
+     * @param value
+     */
     set(categoryId: string, cookieId: string, value: boolean) {
-      const id = this.ids.find((id:any) => id.categoryId === categoryId && id.cookieId === cookieId)
+      const id = this.ids.find((id: any) => id.categoryId === categoryId && id.cookieId === cookieId)
 
       if (id) {
         const key = `${this.storagePrefix}-${categoryId}-${cookieId}`
@@ -118,9 +121,9 @@ export default function(metaCookie: Cookie, useMetaCookie: boolean, storagePrefi
         if (key in savedConsents) {
           savedConsents[key] = value
 
-          const category = categories.find((category:Category) => category.id === id.categoryId)
+          const category = props.categories.find((category: Category) => category.id === id.categoryId)
           if (category && category.cookies) {
-            const cookie = category.cookies.find((cookie:CookieProp) => cookie.id === id.cookieId)
+            const cookie = category.cookies.find((cookie: CookieProp) => cookie.id === id.cookieId)
 
             if (cookie && value && typeof cookie.onAccepted === 'function') cookie.onAccepted()
             if (cookie && !value && typeof cookie.onDenied === 'function') cookie.onDenied()
@@ -129,7 +132,7 @@ export default function(metaCookie: Cookie, useMetaCookie: boolean, storagePrefi
 
         localStorage.setItem(this.storageConsentsKey, JSON.stringify(savedConsents))
 
-        if (useMetaCookie) {
+        if (props.useMetaCookie) {
           const consents = readCookie(this.storageConsentsKey)
           consents[`${this.storagePrefix}-${categoryId}-${cookieId}`] = value
           writeCookie(consents)
@@ -137,11 +140,11 @@ export default function(metaCookie: Cookie, useMetaCookie: boolean, storagePrefi
       }
     },
     /**
-         * Obtain the current consent about a cookie
-         *
-         * @param categoryId
-         * @param cookieId
-         */
+     * Obtain the current consent about a cookie
+     *
+     * @param categoryId
+     * @param cookieId
+     */
     get(categoryId: string, cookieId: string) {
       console.debug(Object.keys(localStorage))
       const consents = JSON.parse(localStorage.getItem(this.storageConsentsKey) || '{}')
@@ -149,26 +152,26 @@ export default function(metaCookie: Cookie, useMetaCookie: boolean, storagePrefi
       return consents[`${this.storagePrefix}-${categoryId}-${cookieId}`] === 'true'
     },
     /**
-         * Did the user gave a consent or just minimized the Cookie Consent
-         */
+     * Did the user gave a consent or just minimized the Cookie Consent
+     */
     get hasAccepted() {
       return this.storageConsentsKey in localStorage
     },
     /**
-         * Clear the Consents
-         */
+     * Clear the Consents
+     */
     clear() {
       localStorage.removeItem(this.storageConsentsKey)
       deleteCookie(this.storageConsentsKey)
 
-      for (let i = 0; i < categories.length; i++) {
-        if (categories[i].cookies) {
-          for (let j = 0; j < categories[i].cookies!.length; j++) {
-            if (typeof categories[i].cookies![j].onDenied === 'function') categories[i].cookies![j].onDenied!()
+      for (let i = 0; i < props.categories.length; i++) {
+        if (props.categories[i].cookies) {
+          for (let j = 0; j < props.categories[i].cookies!.length; j++) {
+            if (typeof props.categories[i].cookies![j].onDenied === 'function') props.categories[i].cookies![j].onDenied!()
             if (i > 0) {
-              consents[i].cookies[j].accepted = false
-              consents[i].accepted = false
-              consents[i].partial = false
+              unref(consents)[i].cookies[j].accepted = false
+              unref(consents)[i].accepted = false
+              unref(consents)[i].partial = false
             }
           }
         }

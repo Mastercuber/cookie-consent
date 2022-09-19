@@ -6,6 +6,8 @@ import './assets/css/index.css'
 
 const app = createApp(App)
 const i18n = createI18n({
-    locale: 'de'
+    legacy: false,
+    locale: 'de',
+    fallbackLocale: 'en'
 })
 app.use(i18n).mount('#app')

@@ -9,6 +9,15 @@ For each Cookie you can pass optional `onAccepted` and `onDenied` functions, to 
 
 Translations for the passed categories and cookies must be provided, when switching a language.
 
+Only the translation file for the current language value is fetched and further translations gets loaded, when switching the language with `vue-i18n`.
+
+The `legacy` flag of i18n must be set to `false`:
+```javascript
+const i18n = createI18n({
+  legacy: false
+})
+```
+
 ## Global Consents Object
 Before the component gets mounted to the DOM, a global `Consents` object is attached to the `window` object and, therefore, can be globally accessed.
 
@@ -32,6 +41,7 @@ Remove the Consents from the `localStorage`, delete the Cookie and call all `onD
 export interface Props {
     categories: Array<Category>;
     requiredLinks: RequiredLinksProps;
+    
     links?: Array<Link>;
     useMetaCookie?: boolean;
     animationDuration?: string;
@@ -79,22 +89,13 @@ import CookieConsent from '@avensio/cookie-consent'
 ```
 For component properties see [here](#component-properties)
 
-To use a smaller version with **only 8** bundled languages instead of 32 use
-```javascript
-import '@avensio/cookie-consent/fewer-languages/style.css'
-import CookieConsent from '@avensio/cookie-consent/fewer-languages'
-```
-
 Full Usage Example:
-
 ```vue
 <script setup>
 import '@avensio/cookie-consent/style.css'
 import CookieConsent from '@avensio/cookie-consent'
 
 const obj = {
-  lang: 'en',
-
   requiredLinks: {
     privacy: {
       title: 'Privacy',
