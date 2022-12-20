@@ -69,7 +69,7 @@
               <div
                   v-for="(category, index) in categories"
                   :key="category.id"
-                  class="relative ml-4 inline-flex"
+                  class="relative inline-flex" :class="{'ml-4': index > 0}"
               >
                 <div class="relative w-[20px] h-[20px] flex checkbox-container">
                   <input
@@ -91,7 +91,7 @@
                 </div>
                 <label
                     :for="`cookie-consent-checkbox-${category.id}`"
-                    class="ml-2 rtl:mr-2 select-none hover:text-orange-400 -translate-y-[2px]"
+                    class="ml-2 rtl:mr-2 select-none hover:text-orange-400"
                 >{{ category.label }}</label>
               </div>
 
@@ -285,7 +285,7 @@
                   </tr>
                   <tr>
                     <td>{{ t('cookieLabels.name') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
                       {{ t('metaCookieTitles.name') }}
                     </td>
                     <td v-else>
@@ -294,7 +294,7 @@
                   </tr>
                   <tr>
                     <td>{{ t('cookieLabels.provider') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
                       {{ t('metaCookieTitles.provider') }}
                     </td>
                     <td v-else>
@@ -303,7 +303,7 @@
                   </tr>
                   <tr>
                     <td>{{ t('cookieLabels.purpose') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
                       {{ t('metaCookieTitles.purpose') }}
                     </td>
                     <td
@@ -324,7 +324,7 @@
                   </tr>
                   <tr v-if="'hosts' in cookie">
                     <td>{{ t('cookieLabels.hosts') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
                       {{ t('metaCookieTitles.hosts') }}
                     </td>
                     <td v-else>
@@ -333,7 +333,7 @@
                   </tr>
                   <tr v-if="'cookieName' in cookie">
                     <td>{{ t('cookieLabels.cookieName') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
                       consents
                     </td>
                     <td v-else>
@@ -342,7 +342,7 @@
                   </tr>
                   <tr v-if="'cookieValidityPeriod' in cookie">
                     <td>{{ t('cookieLabels.cookieValidityPeriod') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0">
+                    <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
                       {{
                         t('metaCookieTitles.cookieValidityPeriod')
                       }}
@@ -418,7 +418,7 @@ const {
 
 <style>
 :root {
-  --border-color: darkgray;
+  --cookie-consent-border-color: darkgray;
   --cookie-consent-animation-duration: 1s;
   --cookie-consent-transition-duration: 0.4s;
   --cookie-consent-minimize-animation-duration: 1s;
@@ -443,7 +443,7 @@ const {
 @import "/src/assets/css/all.css";
 
 .tab-container .active-tab {
-  border-bottom: 3px solid var(--border-color);
+  border-bottom: 3px solid var(--cookie-consent-border-color);
   color: orange;
 }
 
@@ -462,7 +462,7 @@ const {
 }
 
 hr {
-  border: 2px solid var(--border-color);
+  border: 2px solid var(--cookie-consent-border-color);
 }
 
 p {
@@ -522,7 +522,7 @@ header > div h4, header > div h5 {
 }
 
 .cookie-details-card:hover {
-  box-shadow: 0 0 0 gray;
+  box-shadow: 0 0 12px #47494E;
 }
 
 .cookie-details-card {

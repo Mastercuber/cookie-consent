@@ -1,6 +1,6 @@
 {
   "name": "@avensio/cookie-consent",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "private": false,
   "scripts": {
     "dev": "vite",
@@ -29,7 +29,6 @@
     "type": "git",
     "url": "git+https://github.com/Mastercuber/cookie-consent.git"
   },
-  "author": "Armin Kunkel",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Mastercuber/cookie-consent/issues"
@@ -64,25 +63,25 @@
   "devDependencies": {
     "@types/node": "^18.7.18",
     "@typescript-eslint/parser": "^5.37.0",
-    "@vitejs/plugin-vue": "^3.1.0",
-    "@vitest/coverage-c8": "^0.23.4",
-    "@vitest/ui": "^0.23.4",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vitest/coverage-c8": "^0.26.0",
+    "@vitest/ui": "^0.26.0",
     "@vue/test-utils": "^2.0.2",
-    "autoprefixer": "^10.4.11",
+    "autoprefixer": "^10.4.13",
     "browserslist": "^4.21.4",
     "eslint": "^8.23.1",
     "eslint-plugin-vue": "^9.5.1",
-    "happy-dom": "^6.0.4",
-    "pathe": "^0.3.7",
+    "happy-dom": "^8.1.0",
+    "pathe": "^1.0.0",
     "postcss": "^8.4.14",
     "postcss-nesting": "^10.2.0",
     "tailwindcss": "^3.1.8",
-    "typescript": "^4.8.3",
-    "vite": "^3.1.2",
+    "typescript": "^4.9.4",
+    "vite": "^4.0.2",
     "vite-plugin-dts": "^1.5.0",
-    "vite-plugin-vue-type-imports": "^0.2.2",
+    "vite-plugin-vue-type-imports": "^0.2.4",
     "vitepress": "^1.0.0-alpha.15",
-    "vitest": "^0.23.4",
-    "vue-tsc": "^0.40.13"
+    "vitest": "^0.26.0",
+    "vue-tsc": "^1.0.14"
   }
 }

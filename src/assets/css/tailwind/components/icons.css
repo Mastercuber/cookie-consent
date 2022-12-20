@@ -12,17 +12,14 @@
             select-none;
 
         .settings-icon {
-            @apply block mt-[4px];
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
+            @apply w-full h-full block;
             &::before {
+                 @apply w-full h-full block;
                  content: '\2699'; /* HTML Entity -> &#9881; */
-                 height: 40px;
-                 display: flex;
-                 align-items: center;
                  font-size: 36px;
+                 display: flex;
+                 justify-content: center;
+                 align-items: center;
             }
         }
     }
@@ -51,6 +48,10 @@
         border-radius: 50%;
         user-select: none;
         opacity: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
     }
     .cookie-consent-info-hide {
         opacity: 0;

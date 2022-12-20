@@ -2,13 +2,13 @@
 input[type="checkbox"] {
     appearance: none;
     position: relative;
-    height: 18px;
-    width: 18px;
+    height: 20px;
+    width: 20px;
     color: green;
     user-select: none;
     outline: none;
     border: 1px solid gray;
-    box-sizing: content-box;
+    box-sizing: border-box;
 }
 input[type="checkbox"]:checked::before {
     /* Use `visibility` instead of `display` to avoid recalculating layout */
@@ -19,11 +19,32 @@ input[type="checkbox"]::before {
     font-size: 24px;
     visibility: hidden;
     color: green;
-    height: 18px;
+    height: 100%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transform: scaleX(1.2);
+    transform: scaleX(1.1);
+}
+
+.checkbox-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.checkbox-partial-indicator {
+    position: absolute;
+    background: dodgerblue;
+    width: 12px;
+    height: 12px;
+    pointer-events: none;
+}
+.checkbox-none-indicator {
+    position: absolute;
+    background: gray;
+    width: 12px;
+    height: 4px;
+    pointer-events: none;
 }
 
 input[type=checkbox]:focus {
@@ -44,37 +65,9 @@ input[type=checkbox]:hover, label:hover {
     cursor: pointer;
 }
 
-.checkbox-partial-indicator {
-    position: absolute;
-    background: dodgerblue;
-    width: 12px;
-    height: 12px;
-    pointer-events: none;
-}
-
-#container[dir=rtl] .checkbox-none-indicator {
-    left: auto;
-    right: 9px;
-}
 #container[dir=rtl] #details-container > header {
     text-align: initial;
 }
 #container[dir=rtl] #details-container > header > .heading {
     margin-inline-start: 65px;
-}
-
-.checkbox-none-indicator {
-    background: gray;
-    width: 12px;
-    height: 4px;
-    position: absolute;
-    top: calc(50% - 2px);
-    pointer-events: none;
-}
-
-.checkbox-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
 }

@@ -21,8 +21,8 @@
 .minimizer::before {
     content: '\2010';
     position: absolute;
-    top: 0px;
-    font-size: 20px !important;
+    top: 0;
+    font-size: 20px;
     margin: 0;
     padding: 0;
     pointer-events: none;
