@@ -388,8 +388,12 @@ const props = withDefaults(defineProps<Props>(), {
   minimizeAnimationDuration: '1s',
   hideDuration: '1s',
   storagePrefix: 'consent',
-  storageConsentsKey: 'consents'
+  storageConsentsKey: 'consents',
+  maskContent: true,
+  maskColor: '#47494E'
 })
+
+const overlayBackgroundColor = props.maskContent ? props.maskColor : 'transparent'
 
 const {
   consents,
@@ -472,13 +476,13 @@ p {
 #overlay {
   perspective: 1000px;
   transform-style: preserve-3d;
+  background: v-bind(overlayBackgroundColor);
 }
 
 #container {
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.19);
   transform: translateZ(0);
   backface-visibility: hidden;
-  transform-style: preserve-3d;
 }
 
 .cookie-details-card > a {

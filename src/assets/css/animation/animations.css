@@ -79,18 +79,18 @@
         width: var(--transform-current-width);
         height: var(--transform-current-height);
         overflow: hidden;
-        transform: translateZ(0);
+        transform: translateZ(0px);
     }
     20% {
         opacity: 1;
-        transform: rotateX(-15deg) translateZ(0);
+        transform: rotateX(-15deg) translateZ(100px);
         overflow: hidden;
     }
     to {
         width: var(--transform-current-width) !important;
         height: var(--transform-current-height) !important;
         opacity: 0;
-        transform: rotateX(90deg) translateZ(0);
+        transform: rotateX(90deg) translateZ(150px);
         overflow: hidden;
     }
 }
