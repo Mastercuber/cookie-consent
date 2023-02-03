@@ -90,7 +90,8 @@ pages:
   stage: deploy
   script:
     - mkdir public
-    - mv coverage/* public/
+    - ls coverage/
+    - mv coverage/ public/
   artifacts:
     paths:
       - public
