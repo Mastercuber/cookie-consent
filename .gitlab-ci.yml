@@ -91,7 +91,7 @@ pages:
   script:
     - mkdir public
     - ls coverage/
-    - mv coverage/ public/
+    - mv coverage/* public/
   artifacts:
     paths:
       - public
